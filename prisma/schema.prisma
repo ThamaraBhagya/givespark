@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//User
+
+model User {
+  id          String      @id @default(cuid())
+  name        String
+  email       String      @unique
+  password    String?     // If using credentials
+  image       String?
+  role        Role        @default(USER) // Will be USER or CREATOR
+  
+  campaigns   Campaign[]  @relation("UserCampaigns")
+  donations   Donation[]  @relation("UserDonations")
+  wallet      Wallet?     // Creator wallet
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+// User roles
+enum Role {
+  USER
+  CREATOR
+}
+
+// 2. CAMPAIGN 
+model Campaign {
+  id             String       @id @default(cuid())
+  title          String
+  shortDesc      String
+  description    String
+  goalAmount     Float
+  currentAmount  Float        @default(0)
+  
+  deadline       DateTime
+  featuredImage  String
+  images         String[]
+  category       String
+
+  creatorId      String
+  creator        User         @relation("UserCampaigns", fields: [creatorId], references: [id])
+
+  donations      Donation[]
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+// 3. DONATION (Mock Payment Record)
+model Donation {
+  id          String     @id @default(cuid())
+  amount      Float
+  message     String?
+  anonymous   Boolean    @default(false)
+
+  donorId     String?
+  donor       User?       @relation("UserDonations", fields: [donorId], references: [id])
+
+  campaignId  String
+  campaign    Campaign    @relation(fields: [campaignId], references: [id])
+
+  createdAt   DateTime   @default(now())
+}
+
+// 4. WALLET (Virtual Creator Wallet)
+model Wallet {
+  id              String     @id @default(cuid())
+  balance         Float      @default(0)
+  totalReceived   Float      @default(0)
+  withdrawnAmount Float      @default(0)
+
+  userId          String     @unique
+  user            User       @relation(fields: [userId], references: [id])
+
+  transactions    WalletTransaction[]
+  updatedAt       DateTime   @updatedAt
+}
+
+// 5. WALLET TRANSACTIONS (Withdraw logs)
+model WalletTransaction {
+  id          String     @id @default(cuid())
+  amount      Float
+  type          TransactionType
+  createdAt   DateTime   @default(now())
+
+  walletId    String
+  wallet      Wallet     @relation(fields: [walletId], references: [id])
+}
+
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAW
+}
+
+
+
+
+
