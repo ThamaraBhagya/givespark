@@ -1,65 +1,68 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { SparklesIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
+import StatSection from '@/components/StatSection';
+import HowItWorks from '@/components/HowItWorks';
+import FeaturedCampaigns from '@/components/FeaturedCampaigns';
+import TestimonialsSection from '@/components/TestimonialsSection';
+import CtaSection from '@/components/CtaSection';
+
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <>
+      <section className="bg-gray-900 text-white min-h-[70vh] flex items-center justify-center relative overflow-hidden">
+      
+      {/* Background Gradient Effect (Optional but enhances the modern feel) */}
+      <div className="absolute top-0 left-0 w-full h-full bg-linear-to-br from-indigo-900/50 to-gray-900/50 z-0"></div>
+      
+      <div className="max-w-4xl mx-auto text-center p-8 relative z-10">
+        
+        {/* Main Headline (Large and Captivating) */}
+        <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-6">
+          Fund Your Dream Project. <br className="hidden md:inline"/> Ignite Change.
+        </h1>
+
+        {/* Sub-Headline (All-in-one platform...) */}
+        <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-10">
+          The all-in-one platform to launch impactful campaigns, find dedicated backers, and turn innovative ideas into reality.
+        </p>
+
+        {/* CTA Buttons (Matching the style: Primary Green and Secondary Dark Outline) */}
+        <div className="flex justify-center space-x-4">
+          
+          {/* Primary CTA: Start Funding (Green/Teal Button) */}
+          <Link 
+            href="/campaigns/list" 
+            className="flex items-center space-x-2 px-8 py-3 bg-teal-400 text-gray-900 font-bold rounded-lg shadow-xl hover:bg-teal-300 transition duration-300 text-lg"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <SparklesIcon className="w-6 h-6" />
+            <span>Find a Project</span>
+          </Link>
+
+          {/* Secondary CTA: See How It Works (Dark Outline Button) */}
+          <a 
+            href="#how-it-works" 
+            className="flex items-center space-x-2 px-8 py-3 border border-white/50 text-white font-medium rounded-lg hover:bg-white/10 transition duration-300 text-lg"
           >
-            Documentation
+            <ArrowRightIcon className="w-5 h-5" />
+            <span>See How It Works</span>
           </a>
         </div>
-      </main>
-    </div>
+        
+        {/* Optional: Simple Stats/Social Proof (Below CTAs) */}
+        <div className="mt-12 flex justify-center space-x-8 text-gray-400 text-sm">
+            <p><strong>120+</strong> Campaigns Launched</p>
+            <p><strong>$5M+</strong> Total Funds Raised</p>
+        </div>
+
+      </div>
+    </section>
+    <StatSection />
+    <HowItWorks />
+    {/* <FeaturedCampaigns/> */}
+    <TestimonialsSection />
+    <CtaSection />
+
+    </>
   );
 }
