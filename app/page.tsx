@@ -49,11 +49,7 @@ export default function Home() {
           </a>
         </div>
         
-        {/* Optional: Simple Stats/Social Proof (Below CTAs) */}
-        <div className="mt-12 flex justify-center space-x-8 text-gray-400 text-sm">
-            <p><strong>120+</strong> Campaigns Launched</p>
-            <p><strong>$5M+</strong> Total Funds Raised</p>
-        </div>
+        
 
       </div>
     </section>

@@ -2,37 +2,90 @@
 
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import prisma from "@/lib/prisma"; // We'll create this in the next step
+import prisma from "@/lib/prisma"; // Imports the Prisma client instance
 import CredentialsProvider from "next-auth/providers/credentials";
+import * as bcrypt from 'bcryptjs'; // To compare hashed passwords
 
-// You will add a CredentialsProvider here for custom email/password login.
-// For now, we set up the basic config.
+export const authOptions = {
+    // Uses the Prisma client to connect NextAuth sessions/accounts to the DB
+    adapter: PrismaAdapter(prisma), 
+    
+    providers: [
+        CredentialsProvider({
+            name: "Credentials",
+            credentials: {
+                email: { label: "Email", type: "text" },
+                password: { label: "Password", type: "password" }
+            },
+            
+            // This is the custom function that runs when a user attempts to sign in
+            async authorize(credentials) {
+                if (!credentials?.email || !credentials.password) {
+                    return null;
+                }
 
-const handler = NextAuth({
-  adapter: PrismaAdapter(prisma),
-  providers: [
-    // Add CredentialsProvider or other providers (Google, GitHub) here later
-    // Example:
-    /*
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
-      },
-      async authorize(credentials, req) {
-        // Your custom login logic goes here
-        // (Check password, find user, return user object)
-        return null; // For now, just return null
-      }
-    })
-    */
-  ],
-  session: {
-    strategy: "jwt",
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  // Add pages, callbacks, etc. here
-});
+                // 1. Find the user by email
+                const user = await prisma.user.findUnique({
+                    where: { email: credentials.email },
+                });
+
+                if (!user || !user.password) {
+                    // User not found or no password (e.g., if they signed up via social login later)
+                    return null; 
+                }
+
+                // 2. Verify the password
+                // Compares the provided password with the hashed password stored in the DB
+                const isValid = await bcrypt.compare(credentials.password, user.password);
+                
+                if (!isValid) {
+                    return null; // Invalid password
+                }
+                
+                // 3. Return the user object
+                // The fields returned here are stored in the JWT token (after serialization)
+                return {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    role: user.role, // Crucial: Pass the role through
+                };
+            }
+        })
+    ],
+    
+    session: {
+        strategy: "jwt" as const,
+    },
+
+    // Callbacks are necessary to persist the custom 'role' field onto the session
+    callbacks: {
+        // Step 1: Add custom fields (like role) to the JWT token
+        async jwt({ token, user, session }: any) {
+            if (user) {
+                // 'user' is the object returned from the 'authorize' function above
+                token.role = user.role;
+                token.id = user.id;
+            }
+            return token;
+        },
+        // Step 2: Add custom fields (like role) to the session object accessible in the client
+        async session({ session, token }: any) {
+            if (session.user) {
+                session.user.role = token.role;
+                session.user.id = token.id;
+            }
+            return session;
+        },
+    },
+
+    secret: process.env.NEXTAUTH_SECRET,
+    // Define the custom sign-in page URL
+    pages: {
+        signIn: '/auth/signin', 
+    }
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
