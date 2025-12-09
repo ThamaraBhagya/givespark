@@ -3,10 +3,12 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 // Assume we have a placeholder component for image upload that returns a URL string
 // import ImageUpload from '@/components/ImageUpload'; 
 
 export default function NewCampaignPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     title: '',
     shortDesc: '',
@@ -21,6 +23,9 @@ export default function NewCampaignPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [featuredFile, setFeaturedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedUrl, setUploadedUrl] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -36,6 +41,50 @@ export default function NewCampaignPage() {
   const handleFeaturedImageUpload = (url: string) => {
     setFormData((prev) => ({ ...prev, featuredImage: url }));
   };
+  // app/campaign/new/page.tsx (Inside your client component)
+
+// Logic to call your /api/upload/image route
+const handleFileUpload = async (file: File) => {
+    setIsUploading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+        const response = await fetch('/api/upload/image', {
+            method: 'POST',
+            body: formData,
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to upload image.');
+        }
+        
+        const data = await response.json();
+        setUploadedUrl(data.url); // Save the returned public URL
+        return data.url; 
+        
+    } catch (error: any) {
+        setError(error.message);
+        return null;
+    } finally {
+        setIsUploading(false);
+    }
+};
+
+// Handle file selection from the input
+const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+        const file = e.target.files[0];
+        setFeaturedFile(file);
+        
+        // Optionally, start the upload immediately or wait for form submit
+        handleFileUpload(file); 
+    }
+};
+// ...
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,38 +92,71 @@ export default function NewCampaignPage() {
     setError(null);
     setSuccess(false);
 
-    // Basic validation check (can use Zod for robust validation)
-    if (formData.goalAmount <= 0 || !formData.title || !formData.featuredImage) {
-        setError("Please fill out all required fields.");
+    // --- 1. Client-Side Validation ---
+    if (formData.goalAmount <= 0 || !formData.title || !featuredFile) {
+        setError("Please fill out all required fields and upload an image.");
         setLoading(false);
         return;
     }
 
-    try {
-      const response = await fetch('/api/campaign/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        // Handle server errors (e.g., authentication failure 401, validation error 400)
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create campaign');
-      }
-
-      setSuccess(true);
-      // Optional: Redirect to the newly created campaign page or creator dashboard
-      // router.push(`/campaign/${(await response.json()).campaign.id}`);
-      
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    // --- 2. Image Upload ---
+    let finalImageUrl = uploadedUrl;
+    
+    // If we haven't uploaded yet (uploadedUrl is empty), upload the file now
+    if (!finalImageUrl && featuredFile) {
+        // Assume handleFileUpload is available and returns the URL or null
+        const url = await handleFileUpload(featuredFile); 
+        
+        if (!url) {
+            // Error handling is done inside handleFileUpload, just stop submission
+            setLoading(false);
+            return;
+        }
+        finalImageUrl = url;
     }
-  };
+    
+    // If we still don't have a URL, stop the process
+    if (!finalImageUrl) {
+        setError("Failed to secure image URL for submission.");
+        setLoading(false);
+        return;
+    }
+
+    // --- 3. Prepare Final Submission Body ---
+    const submissionBody = {
+        ...formData,
+        // Replace the local image reference with the secure, public URL from Vercel Blob
+        featuredImage: finalImageUrl, 
+    };
+
+
+    // --- 4. Submit Campaign Data to Backend ---
+    try {
+        const response = await fetch('/api/campaign/create', {
+            method: 'POST',
+            headers: {
+                // Must be JSON content type
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(submissionBody),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to create campaign on the server.');
+        }
+
+        setSuccess(true);
+        // Optional: Get the newly created campaign ID for redirection
+        const campaignData = await response.json(); 
+        router.push(`/campaign/${campaignData.campaign.id}`); 
+        
+    } catch (err: any) {
+        setError(err.message);
+    } finally {
+        setLoading(false);
+    }
+};
 
   return (
     <div className="max-w-4xl mx-auto p-8">
@@ -175,21 +257,36 @@ export default function NewCampaignPage() {
           </select>
         </div>
 
-        {/* Featured Image (Mocked input) */}
-        <div>
-            <label className="block text-sm font-medium text-gray-700">Featured Image URL (Mock Upload)</label>
-            {/* Replace this input with a real ImageUpload component that handles API upload */}
-            <input 
-                type="text"
-                name="featuredImage"
-                placeholder="Paste Image URL here (e.g., from Vercel Blob)"
-                value={formData.featuredImage}
-                onChange={(e) => handleFeaturedImageUpload(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            />
-        </div>
+       // app/campaign/new/page.tsx (Replace the Featured Image section)
 
+        <div>
+            <label htmlFor="featuredImage" className="block text-sm font-medium text-gray-700">Featured Image (Required)</label>
+            
+            <input 
+                type="file"
+                id="featuredImage"
+                name="featuredImage"
+                accept="image/*"
+                onChange={handleFileChange}
+                required={!uploadedUrl} // Required unless a URL is already present
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
+                disabled={isUploading}
+            />
+
+            {isUploading && (
+                <p className="mt-2 text-sm text-indigo-600">Uploading image to Vercel Blob...</p>
+            )}
+
+            {uploadedUrl && (
+                <div className="mt-3 p-3 border rounded-md bg-green-50">
+                    <p className="text-sm font-medium text-green-700">
+                        Image uploaded successfully! 
+                    </p>
+                    {/* Display a small preview of the uploaded image */}
+                    {/* <img src={uploadedUrl} alt="Preview" className="w-20 h-20 object-cover mt-2 rounded" /> */}
+                </div>
+            )}
+        </div>
         <button
           type="submit"
           disabled={loading}
