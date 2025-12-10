@@ -257,7 +257,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           </select>
         </div>
 
-       // app/campaign/new/page.tsx (Replace the Featured Image section)
+       
 
         <div>
             <label htmlFor="featuredImage" className="block text-sm font-medium text-gray-700">Featured Image (Required)</label>
