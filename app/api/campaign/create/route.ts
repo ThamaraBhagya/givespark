@@ -3,9 +3,10 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth"; // Used for authentication [cite: 74]
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function POST(req: Request) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 }); //[cite: 76]
   }
@@ -15,6 +16,8 @@ export async function POST(req: Request) {
     const {
       title, shortDesc, description, goalAmount, deadline, images, featuredImage, category
     } = body; // Destructure all mandatory fields [cite: 77]
+
+    const creatorId = (session.user as any).id;
 
     const campaign = await prisma.campaign.create({
       data: {
@@ -26,7 +29,7 @@ export async function POST(req: Request) {
         images,
         featuredImage,
         category,
-        creatorId: session.user.id // Link to the logged-in creator [cite: 78]
+        creatorId: creatorId, // Link to the logged-in creator [cite: 78]
       }
     });
 

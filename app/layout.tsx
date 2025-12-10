@@ -5,6 +5,7 @@ import "./globals.css";
 
 import Navbar from "@/components/navbar"; 
 import Footer from "@/components/Footer";
+import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 
 export const metadata: Metadata = {
   title: "GiveSpark", 
@@ -21,13 +22,19 @@ export default function RootLayout({
       
       <body className={`antialiased`}> 
         
-        
-        <Navbar />
+        <SessionProviderWrapper>
+
+          <Navbar />
         
        
-        <main>{children}</main>
+            <main>{children}</main>
 
-        <Footer />
+          <Footer />
+
+        </SessionProviderWrapper>
+        
+        
+
 
         
         

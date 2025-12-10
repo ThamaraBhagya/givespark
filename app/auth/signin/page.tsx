@@ -15,6 +15,16 @@ export default function SignInPage() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
+    const resetForm = () => {
+    setName('');
+    setEmail('');
+    setPassword('');
+    setRole('USER');
+    // Ensure the view switches to LOGIN
+    setIsLogin(true); 
+    setError('');
+};
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
@@ -64,7 +74,7 @@ export default function SignInPage() {
         
         // --- SUCCESS: Redirect to Login Page ---
         // (You don't need to read response.json() if you are only redirecting)
-        
+        resetForm();
         router.push('/auth/signin?registered=true&email=' + encodeURIComponent(email));
         
     } catch (err: any) {

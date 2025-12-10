@@ -1,13 +1,19 @@
 // components/Navbar.tsx
+'use client';
 import Link from 'next/link';
+import { useSession, signOut } from 'next-auth/react';
 
 export default function Navbar() {
+  const { data: session, status } = useSession();
   // Define the main navigation links
   const navLinks = [
     { name: 'Campaigns', href: '' }, // The main list page
     { name: 'About', href: '/#about' },              // Anchor link for About section
     { name: 'How It Works', href: '/#how-it-works' },// Anchor link for How It Works section
   ];
+
+  const isAuthenticated = status === 'authenticated';
+  const isCreator = isAuthenticated && session?.user?.role === 'CREATOR';
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -42,17 +48,35 @@ export default function Navbar() {
           {/* CTA Buttons (Top Right) */}
           <div className="flex items-center space-x-4">
             
-            {/* Login Button */}
-            <Link 
-              href="/auth/signin" 
-              className="text-gray-600 hover:text-indigo-600 text-sm font-medium px-3 py-2 rounded-md"
-            >
-              Login
-            </Link>
+            {/* Conditional Login/User Status */}
+            {status === 'loading' ? (
+              <div className="text-gray-600 text-sm">Loading...</div>
+            ) : isAuthenticated ? (
+              <>
+                {/* 📌 FIX: We now show the Logout button for ALL logged-in users */}
+                <button 
+                  onClick={() => signOut({ callbackUrl: '/' })} 
+                  className="text-gray-600 hover:text-red-600 text-sm font-medium px-3 py-2 rounded-md"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              // If not authenticated, show Login
+              <Link 
+                href="/auth/signin" 
+                className="text-gray-600 hover:text-indigo-600 text-sm font-medium px-3 py-2 rounded-md"
+              >
+                Login
+              </Link>
+            )}
 
-            {/* Start a Campaign (Primary CTA) */}
+            {/* Start a Campaign Button: 
+                Creator -> /campaign/new
+                Others -> /auth/signin 
+            */}
             <Link 
-              href="/campaign/new" 
+              href={isCreator ? "/campaign/new" : "/auth/signin"} 
               className="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
             >
               Start a Campaign
