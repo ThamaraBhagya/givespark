@@ -1,12 +1,13 @@
 // lib/auth.ts
 import { getServerSession } from "next-auth";
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 // NOTE: This file assumes you've completed Step 5 successfully
 
 /**
  * Gets the current session and user object on the server.
  */
 export async function getAuthSession() {
-  const session = await getServerSession(/* Add NextAuth config here later */);
+  const session = await getServerSession(authOptions);
   return session;
 }
 

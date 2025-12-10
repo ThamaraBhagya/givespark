@@ -35,28 +35,46 @@ export default function SignInPage() {
             }
 
         } else {
-            // --- REGISTER LOGIC (Requires a separate API route) ---
+    // --- REGISTER LOGIC ---
+    try {
+        const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password, role }),
+        });
+
+        if (!response.ok) {
+            // CRITICAL FIX: Clone the response BEFORE attempting to read the body.
+            const responseClone = response.clone();
+            let errorMessage = 'Registration failed due to server error.';
+
             try {
-                const response = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, role }),
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Registration failed.');
-                }
-                
-                // Optional: Automatically sign in after successful registration
-                await signIn('credentials', { email, password, redirect: false });
-                router.push('/'); 
-
-            } catch (err: any) {
-                setError(err.message);
+                // 1. Try to read JSON first (for our custom API errors)
+                const errorData = await response.json();
+                errorMessage = errorData.error || errorData.details || 'Registration failed.';
+            } catch {
+                // 2. If JSON parsing fails (because the server sent plain text/HTML), 
+                // read the raw text from the CLONED response for debugging.
+                errorMessage = await responseClone.text(); 
             }
+            
+            // Throw the error message that was successfully read/parsed
+            throw new Error(errorMessage);
         }
+        
+        // --- SUCCESS: Redirect to Login Page ---
+        // (You don't need to read response.json() if you are only redirecting)
+        
+        router.push('/auth/signin?registered=true&email=' + encodeURIComponent(email));
+        
+    } catch (err: any) {
+        // This catch block handles the error thrown above or network errors.
+        setError(err.message);
+    } finally {
         setLoading(false);
+    }
+}
+        
     };
 
     return (
@@ -73,13 +91,13 @@ export default function SignInPage() {
                     {!isLogin && (
                         <>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Full Name</label>
+                                <label className="block text-sm font-medium text-black">Full Name</label>
                                 <input 
                                     type="text" 
                                     required 
                                     value={name} 
                                     onChange={(e) => setName(e.target.value)} 
-                                    className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+                                    className="w-full p-2 mt-1 border border-gray-300 rounded-md text-black"
                                 />
                             </div>
                             <div>

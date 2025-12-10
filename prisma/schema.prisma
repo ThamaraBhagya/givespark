@@ -29,6 +29,7 @@ model User {
   donations   Donation[]  @relation("UserDonations")
   wallet      Wallet?     // Creator wallet
   accounts         Account[]
+  sessions         Session[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
@@ -57,6 +58,26 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+}
+
+// ADD THESE MODELS to your prisma/schema.prisma file
+
+// ---------- 3. SESSION Model (Required for NextAuth Adapter) ----------
+model Session {
+  id           String    @id @default(cuid())
+  sessionToken String    @unique
+  userId       String
+  expires      DateTime
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ---------- 4. VERIFICATION TOKEN Model (Required for NextAuth Adapter) ----------
+model VerificationToken {
+  identifier String
+  token      String    @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 // 2. CAMPAIGN 
