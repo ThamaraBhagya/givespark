@@ -25,8 +25,10 @@ export default function CampaignCard({ campaign }: CampaignCardProps) {
         <Image 
           src={campaign.featuredImage || '/placeholder.jpg'} 
           alt={campaign.title} 
-          layout="fill" 
-          objectFit="cover" 
+          fill 
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          
         />
       </div>
 

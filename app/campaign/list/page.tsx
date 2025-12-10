@@ -1,4 +1,4 @@
-// app/campaigns/list/page.tsx
+// app/campaign/list/page.tsx
 "use client";
 
 import { useState, useEffect } from 'react';

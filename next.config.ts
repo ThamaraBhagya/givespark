@@ -1,7 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+    // This is the core configuration object for image optimization
+    images: {
+        // Use remotePatterns to whitelist external image hosts securely
+        remotePatterns: [
+            {
+                protocol: 'https',
+                // This hostname matches all files stored in your Vercel Blob storage
+                hostname: '**.public.blob.vercel-storage.com', 
+                port: '',
+                pathname: '/**', // Allows any path
+            },
+        ],
+    },
+    
+    // Add any other configuration options here
 };
 
 export default nextConfig;

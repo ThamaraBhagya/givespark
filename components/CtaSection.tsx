@@ -35,7 +35,7 @@ export default function CtaSection() {
 
             {/* CTA 2: For Donors */}
             <Link 
-              href="/campaigns/list" 
+              href="/campaign/list" 
               className="flex items-center space-x-2 px-8 py-4 border border-white text-white font-medium rounded-xl hover:bg-white/10 transition duration-300 text-lg"
             >
               <HandRaisedIcon className="w-6 h-6" />

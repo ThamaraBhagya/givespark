@@ -3,7 +3,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth"; // Used for authentication [cite: 74]
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -17,6 +17,11 @@ export async function POST(req: Request) {
       title, shortDesc, description, goalAmount, deadline, images, featuredImage, category
     } = body; // Destructure all mandatory fields [cite: 77]
 
+    const deadlineDate = new Date(deadline);
+      if (isNaN(deadlineDate.getTime())) {
+        return NextResponse.json({ error: "Invalid deadline date provided." }, { status: 400 });
+      }
+
     const creatorId = (session.user as any).id;
 
     const campaign = await prisma.campaign.create({
@@ -25,8 +30,8 @@ export async function POST(req: Request) {
         shortDesc,
         description,
         goalAmount,
-        deadline: new Date(deadline),
-        images,
+        deadline: deadlineDate,
+        images: images || [],
         featuredImage,
         category,
         creatorId: creatorId, // Link to the logged-in creator [cite: 78]

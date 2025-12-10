@@ -58,7 +58,7 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
           <p className="text-lg text-gray-600 mt-2">By {campaignData.creator.name}</p>
 
           <div className="relative h-96 w-full mt-6 rounded-xl overflow-hidden">
-            <Image src={campaignData.featuredImage || '/placeholder.jpg'} alt={campaignData.title} layout="fill" objectFit="cover" />
+            <Image src={campaignData.featuredImage || '/placeholder.jpg'} alt={campaignData.title} fill className="object-cover" />
           </div>
 
           <h2 className="text-2xl font-bold mt-8">The Story</h2>
