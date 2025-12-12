@@ -53,6 +53,16 @@ export default function Navbar() {
               <div className="text-gray-600 text-sm">Loading...</div>
             ) : isAuthenticated ? (
               <>
+                {/* 📌 FIX: CREATOR DASHBOARD LINK */}
+                {isCreator && (
+                  <Link 
+                    href="/dashboard/creator" 
+                    className="text-white bg-indigo-500 hover:bg-indigo-600 px-3 py-1 rounded-md text-sm font-medium"
+                  >
+                    Creator Dashboard
+                  </Link>
+                )}
+
                 {/* 📌 FIX: We now show the Logout button for ALL logged-in users */}
                 <button 
                   onClick={() => signOut({ callbackUrl: '/' })} 
