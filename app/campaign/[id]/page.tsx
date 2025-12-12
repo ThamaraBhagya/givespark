@@ -7,7 +7,7 @@ import CampaignDetailClient from './CampaignDetailClient'; // Client wrapper for
 
 
 interface CampaignDetailPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 // Server Component to fetch immutable data
@@ -15,7 +15,7 @@ async function getCampaignData(id: string) {
   const campaign = await prisma.campaign.findUnique({
     where: { id },
     include: { 
-      creator: { select: { name: true } }, // Include creator name
+      creator: { select: { name: true,id: true } }, // Include creator name
       donations: { orderBy: { createdAt: 'desc' }, take: 10 } // Get recent donations
     }
   });
@@ -23,7 +23,8 @@ async function getCampaignData(id: string) {
 }
 
 export default async function CampaignDetailsPage({ params }: CampaignDetailPageProps) {
-  const campaign = await getCampaignData(params.id);
+  const{ id } = await params;
+  const campaign = await getCampaignData(id);
 
   if (!campaign) {
     notFound();

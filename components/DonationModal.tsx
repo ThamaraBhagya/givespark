@@ -3,7 +3,8 @@
 
 import { useState } from 'react';
 // Assume you use next-auth for getting the session/donor ID on the client
-// import { useSession } from 'next-auth/react'; 
+import { useSession } from 'next-auth/react'; 
+import { useRouter } from 'next/navigation';
 
 interface DonationModalProps {
   campaignId: string;
@@ -13,8 +14,9 @@ interface DonationModalProps {
 }
 
 export default function DonationModal({ campaignId, campaignTitle, onClose, onSuccess }: DonationModalProps) {
+  const { data: session } = useSession(); // Get session
+  const router = useRouter();
   
-  // const { data: session } = useSession(); // Use this to pre-fill name/email if needed
   
   const [amount, setAmount] = useState(10); // Default donation amount
   const [message, setMessage] = useState('');
@@ -23,8 +25,19 @@ export default function DonationModal({ campaignId, campaignTitle, onClose, onSu
   const [status, setStatus] = useState<'IDLE' | 'PROCESSING' | 'SUCCESS' | 'ERROR'>('IDLE');
   const [error, setError] = useState('');
 
+  if (!session) {
+    // Redirect to signin
+    router.push(`/auth/signin?callbackUrl=${encodeURIComponent(`/campaign/${campaignId}`)}`);
+    return null;
+  }
+
   const handleDonate = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!session?.user?.id) {
+      setError("You must be logged in to donate");
+      return;
+    }
     if (amount <= 0) {
       setError("Amount must be greater than zero.");
       return;

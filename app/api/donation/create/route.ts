@@ -2,12 +2,19 @@
 
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth"; // To get donorId
+import { getServerSession } from "next-auth"; 
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";// To get donorId
 
 export async function POST(req: Request) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   // Donor ID can be null if the donation is anonymous (which we allow)
-  const donorId = session?.user?.id || null; 
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ 
+      error: "You must be logged in to make a donation" 
+    }, { status: 401 });
+  }
+  const donorId = session.user.id; 
 
   try {
     const body = await req.json();
@@ -20,11 +27,31 @@ export async function POST(req: Request) {
 
     // --- 1. Get the Campaign and its Creator ---
     const campaign = await prisma.campaign.findUnique({
-        where: { id: campaignId }
+      where: { id: campaignId },
+      select: { 
+        id: true, 
+        creatorId: true,
+        title: true 
+      }
     });
 
     if (!campaign) {
         return NextResponse.json({ error: "Campaign not found." }, { status: 404 });
+    }
+    // Prevent creators from donating to their own campaigns
+    if (campaign.creatorId === donorId) {
+      return NextResponse.json({ 
+        error: "Creators cannot donate to their own campaigns" 
+      }, { status: 403 });
+    }
+
+    const donor = await prisma.user.findUnique({
+      where: { id: donorId },
+      select: { role: true }
+    });
+
+    if (!donor) {
+      return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
 
     // --- 2. Perform the Transaction (Mock Payment Logic) ---

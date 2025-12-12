@@ -4,6 +4,8 @@
 import { useState, useCallback } from 'react';
 import DonationModal from '@/components/DonationModal';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 // Import any other necessary components like ModalContainer
 
 // Define the type for the campaign data structure
@@ -14,7 +16,7 @@ interface CampaignDataType {
   featuredImage: string;
   currentAmount: number;
   goalAmount: number;
-  creator: { name: string };
+  creator: { name: string, id: string; };
   // Include other necessary fields
 }
 
@@ -25,6 +27,8 @@ interface ClientProps {
 }
 
 export default function CampaignDetailClient({ campaignId, initialCampaignData, fundedPercentage }: ClientProps) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [campaignData, setCampaignData] = useState<CampaignDataType>(initialCampaignData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPercentage, setCurrentPercentage] = useState(fundedPercentage);
@@ -47,6 +51,26 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
     setIsModalOpen(false);
     // NOTE: For a multi-user demo, you would need WebSockets or server re-fetching here.
   }, [campaignData.currentAmount, campaignData.goalAmount]);
+
+   const handleDonateClick = () => {
+    if (status === 'loading') {
+      return; // Wait for session to load
+    }
+    
+    if (!session) {
+      // Redirect to signin page with callback URL
+      router.push(`/auth/signin?callbackUrl=${encodeURIComponent(`/campaign/${campaignId}`)}`);
+      return;
+    }
+    
+    // Check if user is a donor (not a creator donating to themselves)
+    if (session.user?.role === 'CREATOR' && session.user?.id === initialCampaignData.creator?.id) {
+      alert("Creators cannot donate to their own campaigns");
+      return;
+    }
+    
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="max-w-6xl mx-auto p-8">
@@ -93,6 +117,12 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
             >
               Donate Now
             </button>
+            {/* Show login prompt if not signed in */}
+            {!session && status !== 'loading' && (
+              <p className="mt-2 text-sm text-gray-500 text-center">
+                Please sign in to donate
+              </p>
+            )}
           </div>
 
           {/* Creator Info / Deadline, etc. */}
@@ -101,7 +131,7 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
       </div>
 
       {/* Modal Container (Simple placeholder for modal display) */}
-      {isModalOpen && (
+      {isModalOpen &&  session &&  (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <div className="bg-white rounded-xl max-w-lg w-full">
                   <DonationModal 
