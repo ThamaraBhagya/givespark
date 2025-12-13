@@ -3,9 +3,10 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth"; // To identify the creator
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function POST(req: Request) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   // Ensure the user is authenticated and is a Creator
   if (!session?.user || session.user.role !== 'CREATOR') {
       return NextResponse.json({ error: "Access denied or not a creator." }, { status: 403 });
