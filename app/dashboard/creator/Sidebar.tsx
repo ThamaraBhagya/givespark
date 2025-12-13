@@ -13,11 +13,11 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { 
-    name: 'Dashboard Home', 
-    href: '/dashboard/creator', 
-    icon: LayoutDashboard 
-  },
+  // { 
+  //   name: 'Dashboard Home', 
+  //   href: '/dashboard/creator', 
+  //   icon: LayoutDashboard 
+  // },
   { 
     name: 'Virtual Wallet', 
     href: '/dashboard/creator/wallet', 

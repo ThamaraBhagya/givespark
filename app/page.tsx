@@ -32,7 +32,7 @@ export default function Home() {
           
           {/* Primary CTA: Start Funding (Green/Teal Button) */}
           <Link 
-            href="/campaigns/list" 
+            href="/campaign/list" 
             className="flex items-center space-x-2 px-8 py-3 bg-teal-400 text-gray-900 font-bold rounded-lg shadow-xl hover:bg-teal-300 transition duration-300 text-lg"
           >
             <SparklesIcon className="w-6 h-6" />
