@@ -55,7 +55,7 @@ export default function Home() {
     </section>
     <StatSection />
     <HowItWorks />
-    {/* <FeaturedCampaigns/> */}
+    <FeaturedCampaigns/>
     <TestimonialsSection />
     <CtaSection />
 

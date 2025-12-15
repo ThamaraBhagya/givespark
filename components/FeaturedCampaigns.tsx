@@ -67,7 +67,7 @@ export default function FeaturedCampaigns() {
         {/* CTA to All Campaigns */}
         <div className="mt-12 text-center">
           <Link 
-            href="/campaigns/list" 
+            href="/campaign/list" 
             className="px-8 py-3 border border-indigo-600 text-lg font-medium rounded-lg text-indigo-600 hover:bg-indigo-50 transition duration-300"
           >
             View All Campaigns →

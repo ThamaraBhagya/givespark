@@ -48,7 +48,7 @@ export default function AllCampaignsPage() {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <h1 className="text-4xl font-extrabold text-gray-900 mb-6">Explore All Campaigns</h1>
+            <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-white">Explore All Campaigns</h1>
 
             {/* Optional: Filter/Sort Bar */}
             <div className="flex justify-between items-center mb-8 p-4 bg-gray-50 rounded-lg border">
