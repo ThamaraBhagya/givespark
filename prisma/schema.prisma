@@ -24,6 +24,9 @@ model User {
   emailVerified    DateTime?     // If using credentials
   image       String?
   role        Role        @default(USER) // Will be USER or CREATOR
+
+  // 💡 NEW FIELD for Stripe Connect
+  stripeAccountId String?
   
   campaigns   Campaign[]  @relation("UserCampaigns")
   donations   Donation[]  @relation("UserDonations")

@@ -49,6 +49,7 @@ export const authOptions = {
                     email: user.email,
                     name: user.name,
                     role: user.role, // Crucial: Pass the role through
+                    stripeAccountId: user.stripeAccountId,
                 };
             }
         })
@@ -66,6 +67,7 @@ export const authOptions = {
                 // 'user' is the object returned from the 'authorize' function above
                 token.role = user.role;
                 token.id = user.id;
+                token.stripeAccountId = user.stripeAccountId;
             }
             return token;
         },
@@ -74,6 +76,7 @@ export const authOptions = {
             if (session.user) {
                 session.user.role = token.role;
                 session.user.id = token.id;
+                session.user.stripeAccountId = token.stripeAccountId;
             }
             return session;
         },
