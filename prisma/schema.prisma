@@ -110,6 +110,9 @@ model Donation {
   message     String?
   anonymous   Boolean    @default(false)
 
+  // 💡 NEW FIELD: Link to the Stripe transaction ID
+  stripePaymentIntentId String?  @unique
+
   donorId     String?
   donor       User?       @relation("UserDonations", fields: [donorId], references: [id])
 
@@ -139,6 +142,10 @@ model WalletTransaction {
   amount      Float
   type          TransactionType
   createdAt   DateTime   @default(now())
+
+  // 💡 NEW FIELDS: For linking the transaction to its source (Donation/Stripe ID)
+  sourceId      String?   // The ID of the related object (e.g., Donation ID or Stripe Intent ID)
+  sourceType    String?   // e.g., 'DONATION', 'STRIPE_FEE'
 
   walletId    String
   wallet      Wallet     @relation(fields: [walletId], references: [id])
