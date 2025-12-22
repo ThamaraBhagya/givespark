@@ -82,6 +82,13 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+enum Category {
+  EDUCATION
+  MEDICAL
+  TECHNOLOGY
+  COMMUNITY
+  OTHER
+}
 
 // 2. CAMPAIGN 
 model Campaign {
@@ -95,7 +102,7 @@ model Campaign {
   deadline       DateTime
   featuredImage  String
   images         String[]
-  category       String
+  category       Category @default(OTHER)
 
   creatorId      String
   creator        User         @relation("UserCampaigns", fields: [creatorId], references: [id])
@@ -124,6 +131,8 @@ model Donation {
 
   createdAt   DateTime   @default(now())
 }
+
+
 
 // 4. WALLET (Virtual Creator Wallet)
 model Wallet {

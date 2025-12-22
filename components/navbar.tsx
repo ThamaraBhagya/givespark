@@ -7,6 +7,7 @@ export default function Navbar() {
   const { data: session, status } = useSession();
   // Define the main navigation links
   const navLinks = [
+    { name: 'Home', href: '/' },
     { name: 'Campaigns', href: '/campaign/list' }, // The main list page
     { name: 'About', href: '/#about' },              // Anchor link for About section
     { name: 'How It Works', href: '/#how-it-works' },// Anchor link for How It Works section

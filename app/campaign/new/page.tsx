@@ -249,10 +249,11 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
           >
             <option value="">Select a category...</option>
-            <option value="Education">Education</option>
-            <option value="Medical">Medical</option>
-            <option value="Community">Community</option>
-            <option value="Technology">Technology</option>
+            <option value="EDUCATION">Education</option>
+            <option value="MEDICAL">Medical</option>
+            <option value="COMMUNITY">Community</option>
+            <option value="TECHNOLOGY">Technology</option>
+            <option value="OTHER">Other</option>
             {/* Add more categories here */}
           </select>
         </div>

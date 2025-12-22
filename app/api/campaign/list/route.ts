@@ -7,6 +7,15 @@ export async function GET() {
   try {
     const campaigns = await prisma.campaign.findMany({
       // Since we removed the status/approval, we just fetch all campaigns
+      select: {
+        id: true,
+        title: true,
+        shortDesc: true,
+        featuredImage: true,
+        currentAmount: true,
+        goalAmount: true,
+        category: true, // 💡 Ensure category is included
+      },
       orderBy: { createdAt: "desc" } 
     }); //[cite: 105]
 
