@@ -1,11 +1,15 @@
-// components/Footer.tsx
+"use client"; // 💡 Required for useSession and state
+
 import Link from 'next/link';
-import { Twitter, Linkedin, Github } from 'lucide-react'; // Example icons from lucide-react (install if needed: npm install lucide-react)
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { Twitter, Linkedin, Github, MessageSquare, X } from 'lucide-react';
+import LeaveTestimonial from './LeaveTestimonial';
 
 const footerNavigation = {
   solutions: [
     { name: 'Launch Campaign', href: '/campaign/new' },
-    { name: 'Explore Projects', href: '/campaigns/list' },
+    { name: 'Explore Projects', href: '/campaign/list' }, // Fixed typo from 'campaigns'
     { name: 'How It Works', href: '/#how-it-works' },
   ],
   company: [
@@ -20,6 +24,9 @@ const footerNavigation = {
 };
 
 export default function Footer() {
+  const { data: session } = useSession(); // 💡 Check login status
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <footer className="bg-gray-900 border-t border-gray-800">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -35,17 +42,13 @@ export default function Footer() {
               Join our community and get updates on inspiring projects.
             </p>
             
-            {/* Newsletter (Mocked) */}
+            {/* Newsletter */}
             <form className="mt-4 sm:flex sm:max-w-md">
-              <label htmlFor="email-address" className="sr-only">
-                Email address
-              </label>
               <input
-                id="email-address"
                 type="email"
                 required
                 placeholder="Enter your email"
-                className="w-full min-w-0 appearance-none rounded-md border border-gray-700 bg-gray-800 px-4 py-2 text-base text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                className="w-full min-w-0 appearance-none rounded-md border border-gray-700 bg-gray-800 px-4 py-2 text-base text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
               <div className="mt-3 rounded-md sm:mt-0 sm:ml-3 shrink-0">
                 <button
@@ -56,6 +59,19 @@ export default function Footer() {
                 </button>
               </div>
             </form>
+
+            {/* 💡 TESTIMONIAL BUTTON: Only visible if logged in */}
+            {session && (
+              <div className="pt-4">
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="flex items-center space-x-2 bg-gray-800 border border-gray-700 hover:border-teal-500 text-teal-400 hover:text-white px-4 py-2 rounded-lg transition-all text-sm font-semibold"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Share your experience</span>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Section 2 & 3: Navigation Links */}
@@ -99,32 +115,45 @@ export default function Footer() {
                   ))}
                 </ul>
               </div>
+              <div>
+                
+              </div>
             </div>
           </div>
         </div>
         
-        {/* Bottom Section: Copyright and Social Icons */}
+        {/* Bottom Section */}
         <div className="mt-12 border-t border-gray-800 pt-8 md:flex md:items-center md:justify-between">
           <div className="flex space-x-6 md:order-2">
-            {/* Social Icons */}
-            <a href="#" className="text-gray-400 hover:text-white">
-              <span className="sr-only">Twitter</span>
-              <Twitter className="h-6 w-6" />
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white">
-              <span className="sr-only">LinkedIn</span>
-              <Linkedin className="h-6 w-6" />
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white">
-              <span className="sr-only">GitHub</span>
-              <Github className="h-6 w-6" />
-            </a>
+            <a href="#" className="text-gray-400 hover:text-white"><Twitter className="h-6 w-6" /></a>
+            <a href="#" className="text-gray-400 hover:text-white"><Linkedin className="h-6 w-6" /></a>
+            <a href="#" className="text-gray-400 hover:text-white"><Github className="h-6 w-6" /></a>
           </div>
           <p className="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
             &copy; {new Date().getFullYear()} GiveSpark, Inc. All rights reserved.
           </p>
         </div>
       </div>
+
+      {/* 💡 TESTIMONIAL MODAL OVERLAY */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="relative w-full max-w-lg">
+            {/* Close Icon */}
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              className="absolute -top-12 right-0 text-white hover:text-teal-400 transition-colors"
+            >
+              <X className="w-8 h-8" />
+            </button>
+            
+            {/* Form Container */}
+            <div className="bg-white rounded-2xl overflow-hidden">
+               <LeaveTestimonial />
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   );
 }

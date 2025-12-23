@@ -41,21 +41,21 @@ export default function StatsSection() {
     {
       id: 1,
       name: 'Campaigns Launched',
-      value: statsData.totalCampaigns.toString() + '+',
+      value: (statsData?.totalCampaigns ?? 0).toString() + '+',
       icon: RocketLaunchIcon,
       description: 'Ideas successfully transitioned from concept to active funding.'
     },
     {
       id: 2,
       name: 'Total Funds Raised',
-      value: `$${formatNumber(statsData.totalFunds)}`,
+      value: `$${formatNumber(statsData?.totalFunds ?? 0)}`,
       icon: HandRaisedIcon,
       description: 'Total contributions provided by our global community.'
     },
     {
       id: 3,
       name: 'Active Backers',
-      value: statsData.totalBackers.toString() + '+',
+      value: (statsData?.totalBackers ?? 0).toString() + '+',
       icon: UserGroupIcon,
       description: 'The growing number of people supporting change.'
     },
