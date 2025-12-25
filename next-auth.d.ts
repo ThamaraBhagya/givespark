@@ -9,6 +9,7 @@ declare module "next-auth" {
    */
   interface Session {
     user: {
+      image?: string;
       id: string; // <-- Add custom ID
       role: 'USER' | 'CREATOR'; // <-- Add custom Role
     } & DefaultSession["user"];

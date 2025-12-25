@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react'; // NextAuth client hook
 import { useRouter } from 'next/navigation';
+import { CameraIcon, UserCircleIcon } from 'lucide-react';
 
 export default function SignInPage() {
     const router = useRouter();
@@ -15,6 +16,11 @@ export default function SignInPage() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
+    // --- 💡 NEW: Profile Photo States ---
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [finalImageUrl, setFinalImageUrl] = useState('');
+    const [uploadingImage, setUploadingImage] = useState(false);
+
     const resetForm = () => {
     setName('');
     setEmail('');
@@ -24,6 +30,32 @@ export default function SignInPage() {
     setIsLogin(true); 
     setError('');
 };
+
+// --- 💡 NEW: Handle Image Upload to Vercel Blob ---
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setPreviewUrl(URL.createObjectURL(file));
+            setUploadingImage(true);
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch('/api/upload/image', {
+                    method: 'POST',
+                    body: formData,
+                });
+                if (!res.ok) throw new Error("Image upload failed");
+                const data = await res.json();
+                setFinalImageUrl(data.url); // Use this URL for registration
+            } catch (err) {
+                setError("Failed to upload profile photo.");
+            } finally {
+                setUploadingImage(false);
+            }
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,7 +82,7 @@ export default function SignInPage() {
         const response = await fetch('/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, password, role }),
+            body: JSON.stringify({ name, email, password, role,image: finalImageUrl }),
         });
 
         if (!response.ok) {
@@ -100,6 +132,26 @@ export default function SignInPage() {
                     {/* Register fields (Hidden during login) */}
                     {!isLogin && (
                         <>
+
+                            {/* 💡 PROFILE PHOTO UPLOAD */}
+                            <div className="flex flex-col items-center space-y-2">
+                                <div className="relative group w-24 h-24">
+                                    <div className="w-full h-full rounded-full border-4 border-gray-100 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
+                                        {previewUrl ? (
+                                            <img src={previewUrl} className="w-full h-full object-cover" alt="Preview" />
+                                        ) : (
+                                            <UserCircleIcon className="w-full h-full text-gray-300" />
+                                        )}
+                                    </div>
+                                    <label className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 rounded-full cursor-pointer transition-opacity">
+                                        <CameraIcon className="w-8 h-8 text-white" />
+                                        <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                                    </label>
+                                </div>
+                                <span className="text-xs text-gray-500 font-medium">Add profile photo</span>
+                                {uploadingImage && <span className="text-[10px] text-indigo-600 animate-pulse">Uploading...</span>}
+                            </div> 
+                            
                             <div>
                                 <label className="block text-sm font-medium text-black">Full Name</label>
                                 <input 

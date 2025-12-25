@@ -1,16 +1,17 @@
-// components/Navbar.tsx
 'use client';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
+import { UserCircleIcon,LogOut } from 'lucide-react';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
+  
   // Define the main navigation links
   const navLinks = [
     { name: 'Home', href: '/' },
-    { name: 'Campaigns', href: '/campaign/list' }, // The main list page
-    { name: 'About', href: '/#about' },              // Anchor link for About section
-    { name: 'How It Works', href: '/#how-it-works' },// Anchor link for How It Works section
+    { name: 'Campaigns', href: '/campaign/list' },
+    { name: 'About', href: '/#about' },
+    { name: 'How It Works', href: '/#how-it-works' },
   ];
 
   const isAuthenticated = status === 'authenticated';
@@ -23,9 +24,7 @@ export default function Navbar() {
           
           {/* Logo/Name (Top Left) */}
           <div className="shrink-0 flex items-center space-x-2">
-            {/* Placeholder for Icon (e.g., a Spark or Fire icon) */}
             <span className="text-3xl text-indigo-600">⚡</span> 
-            
             <Link href="/" className="text-xl font-extrabold text-gray-800">
               GiveSpark
             </Link>
@@ -48,32 +47,55 @@ export default function Navbar() {
 
           {/* CTA Buttons (Top Right) */}
           <div className="flex items-center space-x-4">
+            {/* Start a Campaign Button */}
+            <Link 
+              href={isCreator ? "/campaign/new" : "/auth/signin"} 
+              className="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
+            >
+              Start a Campaign
+            </Link>
             
             {/* Conditional Login/User Status */}
             {status === 'loading' ? (
-              <div className="text-gray-600 text-sm">Loading...</div>
+              <div className="animate-pulse h-8 w-8 bg-gray-200 rounded-full" />
             ) : isAuthenticated ? (
-              <>
-                {/* 📌 FIX: CREATOR DASHBOARD LINK */}
-                {isCreator && (
-                  <Link 
-                    href="/dashboard/creator" 
-                    className="text-white bg-indigo-500 hover:bg-indigo-600 px-3 py-1 rounded-md text-sm font-medium"
-                  >
-                    Creator Dashboard
-                  </Link>
-                )}
+              // FIX: Wrapped authenticated content in a single fragment or div
+              <div className="flex items-center space-x-4 border-r pr-4 mr-2 border-gray-200">
+                {/* PROFILE IMAGE & NAME */}
+                <Link 
+                  href={isCreator ? "/dashboard/creator" : "/dashboard/user"} 
+                  className="flex items-center space-x-2 group cursor-pointer"
+                  title="View Dashboard"
+                >
+                  <div className="h-8 w-8 rounded-full overflow-hidden border border-indigo-100 bg-gray-100">
+                    {session?.user?.image ? (
+                      <img 
+                        src={session.user.image} 
+                        alt="Profile" 
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <UserCircleIcon className="h-full w-full text-gray-400" />
+                    )}
+                  </div>
+                  <div className="hidden lg:block text-left">
+                    <p className="text-xs font-bold text-gray-900 leading-none">
+                      {session?.user?.name?.split(' ')[0]}
+                    </p>
+                    <p className="text-[10px] text-gray-500 uppercase tracking-tighter">
+                      {session?.user?.role}
+                    </p>
+                  </div>
+                </Link>
 
-                {/* 📌 FIX: We now show the Logout button for ALL logged-in users */}
                 <button 
                   onClick={() => signOut({ callbackUrl: '/' })} 
                   className="text-gray-600 hover:text-red-600 text-sm font-medium px-3 py-2 rounded-md"
                 >
-                  Logout
+                  <LogOut className="h-5 w-5" />
                 </button>
-              </>
+              </div> // FIX: Closed the outer container div
             ) : (
-              // If not authenticated, show Login
               <Link 
                 href="/auth/signin" 
                 className="text-gray-600 hover:text-indigo-600 text-sm font-medium px-3 py-2 rounded-md"
@@ -82,16 +104,7 @@ export default function Navbar() {
               </Link>
             )}
 
-            {/* Start a Campaign Button: 
-                Creator -> /campaign/new
-                Others -> /auth/signin 
-            */}
-            <Link 
-              href={isCreator ? "/campaign/new" : "/auth/signin"} 
-              className="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
-            >
-              Start a Campaign
-            </Link>
+            
           </div>
         </div>
       </div>

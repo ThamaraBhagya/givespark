@@ -1,13 +1,15 @@
 // app/dashboard/creator/Sidebar.tsx
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // For active link styling
-import { LayoutDashboard, Wallet, Megaphone, User } from 'lucide-react'; // Example icons
+import { LayoutDashboard, Wallet, Megaphone, User, Settings } from 'lucide-react'; // Example icons
 
 // Define the expected user data structure
 interface SidebarProps {
   user: {
     name: string;
     role: 'USER' | 'CREATOR';
+    image?: string | null;
     // Add other user fields if needed (e.g., image)
   };
 }
@@ -28,11 +30,19 @@ const navItems = [
     href: '/dashboard/creator/campaigns', 
     icon: Megaphone 
   },
+  { 
+    name: 'Profile Settings', 
+    href: '/dashboard/creator/settings', 
+    icon: Settings 
+  },
 ];
 
-export default function Sidebar({ user }: SidebarProps) {
+export default function Sidebar({ user: initialUser }: SidebarProps){
   // Use 'use client' hook to use hooks like usePathname
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const user = session?.user || initialUser;
+  
 
   return (
     <aside className="w-64 bg-gray-800 text-white flex flex-col h-screen sticky top-0">
@@ -47,11 +57,20 @@ export default function Sidebar({ user }: SidebarProps) {
       {/* User Info */}
       <div className="p-4 border-b border-gray-700">
         <div className="flex items-center space-x-3">
-          <User className="w-6 h-6 p-1 rounded-full bg-indigo-600 text-white" />
-          <div>
-            <p className="font-semibold">{user.name}</p>
-            <p className="text-xs text-teal-400">Role: {user.role}</p>
-          </div>
+          {/* 💡 Show real profile image if available */}
+    <div className="w-9 h-9 rounded-full overflow-hidden bg-indigo-600 border border-gray-600">
+      {user.image ? (
+        <img src={user.image} alt={user.name} className="w-full h-full object-cover" />
+      ) : (
+        <User className="w-full h-full p-1.5 text-white" />
+      )}
+    </div>
+    <div>
+      <p className="font-semibold text-sm truncate w-32">{user.name}</p>
+      <p className="text-[10px] text-teal-400 uppercase font-bold tracking-wider">
+        {user.role}
+      </p>
+    </div>
         </div>
       </div>
 

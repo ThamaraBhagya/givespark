@@ -48,6 +48,7 @@ export const authOptions = {
                     id: user.id,
                     email: user.email,
                     name: user.name,
+                    image: user.image,
                     role: user.role, // Crucial: Pass the role through
                     stripeAccountId: user.stripeAccountId,
                 };
@@ -62,11 +63,16 @@ export const authOptions = {
     // Callbacks are necessary to persist the custom 'role' field onto the session
     callbacks: {
         // Step 1: Add custom fields (like role) to the JWT token
-        async jwt({ token, user, session }: any) {
+        async jwt({ token, user,trigger, session }: any) {
+            if (trigger === "update" && session) {
+                token.name = session.name;
+                token.image = session.image;
+                }
             if (user) {
                 // 'user' is the object returned from the 'authorize' function above
                 token.role = user.role;
                 token.id = user.id;
+                token.image = user.image;
                 token.stripeAccountId = user.stripeAccountId;
             }
             return token;
@@ -76,6 +82,7 @@ export const authOptions = {
             if (session.user) {
                 session.user.role = token.role;
                 session.user.id = token.id;
+                session.user.image = token.image;
                 session.user.stripeAccountId = token.stripeAccountId;
             }
             return session;
