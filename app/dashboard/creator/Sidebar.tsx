@@ -1,25 +1,20 @@
-// app/dashboard/creator/Sidebar.tsx
+"use client";
+
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'; // For active link styling
-import { LayoutDashboard, Wallet, Megaphone, User, Settings } from 'lucide-react'; // Example icons
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { Wallet, Megaphone, Settings, User, Rocket } from 'lucide-react';
 
-// Define the expected user data structure
 interface SidebarProps {
   user: {
     name: string;
     role: 'USER' | 'CREATOR';
     image?: string | null;
-    // Add other user fields if needed (e.g., image)
   };
 }
 
 const navItems = [
-  // { 
-  //   name: 'Dashboard Home', 
-  //   href: '/dashboard/creator', 
-  //   icon: LayoutDashboard 
-  // },
   { 
     name: 'Virtual Wallet', 
     href: '/dashboard/creator/wallet', 
@@ -37,69 +32,94 @@ const navItems = [
   },
 ];
 
-export default function Sidebar({ user: initialUser }: SidebarProps){
-  // Use 'use client' hook to use hooks like usePathname
+export default function Sidebar({ user: initialUser }: SidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const user = session?.user || initialUser;
-  
 
   return (
-    <aside className="w-64 bg-gray-800 text-white flex flex-col h-screen sticky top-0">
+    <aside className="w-72 bg-[#0a0f1d] text-white flex flex-col h-screen sticky top-0 border-r border-white/5">
       
-      {/* Header/Logo */}
-      <div className="flex items-center justify-center h-16 border-b border-gray-700">
-        <Link href="/" className="text-xl font-extrabold text-teal-400">
-          GiveSpark Creator
-        </Link>
+      {/* Header/Logo Section */}
+      <div className="flex flex-col items-center justify-center py-10 border-b border-white/5">
+        {/* <Link href="/" className="flex items-center space-x-2 group">
+            <div className="relative h-8 w-8">
+              <Image 
+                src="/logo-icon.png" 
+                alt="Icon" 
+                fill 
+                className="object-contain transition-transform group-hover:rotate-12" 
+              />
+            </div>
+            <div className="relative h-5 w-28">
+              <Image 
+                src="/givespark-text.png" 
+                alt="GiveSpark" 
+                fill 
+                className="object-contain brightness-0 invert" 
+              />
+            </div>
+        </Link> */}
+        <span className="mt-2 text-[15px] font-black uppercase tracking-[0.3em] text-teal-500/60">
+          Creator Studio
+        </span>
       </div>
 
-      {/* User Info */}
-      <div className="p-4 border-b border-gray-700">
-        <div className="flex items-center space-x-3">
-          {/* 💡 Show real profile image if available */}
-    <div className="w-9 h-9 rounded-full overflow-hidden bg-indigo-600 border border-gray-600">
-      {user.image ? (
-        <img src={user.image} alt={user.name} className="w-full h-full object-cover" />
-      ) : (
-        <User className="w-full h-full p-1.5 text-white" />
-      )}
-    </div>
-    <div>
-      <p className="font-semibold text-sm truncate w-32">{user.name}</p>
-      <p className="text-[10px] text-teal-400 uppercase font-bold tracking-wider">
-        {user.role}
-      </p>
-    </div>
+      {/* User Info Section */}
+      <div className="p-6">
+        <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex items-center space-x-4">
+          <div className="relative shrink-0">
+            <div className="w-11 h-11 rounded-xl overflow-hidden bg-[#111827] border border-white/10 shadow-lg">
+              {user.image ? (
+                <img src={user.image} alt={user.name} className="w-full h-full object-cover" />
+              ) : (
+                <User className="w-full h-full p-2 text-gray-500" />
+              )}
+            </div>
+            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-teal-500 rounded-full border-2 border-[#0a0f1d]" />
+          </div>
+          <div className="truncate">
+            <p className="font-bold text-sm text-white truncate">{user.name}</p>
+            <p className="text-[10px] text-teal-400 uppercase font-black tracking-widest mt-0.5">
+              {user.role}
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Navigation Links */}
-      <nav className="flex-1 px-2 py-4 space-y-2">
+      {/* Navigation Section */}
+      <nav className="flex-1 px-4 py-4 space-y-3">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center space-x-3 p-2 rounded-md transition duration-150 ease-in-out
-                ${isActive ? 'bg-indigo-600 text-white shadow-lg' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}
+              className={`flex items-center space-x-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group
+                ${isActive 
+                  ? 'bg-teal-400 text-gray-950 font-black shadow-[0_0_20px_rgba(45,212,191,0.2)]' 
+                  : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent hover:border-white/5'
+                }
               `}
             >
-              <item.icon className="w-5 h-5" />
-              <span>{item.name}</span>
+              <item.icon className={`w-5 h-5 transition-transform group-hover:scale-110 ${isActive ? 'text-gray-950' : 'text-teal-500/70'}`} />
+              <span className="text-sm tracking-tight">{item.name}</span>
             </Link>
           );
         })}
       </nav>
 
-      {/* CTA: Create New Campaign (Always visible) */}
-      <div className="p-4 border-t border-gray-700">
+      {/* Launch New Campaign Section */}
+      <div className="p-6 mt-auto">
         <Link
           href="/campaign/new"
-          className="block w-full text-center py-2 bg-teal-500 text-gray-900 font-bold rounded-md hover:bg-teal-400 transition"
+          className="group relative flex items-center justify-center space-x-3 w-full py-4 bg-white/5 border border-white/10 text-white font-black rounded-2xl overflow-hidden transition-all hover:bg-white/10 hover:border-teal-500/50"
         >
-          + Launch New Campaign
+          {/* Subtle bottom glow effect */}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-teal-400 transition-all duration-500 group-hover:w-full" />
+          
+          <Rocket className="w-5 h-5 text-teal-400 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
+          <span className="text-sm">Launch New Spark</span>
         </Link>
       </div>
     </aside>

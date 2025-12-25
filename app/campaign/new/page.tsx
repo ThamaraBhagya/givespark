@@ -1,11 +1,16 @@
-// app/campaign/new/page.tsx
-// This is a client component because it handles user input and state.
 "use client";
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-// Assume we have a placeholder component for image upload that returns a URL string
-// import ImageUpload from '@/components/ImageUpload'; 
+import { 
+  RocketIcon, 
+  ImageIcon, 
+  CalendarIcon, 
+  DollarSignIcon, 
+  LayersIcon,
+  CheckCircle2,
+  AlertCircle
+} from 'lucide-react';
 
 export default function NewCampaignPage() {
   const router = useRouter();
@@ -16,9 +21,8 @@ export default function NewCampaignPage() {
     goalAmount: 0,
     deadline: '',
     category: '',
-    // These will be URLs from the image upload service
     featuredImage: '', 
-    images: [], // array of additional image URLs
+    images: [], 
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,23 +35,13 @@ export default function NewCampaignPage() {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      // Convert goalAmount to a number
       [name]: name === 'goalAmount' ? parseFloat(value) : value, 
     }));
   };
   
-  // NOTE: Image handling complexity is abstracted here. 
-  // In a real app, you'd upload the image first and get the URL back.
-  const handleFeaturedImageUpload = (url: string) => {
-    setFormData((prev) => ({ ...prev, featuredImage: url }));
-  };
-  // app/campaign/new/page.tsx (Inside your client component)
-
-// Logic to call your /api/upload/image route
-const handleFileUpload = async (file: File) => {
+  const handleFileUpload = async (file: File) => {
     setIsUploading(true);
     setError(null);
-
     const formData = new FormData();
     formData.append('file', file);
     
@@ -63,7 +57,7 @@ const handleFileUpload = async (file: File) => {
         }
         
         const data = await response.json();
-        setUploadedUrl(data.url); // Save the returned public URL
+        setUploadedUrl(data.url);
         return data.url; 
         
     } catch (error: any) {
@@ -72,82 +66,58 @@ const handleFileUpload = async (file: File) => {
     } finally {
         setIsUploading(false);
     }
-};
+  };
 
-// Handle file selection from the input
-const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
         const file = e.target.files[0];
         setFeaturedFile(file);
-        
-        // Optionally, start the upload immediately or wait for form submit
         handleFileUpload(file); 
     }
-};
-// ...
-  
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setSuccess(false);
 
-    // --- 1. Client-Side Validation ---
     if (formData.goalAmount <= 0 || !formData.title || !featuredFile) {
         setError("Please fill out all required fields and upload an image.");
         setLoading(false);
         return;
     }
 
-    // --- 2. Image Upload ---
     let finalImageUrl = uploadedUrl;
-    
-    // If we haven't uploaded yet (uploadedUrl is empty), upload the file now
     if (!finalImageUrl && featuredFile) {
-        // Assume handleFileUpload is available and returns the URL or null
         const url = await handleFileUpload(featuredFile); 
-        
         if (!url) {
-            // Error handling is done inside handleFileUpload, just stop submission
             setLoading(false);
             return;
         }
         finalImageUrl = url;
     }
     
-    // If we still don't have a URL, stop the process
     if (!finalImageUrl) {
         setError("Failed to secure image URL for submission.");
         setLoading(false);
         return;
     }
 
-    // --- 3. Prepare Final Submission Body ---
-    const submissionBody = {
-        ...formData,
-        // Replace the local image reference with the secure, public URL from Vercel Blob
-        featuredImage: finalImageUrl, 
-    };
+    const submissionBody = { ...formData, featuredImage: finalImageUrl };
 
-
-    // --- 4. Submit Campaign Data to Backend ---
     try {
         const response = await fetch('/api/campaign/create', {
             method: 'POST',
-            headers: {
-                // Must be JSON content type
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(submissionBody),
         });
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to create campaign on the server.');
+            throw new Error(errorData.error || 'Failed to create campaign.');
         }
 
         setSuccess(true);
-        // Optional: Get the newly created campaign ID for redirection
         const campaignData = await response.json(); 
         router.push(`/campaign/${campaignData.campaign.id}`); 
         
@@ -156,146 +126,199 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     } finally {
         setLoading(false);
     }
-};
+  };
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-6">Start a New Campaign</h1>
-      
-      {error && <p className="bg-red-100 text-red-700 p-3 mb-4 rounded">{error}</p>}
-      {success && <p className="bg-green-100 text-green-700 p-3 mb-4 rounded">Campaign created successfully! (Awaiting publish)</p>}
+    <div className="min-h-screen bg-[#0a0f1d] text-white pb-20 relative overflow-hidden">
+      {/* Background Decorative Glows */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] -z-10" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-[120px] -z-10" />
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Campaign Title */}
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">Campaign Title</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          />
-        </div>
+      <div className="max-w-4xl mx-auto p-6 md:p-12 relative z-10">
+        <header className="mb-12 text-center md:text-left">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-[0.2em] mb-4">
+            <RocketIcon className="w-3 h-3" />
+            <span>Launch Your Vision</span>
+          </div>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+            Start a New Campaign
+          </h1>
+          <p className="text-gray-400 mt-4 text-lg font-light">
+            Fill in the details below to ignite your project and find your backers.
+          </p>
+        </header>
         
-        {/* Short Description */}
-        <div>
-          <label htmlFor="shortDesc" className="block text-sm font-medium text-gray-700">Short Description (for card preview)</label>
-          <input
-            type="text"
-            id="shortDesc"
-            name="shortDesc"
-            value={formData.shortDesc}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          />
-        </div>
+        {error && (
+          <div className="flex items-center space-x-3 bg-red-500/10 border border-red-500/20 text-red-400 p-4 mb-8 rounded-2xl animate-in fade-in slide-in-from-top-4">
+            <AlertCircle className="w-5 h-5 shrink-0" />
+            <p className="text-sm font-medium">{error}</p>
+          </div>
+        )}
 
-        {/* Full Description / Story */}
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Full Story / Description</label>
-          <textarea
-            id="description"
-            name="description"
-            rows={6}
-            value={formData.description}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          />
-        </div>
-
-        {/* Fundraising Goal & Deadline */}
-        <div className="grid grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="goalAmount" className="block text-sm font-medium text-gray-700">Fundraising Goal ($)</label>
+        <form onSubmit={handleSubmit} className="space-y-8 bg-white/5 backdrop-blur-xl p-8 md:p-12 rounded-[2.5rem] border border-white/10 shadow-2xl">
+          
+          {/* Campaign Title */}
+          <div className="space-y-2">
+            <label htmlFor="title" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+              <span className="mr-2">01.</span> Campaign Title
+            </label>
             <input
-              type="number"
-              id="goalAmount"
-              name="goalAmount"
-              value={formData.goalAmount}
+              type="text"
+              id="title"
+              name="title"
+              placeholder="e.g. Clean Water Initiative"
+              value={formData.title}
               onChange={handleChange}
               required
-              min="1"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all"
             />
           </div>
-          <div>
-            <label htmlFor="deadline" className="block text-sm font-medium text-gray-700">Deadline Date</label>
+          
+          {/* Short Description */}
+          <div className="space-y-2">
+            <label htmlFor="shortDesc" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+              <span className="mr-2">02.</span> Elevator Pitch
+            </label>
             <input
-              type="date"
-              id="deadline"
-              name="deadline"
-              value={formData.deadline}
+              type="text"
+              id="shortDesc"
+              name="shortDesc"
+              placeholder="A one-sentence summary for your card preview"
+              value={formData.shortDesc}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all"
             />
           </div>
-        </div>
 
-        {/* Category */}
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
-          <select
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          >
-            <option value="">Select a category...</option>
-            <option value="EDUCATION">Education</option>
-            <option value="MEDICAL">Medical</option>
-            <option value="COMMUNITY">Community</option>
-            <option value="TECHNOLOGY">Technology</option>
-            <option value="OTHER">Other</option>
-            {/* Add more categories here */}
-          </select>
-        </div>
+          {/* Full Description */}
+          <div className="space-y-2">
+            <label htmlFor="description" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+              <span className="mr-2">03.</span> The Full Story
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              rows={6}
+              placeholder="Describe your project, your goals, and why it matters..."
+              value={formData.description}
+              onChange={handleChange}
+              required
+              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all resize-none"
+            />
+          </div>
 
-       
+          {/* Goal & Deadline Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-2">
+              <label htmlFor="goalAmount" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+                <DollarSignIcon className="w-3 h-3 mr-2" /> Goal Amount
+              </label>
+              <input
+                type="number"
+                id="goalAmount"
+                name="goalAmount"
+                value={formData.goalAmount}
+                onChange={handleChange}
+                required
+                min="1"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all"
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="deadline" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+                <CalendarIcon className="w-3 h-3 mr-2" /> Deadline
+              </label>
+              <input
+                type="date"
+                id="deadline"
+                name="deadline"
+                value={formData.deadline}
+                onChange={handleChange}
+                required
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all [color-scheme:dark]"
+              />
+            </div>
+          </div>
 
-        <div>
-            <label htmlFor="featuredImage" className="block text-sm font-medium text-gray-700">Featured Image (Required)</label>
+          {/* Category */}
+          <div className="space-y-2">
+            <label htmlFor="category" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+              <LayersIcon className="w-3 h-3 mr-2" /> Category
+            </label>
+            <select
+              id="category"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all appearance-none cursor-pointer"
+            >
+              <option value="" className="bg-[#0a0f1d]">Select a category...</option>
+              <option value="EDUCATION" className="bg-[#0a0f1d]">Education</option>
+              <option value="MEDICAL" className="bg-[#0a0f1d]">Medical</option>
+              <option value="COMMUNITY" className="bg-[#0a0f1d]">Community</option>
+              <option value="TECHNOLOGY" className="bg-[#0a0f1d]">Technology</option>
+              <option value="OTHER" className="bg-[#0a0f1d]">Other</option>
+            </select>
+          </div>
+
+          {/* Featured Image Upload */}
+          <div className="space-y-4">
+            <label className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+              <ImageIcon className="w-3 h-3 mr-2" /> Featured Image
+            </label>
             
-            <input 
-                type="file"
-                id="featuredImage"
-                name="featuredImage"
-                accept="image/*"
-                onChange={handleFileChange}
-                required={!uploadedUrl} // Required unless a URL is already present
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
-                disabled={isUploading}
-            />
-
-            {isUploading && (
-                <p className="mt-2 text-sm text-indigo-600">Uploading image to Vercel Blob...</p>
-            )}
-
-            {uploadedUrl && (
-                <div className="mt-3 p-3 border rounded-md bg-green-50">
-                    <p className="text-sm font-medium text-green-700">
-                        Image uploaded successfully! 
+            <div className={`relative group border-2 border-dashed rounded-[2rem] p-8 text-center transition-all ${uploadedUrl ? 'border-teal-500/40 bg-teal-500/5' : 'border-white/10 hover:border-white/20'}`}>
+              <input 
+                  type="file"
+                  id="featuredImage"
+                  name="featuredImage"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  required={!uploadedUrl}
+                  disabled={isUploading}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+              />
+              
+              <div className="space-y-4">
+                {uploadedUrl ? (
+                  <div className="flex flex-col items-center animate-in zoom-in-95">
+                    <CheckCircle2 className="w-12 h-12 text-teal-400 mb-2" />
+                    <p className="text-teal-400 font-bold">Image Securely Uploaded</p>
+                    <img src={uploadedUrl} alt="Preview" className="w-32 h-20 object-cover mt-4 rounded-xl border border-teal-500/20" />
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <div className="p-4 bg-white/5 rounded-2xl mb-2">
+                      <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-white transition-colors" />
+                    </div>
+                    <p className="text-gray-400 group-hover:text-white transition-colors">
+                      {isUploading ? 'Securing your image...' : 'Click or drag to upload featured image'}
                     </p>
-                    {/* Display a small preview of the uploaded image */}
-                    {/* <img src={uploadedUrl} alt="Preview" className="w-20 h-20 object-cover mt-2 rounded" /> */}
-                </div>
+                    <p className="text-[10px] text-gray-600 uppercase tracking-widest mt-2">Max size: 5MB • JPG, PNG, WEBP</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading || isUploading}
+            className="w-full py-5 px-4 bg-teal-400 text-[#0a0f1d] font-black text-xl rounded-2xl shadow-xl shadow-teal-500/20 hover:bg-teal-300 transition-all active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center space-x-3"
+          >
+            {loading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-[#0a0f1d]/20 border-t-[#0a0f1d] rounded-full animate-spin" />
+                <span>Creating Spark...</span>
+              </>
+            ) : (
+              <span>Submit Campaign</span>
             )}
-        </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
-        >
-          {loading ? 'Creating Campaign...' : 'Submit Campaign'}
-        </button>
-      </form>
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

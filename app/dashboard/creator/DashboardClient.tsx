@@ -7,7 +7,7 @@ export default function DashboardClient({ user, children }: { user: any, childre
   return (
     <div className="flex min-h-screen">
       <Sidebar user={user} />
-      <main className="flex-1 p-8 bg-gray-50">
+      <main className="flex-1 p-1 bg-gray-50">
         {children}
       </main>
     </div>

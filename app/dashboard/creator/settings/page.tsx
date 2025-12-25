@@ -2,7 +2,7 @@ import SettingsPage from "@/components/settings"; // 💡 Import your existing c
 
 export default function CreatorSettings() {
     return (
-        <div className="p-6">
+        <div className="p-1">
             <SettingsPage />
         </div>
     );

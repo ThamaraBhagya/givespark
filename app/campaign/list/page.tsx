@@ -1,11 +1,9 @@
-// app/campaign/list/page.tsx
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
-import CampaignCard from '@/components/CampaignCard'; // Reuse your card component
-import { FunnelIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import CampaignCard from '@/components/CampaignCard';
+import { FunnelIcon, MagnifyingGlassIcon, SparklesIcon } from '@heroicons/react/24/outline';
 
-// Define the campaign data structure
 interface CampaignData {
     id: string;
     title: string;
@@ -15,6 +13,7 @@ interface CampaignData {
     goalAmount: number;
     category: string;
 }
+
 const CATEGORIES = ["ALL", "EDUCATION", "MEDICAL", "TECHNOLOGY", "COMMUNITY", "OTHER"];
 
 export default function AllCampaignsPage() {
@@ -22,7 +21,6 @@ export default function AllCampaignsPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    // 💡 Filter States
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('ALL');
     const [statusFilter, setStatusFilter] = useState<'ALL' | 'ACTIVE' | 'FUNDED'>('ALL');
@@ -31,9 +29,7 @@ export default function AllCampaignsPage() {
         async function fetchAllCampaigns() {
             try {
                 const response = await fetch('/api/campaign/list');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch all campaigns');
-                }
+                if (!response.ok) throw new Error('Failed to fetch all campaigns');
                 const data = await response.json();
                 setCampaigns(data.campaigns || []);
             } catch (err: any) {
@@ -45,19 +41,15 @@ export default function AllCampaignsPage() {
         fetchAllCampaigns();
     }, []);
 
-    // 💡 Live Filtering Logic
     const filteredCampaigns = useMemo(() => {
         return campaigns.filter((c) => {
-            // 1. Search Logic
             const matchesSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                                  c.shortDesc.toLowerCase().includes(searchQuery.toLowerCase());
             
-            // 2. Category Logic
-                 const campaignCategory = c.category?.toUpperCase() || 'OTHER';
+            const campaignCategory = c.category?.toUpperCase() || 'OTHER';
             const selectedCat = selectedCategory.toUpperCase();
             const matchesCategory = selectedCat === 'ALL' || campaignCategory === selectedCat;
             
-            // 3. Status Logic (Goal reached or not)
             const isFunded = c.currentAmount >= c.goalAmount;
             const matchesStatus = statusFilter === 'ALL' || 
                                  (statusFilter === 'FUNDED' && isFunded) || 
@@ -67,85 +59,113 @@ export default function AllCampaignsPage() {
         });
     }, [campaigns, searchQuery, selectedCategory, statusFilter]);
 
-    if (loading) {
-        return <div className="text-center py-20">Loading campaigns feed...</div>;
-    }
-
-    if (error) {
-        return <div className="text-center py-20 text-red-500">Error loading campaigns: {error}</div>;
-    }
+    if (loading) return (
+        <div className="min-h-screen bg-[#0a0f1d] flex flex-col items-center justify-center">
+            <div className="w-12 h-12 border-4 border-teal-500/20 border-t-teal-500 rounded-full animate-spin"></div>
+            <p className="mt-4 text-gray-500 font-black uppercase tracking-widest text-xs">Syncing Feed...</p>
+        </div>
+    );
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-white">Explore All Campaigns</h1>
+        <div className="min-h-screen bg-[#0a0f1d] text-white pb-20 relative overflow-hidden">
+            {/* Background Decorative Glows */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] -z-10" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-[120px] -z-10" />
 
-            {/* 🛠️ FILTER BAR */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 p-6 bg-white rounded-xl shadow-sm border">
-                
-                {/* Search */}
-                <div className="relative">
-                    <MagnifyingGlassIcon className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-                    <input 
-                        type="text"
-                        placeholder="Search title..."
-                        className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                </div>
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 relative z-10">
+                <header className="mb-12">
+                    <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-bold uppercase tracking-[0.2em] mb-4">
+                        <SparklesIcon className="w-4 h-4" />
+                        <span>Discover Impact</span>
+                    </div>
+                    <h1 className="text-5xl md:text-7xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+                        Explore All Projects
+                    </h1>
+                </header>
 
-                {/* Category Dropdown */}
-                <select 
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full p-2 border rounded-lg bg-gray-50 text-gray-700 font-medium outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-                    {CATEGORIES.map(cat => (
-                        <option key={cat} value={cat}>
-                            {cat === "ALL" ? "All Categories" : cat.charAt(0) + cat.slice(1).toLowerCase()}
-                        </option>
-                    ))}
-                </select>
+                {/* 🛠️ FILTER BAR (Glassmorphism) */}
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12 p-8 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 shadow-2xl">
+                    
+                    {/* Search */}
+                    <div className="lg:col-span-2 relative group">
+                        <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-teal-400 transition-colors" />
+                        <input 
+                            type="text"
+                            placeholder="Search by title or story..."
+                            className="w-full pl-12 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:ring-2 focus:ring-teal-500/50 outline-none text-white placeholder-gray-600 transition-all"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
 
-                {/* Status Toggle */}
-                <div className="flex bg-gray-100 p-1 rounded-lg border border-gray-200">
-                    {(['ALL', 'ACTIVE', 'FUNDED'] as const).map((status) => (
-                        <button
-                            key={status}
-                            onClick={() => setStatusFilter(status)}
-                            className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
-                                statusFilter === status 
-                                ? 'bg-white text-indigo-600 shadow-sm' 
-                                : 'text-gray-500 hover:text-gray-700'
-                            }`}
+                    {/* Category Dropdown */}
+                    <div className="relative">
+                        <select 
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            className="w-full px-6 py-4 bg-[#111827] border border-white/10 rounded-2xl text-gray-300 font-bold outline-none focus:ring-2 focus:ring-teal-500/50 appearance-none cursor-pointer"
                         >
-                            {status}
-                        </button>
-                    ))}
-                </div>
-            </div>
-            {/* 💡 Result Counter */}
-            <p className="text-gray-400 mb-6 font-medium">
-                Showing {filteredCampaigns.length} {filteredCampaigns.length === 1 ? 'campaign' : 'campaigns'}
-            </p>
-            
+                            {CATEGORIES.map(cat => (
+                                <option key={cat} value={cat} className="bg-[#111827]">
+                                    {cat === "ALL" ? "All Categories" : cat.charAt(0) + cat.slice(1).toLowerCase()}
+                                </option>
+                            ))}
+                        </select>
+                        <FunnelIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 pointer-events-none" />
+                    </div>
 
-            {/* 💡 Conditional Grid Rendering */}
-            {filteredCampaigns.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {/* 💡 Using the filtered list here */}
-                    {filteredCampaigns.map((campaign) => (
-                        <CampaignCard key={campaign.id} campaign={campaign} /> 
-                    ))}
+                    {/* Status Toggle */}
+                    <div className="flex bg-[#0a0f1d] p-1.5 rounded-2xl border border-white/5">
+                        {(['ALL', 'ACTIVE', 'FUNDED'] as const).map((status) => (
+                            <button
+                                key={status}
+                                onClick={() => setStatusFilter(status)}
+                                className={`flex-1 py-2.5 text-[10px] font-black tracking-widest rounded-xl transition-all ${
+                                    statusFilter === status 
+                                    ? 'bg-teal-400 text-gray-950 shadow-lg' 
+                                    : 'text-gray-500 hover:text-white'
+                                }`}
+                            >
+                                {status}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-            ) : (
-                /* 💡 Empty State */
-                <div className="text-center py-20 bg-gray-800/30 rounded-2xl border border-dashed border-gray-600">
-                    <FunnelIcon className="mx-auto h-12 w-12 text-gray-500 mb-4" />
-                    <h3 className="text-lg font-medium text-white">No campaigns found</h3>
-                    <p className="text-gray-400 mt-1">Try adjusting your filters or search terms.</p>
+
+                {/* 💡 Result Counter */}
+                <div className="flex items-center justify-between mb-8 px-2">
+                    <p className="text-gray-500 text-sm font-black uppercase tracking-widest">
+                        Showing <span className="text-white">{filteredCampaigns.length}</span> {filteredCampaigns.length === 1 ? 'project' : 'projects'}
+                    </p>
+                    <div className="h-px flex-1 bg-white/5 mx-6 hidden md:block" />
                 </div>
-            )}
+                
+                {/* 💡 Conditional Grid Rendering */}
+                {filteredCampaigns.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                        {filteredCampaigns.map((campaign) => (
+                            <div key={campaign.id} className="group relative">
+                                {/* Subtle bottom glow for consistency */}
+                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-teal-400 to-indigo-500 transition-all duration-500 group-hover:w-full z-20 rounded-full"></div>
+                                <CampaignCard campaign={campaign} /> 
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    /* 💡 Empty State */
+                    <div className="text-center py-32 bg-white/5 backdrop-blur-sm rounded-[3rem] border-2 border-dashed border-white/10">
+                        <FunnelIcon className="mx-auto h-16 w-16 text-gray-700 mb-6" />
+                        <h3 className="text-2xl font-black text-white">No projects found</h3>
+                        <p className="text-gray-500 mt-2 font-light">Try adjusting your filters to find more sparks.</p>
+                        <button 
+                            onClick={() => {setSearchQuery(''); setSelectedCategory('ALL'); setStatusFilter('ALL');}}
+                            className="mt-8 text-teal-400 font-black uppercase text-xs tracking-[0.2em] hover:text-teal-300 transition-colors"
+                        >
+                            Reset All Filters
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

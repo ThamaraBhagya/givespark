@@ -5,7 +5,7 @@ import DonationModal from '@/components/DonationModal';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { ClockIcon, HeartIcon, TrophyIcon, UserIcon } from 'lucide-react';
+import { ClockIcon, HeartIcon, TrophyIcon, UserIcon, ShieldCheckIcon, Share2Icon } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 interface Donation {
@@ -66,113 +66,189 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* LEFT COLUMN: Campaign Content */}
-        <div className="lg:col-span-2">
-          <h1 className="text-4xl font-extrabold text-gray-900">{campaignData.title}</h1>
-          <p className="text-lg text-gray-600 mt-2">By {campaignData.creator.name}</p>
+    <div className="min-h-screen bg-[#0a0f1d] text-white pb-20">
+      {/* Decorative Background Glows */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-[120px] -z-10" />
+      <div className="absolute top-40 right-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-[120px] -z-10" />
 
-          <div className="relative h-96 w-full mt-6 rounded-xl overflow-hidden shadow-lg">
-            <Image src={campaignData.featuredImage || '/placeholder.jpg'} alt={campaignData.title} fill className="object-cover" />
+      <div className="max-w-7xl mx-auto p-6 md:p-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          
+          {/* LEFT COLUMN: Campaign Content */}
+          <div className="lg:col-span-2 space-y-12">
+            <header className="space-y-6">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-bold uppercase tracking-widest">
+                <span className="relative flex h-2 w-2 mr-1">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
+                </span>
+                Active Campaign
+              </div>
+              
+              <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                {campaignData.title}
+              </h1>
+
+              <div className="flex items-center space-x-4">
+                <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-teal-500 p-[1px]">
+                  <div className="h-full w-full rounded-2xl bg-[#0a0f1d] flex items-center justify-center font-bold text-white">
+                    {campaignData.creator.name.charAt(0)}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] text-teal-400 uppercase font-black tracking-[0.2em]">Project Lead</p>
+                  <p className="text-white text-lg font-bold">{campaignData.creator.name}</p>
+                </div>
+              </div>
+            </header>
+
+            {/* Main Image Card */}
+            <div className="group relative aspect-video w-full rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-black">
+              <Image 
+                src={campaignData.featuredImage || '/placeholder.jpg'} 
+                alt={campaignData.title} 
+                fill 
+                className="object-cover transition-transform duration-1000 group-hover:scale-105" 
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1d] via-transparent to-transparent opacity-40" />
+            </div>
+
+            <section className="bg-white/5 backdrop-blur-md p-10 rounded-[2.5rem] border border-white/10">
+              <h2 className="text-3xl font-black text-white flex items-center mb-8">
+                <span className="w-1.5 h-8 bg-gradient-to-b from-teal-400 to-indigo-600 mr-4 rounded-full" />
+                The Story
+              </h2>
+              <p className="text-xl text-gray-400 whitespace-pre-wrap leading-relaxed font-light italic">
+                {campaignData.description}
+              </p>
+            </section>
           </div>
 
-          <h2 className="text-2xl font-bold mt-8">The Story</h2>
-          <p className="mt-4 text-gray-700 whitespace-pre-wrap leading-relaxed">{campaignData.description}</p>
-        </div>
+          {/* RIGHT COLUMN: Sidebar (Funding & Donations) */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-28 space-y-8">
+              
+              {/* Funding Card */}
+              <div className="bg-white/5 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white/10 shadow-2xl relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-400 to-indigo-600" />
+                
+                <div className="space-y-8">
+                  <div>
+                    <div className="flex items-baseline space-x-2">
+                      <span className="text-6xl font-black text-white tracking-tighter">${campaignData.currentAmount.toLocaleString()}</span>
+                    </div>
+                    <p className="text-gray-400 mt-2 font-medium">
+                      pledged of <span className="text-white font-bold">${campaignData.goalAmount.toLocaleString()}</span> goal
+                    </p>
+                  </div>
 
-        {/* RIGHT COLUMN: Sidebar (Funding & Donations) */}
-        <div className="lg:col-span-1 space-y-6">
-          <div className="bg-white p-6 rounded-xl shadow-lg border border-indigo-100 sticky top-24">
-            <p className="text-3xl font-bold text-gray-900">
-              ${campaignData.currentAmount.toLocaleString()}
-            </p>
-            <p className="text-gray-500 mt-1 text-sm">
-              raised of ${campaignData.goalAmount.toLocaleString()} goal
-            </p>
-
-            {/* Progress Bar */}
-            <div className="h-3 bg-gray-100 rounded-full mt-4 overflow-hidden">
-              <div 
-                className="h-3 rounded-full bg-teal-500 transition-all duration-700 ease-out" 
-                style={{ width: `${currentPercentage}%` }}
-              ></div>
-            </div>
-            <p className="mt-2 text-sm text-teal-600 font-semibold">{currentPercentage.toFixed(1)}% Funded</p>
-
-            {/* Donate Button */}
-            <button
-              onClick={handleDonateClick}
-              className="w-full mt-6 py-4 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-md active:scale-[0.98]"
-            >
-              Donate Now
-            </button>
-
-            {!session && status !== 'loading' && (
-              <p className="mt-2 text-xs text-gray-500 text-center">Please sign in to donate</p>
-            )}
-
-            {/* 💡 RECENT DONATIONS LIST (Now inside the Sidebar) */}
-            <div className="mt-8 pt-6 border-t border-gray-100">
-              <h3 className="text-md font-bold text-gray-900 flex items-center mb-4">
-                <HeartIcon className="w-4 h-4 mr-2 text-red-500 fill-red-500" />
-                Recent Donors ({campaignData.donations.length})
-              </h3>
-
-              <div className="space-y-5 max-h-[380px] overflow-y-auto pr-2 custom-scrollbar">
-                {campaignData.donations.length > 0 ? (
-                  campaignData.donations.map((donation, index) => (
-                    <div key={donation.id} className="flex items-start space-x-3 animate-fadeIn">
-                      <div className="relative shrink-0">
-                        <div className="h-9 w-9 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center overflow-hidden">
-                          {donation.donor?.image ? (
-                            <img src={donation.donor.image} className="h-full w-full object-cover" alt="" />
-                          ) : (
-                            <UserIcon className="w-4 h-4 text-indigo-300" />
-                          )}
-                        </div>
-                        {/* 1st Donor Badge (Last item in array usually) */}
-                        {index === campaignData.donations.length - 1 && (
-                            <TrophyIcon className="w-3.5 h-3.5 text-yellow-500 absolute -top-1 -right-1 bg-white rounded-full p-0.5 shadow-sm" />
-                        )}
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-start">
-                           <p className="text-sm font-bold text-gray-900 truncate mr-2">
-                             {donation.donor?.name || "Kind Soul"}
-                           </p>
-                           <p className="text-sm font-black text-gray-900 shrink-0">${donation.amount}</p>
-                        </div>
-                        <p className="text-[10px] text-gray-400 flex items-center mt-0.5">
-                          <ClockIcon className="w-3 h-3 mr-1" />
-                          {formatDistanceToNow(new Date(donation.createdAt), { addSuffix: true })}
-                        </p>
+                  {/* Progress Bar */}
+                  <div className="space-y-4">
+                    <div className="h-4 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                      <div 
+                        className="h-full rounded-full bg-gradient-to-r from-teal-400 to-indigo-500 transition-all duration-1000 ease-out shadow-[0_0_20px_rgba(45,212,191,0.3)]" 
+                        style={{ width: `${currentPercentage}%` }}
+                      ></div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-teal-400 font-black text-xs tracking-widest uppercase">
+                        {currentPercentage.toFixed(1)}% Funded
+                      </span>
+                      <div className="flex items-center text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+                        <span className="w-1.5 h-1.5 bg-teal-500 rounded-full mr-2 animate-pulse" />
+                        Live
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <p className="text-gray-400 text-sm italic text-center py-4">Be the first to donate!</p>
-                )}
+                  </div>
+
+                  <button
+                    onClick={handleDonateClick}
+                    className="w-full py-5 bg-teal-400 text-[#0a0f1d] font-black text-xl rounded-2xl hover:bg-teal-300 transition-all shadow-xl shadow-teal-500/20 active:scale-[0.97] flex items-center justify-center space-x-3"
+                  >
+                    <HeartIcon className="w-6 h-6 fill-[#0a0f1d]" />
+                    <span>Back this project</span>
+                  </button>
+
+                  <div className="flex items-center justify-between pt-4">
+                    <div className="flex items-center space-x-2 text-gray-500">
+                      <ShieldCheckIcon className="w-4 h-4" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">Secure Payment</span>
+                    </div>
+                    <button className="p-2 hover:bg-white/5 rounded-full transition-colors">
+                      <Share2Icon className="w-5 h-5 text-gray-400" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* RECENT DONATIONS LIST */}
+              <div className="bg-white/5 backdrop-blur-md p-10 rounded-[2.5rem] border border-white/10">
+                <h3 className="text-xl font-black text-white flex items-center mb-8">
+                  <HeartIcon className="w-5 h-5 mr-3 text-teal-400 fill-teal-400/20" />
+                  Recent Backers
+                </h3>
+
+                <div className="space-y-8 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                  {campaignData.donations.length > 0 ? (
+                    campaignData.donations.map((donation, index) => (
+                      <div key={donation.id} className="flex items-center space-x-4 group">
+                        <div className="relative shrink-0">
+                          <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden transition-transform group-hover:scale-110">
+                            {/* 💡 Fixed: Optional Chaining to prevent TypeError */}
+                            {donation.donor?.image ? (
+                              <img src={donation.donor.image} className="h-full w-full object-cover" alt="" />
+                            ) : (
+                              <UserIcon className="w-6 h-6 text-gray-600" />
+                            )}
+                          </div>
+                          {index === 0 && (
+                            <div className="absolute -top-2 -left-2 bg-gradient-to-br from-yellow-400 to-amber-600 text-white p-1 rounded-lg shadow-lg">
+                              <TrophyIcon className="w-3 h-3" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-center">
+                             <p className="text-sm font-bold text-white truncate pr-2">
+                               {donation.donor?.name || "Anonymous Backer"}
+                             </p>
+                             <p className="text-sm font-black text-teal-400">
+                               ${donation.amount}
+                             </p>
+                          </div>
+                          <p className="text-[10px] text-gray-500 flex items-center mt-1 font-black uppercase tracking-widest">
+                            <ClockIcon className="w-3 h-3 mr-1" />
+                            {formatDistanceToNow(new Date(donation.createdAt), { addSuffix: true })}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-10 opacity-30">
+                      <p className="text-gray-400 text-sm italic uppercase tracking-widest font-black">Waiting for first spark</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Donation Modal */}
+      {/* Donation Modal Overlay */}
       {isModalOpen && session && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden">
-                  <DonationModal 
-                      campaignId={campaignId} 
-                      campaignTitle={campaignData.title}
-                      onClose={() => setIsModalOpen(false)} 
-                      onSuccess={refreshCampaignData}
-                  />
-              </div>
+        <div className="fixed inset-0 bg-[#0a0f1d]/80 backdrop-blur-xl flex items-center justify-center z-[100] p-4 transition-all duration-300">
+          <div className="bg-white rounded-[3rem] max-w-lg w-full shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <DonationModal 
+                campaignId={campaignId} 
+                campaignTitle={campaignData.title}
+                onClose={() => setIsModalOpen(false)} 
+                onSuccess={refreshCampaignData}
+            />
           </div>
+        </div>
       )}
     </div>
   );
