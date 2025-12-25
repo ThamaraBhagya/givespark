@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { StarIcon } from '@heroicons/react/20/solid';
 
-// Define the shape of our testimonial data
 interface TestimonialData {
   id: string;
   content: string;
@@ -36,77 +35,71 @@ export default function TestimonialsSection() {
     fetchTestimonials();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="bg-gray-50 py-24 text-center">
-        <div className="animate-pulse text-gray-400">Loading community stories...</div>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="bg-[#0a0f1d] py-24 text-center">
+      <div className="animate-pulse text-gray-500 font-mono text-sm tracking-widest uppercase">Reading Community Stories...</div>
+    </div>
+  );
 
-  // If there are no testimonials yet, we can hide the section or show a placeholder
   if (testimonials.length === 0) return null;
 
   return (
-    <div className="bg-gray-50 py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
+    <section className="relative bg-[#0a0f1d] py-24 overflow-hidden">
+      {/* Background Accent */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-sm font-semibold text-indigo-600 tracking-wide uppercase">
-            What Our Users Say
-          </h2>
-          <p className="mt-2 text-4xl font-extrabold text-gray-900 tracking-tight">
-            Trusted by Creators and Donors Alike
+          <h2 className="text-sm font-black text-teal-400 tracking-[0.3em] uppercase mb-4">Social Proof</h2>
+          <p className="text-4xl md:text-5xl font-black text-white tracking-tight">
+            Trusted by <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-indigo-400">Thousands</span> of Visionaries
           </p>
         </div>
 
-        {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((t) => (
             <div 
               key={t.id} 
-              className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between transition-hover hover:shadow-md"
+              className="group relative bg-white/[0.03] border border-white/10 p-8 rounded-3xl backdrop-blur-xl transition-all duration-500 hover:bg-white/[0.06] hover:-translate-y-2"
             >
-              <div>
-                {/* 💡 Dynamic Star Rating */}
-                <div className="flex mb-4">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <StarIcon
-                      key={star}
-                      className={`h-5 w-5 ${
-                        star <= t.rating ? 'text-yellow-400' : 'text-gray-200'
-                      }`}
-                    />
-                  ))}
-                </div>
-
-                {/* Testimonial Content */}
-                <p className="text-gray-600 italic leading-relaxed">
-                  "{t.content}"
-                </p>
+              {/* Star Rating */}
+              <div className="flex mb-6 space-x-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <StarIcon
+                    key={star}
+                    className={`h-4 w-4 ${star <= t.rating ? 'text-teal-400' : 'text-gray-700'}`}
+                  />
+                ))}
               </div>
 
-              {/* Author Details */}
-              <div className="mt-8 flex items-center">
-                <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold overflow-hidden border border-gray-200">
-                  {t.author.image ? (
-                    <img src={t.author.image} alt={t.author.name} className="h-full w-full object-cover" />
-                  ) : (
-                    t.author.name.charAt(0).toUpperCase()
-                  )}
+              <p className="text-gray-300 leading-relaxed font-light italic mb-8">
+                "{t.content}"
+              </p>
+
+              <div className="flex items-center pt-6 border-t border-white/5">
+                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-indigo-500 to-teal-500 p-[1px] overflow-hidden">
+                  <div className="h-full w-full rounded-full bg-[#0a0f1d] flex items-center justify-center overflow-hidden">
+                    {t.author.image ? (
+                      <img src={t.author.image} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="text-white font-bold">{t.author.name.charAt(0)}</span>
+                    )}
+                  </div>
                 </div>
-                <div className="ml-3">
-                  <p className="text-sm font-bold text-gray-900">{t.author.name}</p>
-                  <p className="text-xs text-indigo-600 font-medium">
-                    {t.author.role === 'CREATOR' ? 'Campaign Creator' : 'Community Supporter'}
+                <div className="ml-4">
+                  <p className="text-sm font-bold text-white">{t.author.name}</p>
+                  <p className="text-[10px] font-black text-teal-500 uppercase tracking-widest mt-1">
+                    {t.author.role === 'CREATOR' ? 'Project Lead' : 'Backer'}
                   </p>
                 </div>
               </div>
+              
+              {/* Signature Bottom Line */}
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-teal-400 to-indigo-500 transition-all duration-500 group-hover:w-full rounded-b-3xl"></div>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

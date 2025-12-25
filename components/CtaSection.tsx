@@ -1,49 +1,46 @@
-// components/CtaSection.tsx
 import Link from 'next/link';
-import { ArrowTrendingUpIcon, HandRaisedIcon } from '@heroicons/react/24/solid'; // Example icons
+import { ArrowTrendingUpIcon, HandRaisedIcon } from '@heroicons/react/24/solid';
 
 export default function CtaSection() {
   return (
-    <section className="py-20 sm:py-28">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Gradient Banner Container */}
-        <div className="p-10 rounded-3xl text-center shadow-2xl 
-                        bg-linear-to-r from-indigo-600 to-teal-500">
+    <section className="relative py-24 bg-[#0a0f1d]">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="relative group overflow-hidden rounded-[3rem] p-12 md:p-20 text-center border border-white/10 shadow-2xl">
+          {/* Animated Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-[#0a0f1d] to-teal-900/30 opacity-90 transition-transform duration-700 group-hover:scale-110"></div>
           
-          {/* Headline */}
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-white">
-            Ready to Make an Impact?
-          </h2>
-          
-          {/* Subtitle */}
-          <p className="mt-4 text-xl text-indigo-100 max-w-3xl mx-auto">
-            Whether you need backing or want to give it, your journey to change starts here.
-          </p>
+          {/* Decorative Glows */}
+          <div className="absolute -top-24 -left-24 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px]"></div>
+          <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-teal-500/20 rounded-full blur-[80px]"></div>
 
-          {/* Dual CTA Buttons */}
-          <div className="mt-10 flex flex-wrap justify-center gap-6">
+          <div className="relative z-10">
+            <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tighter mb-6">
+              Ready to <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-white">Ignite</span> Your Impact?
+            </h2>
             
-            {/* CTA 1: For Creators */}
-            <Link 
-              href="/campaign/new" 
-              className="flex items-center space-x-2 px-8 py-4 bg-white text-indigo-700 font-bold rounded-xl shadow-lg hover:bg-gray-100 transition duration-300 text-lg"
-            >
-              <ArrowTrendingUpIcon className="w-6 h-6" />
-              <span>Launch Your Campaign</span>
-            </Link>
+            <p className="mt-4 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
+              Whether you're launching the next big thing or backing the change you want to see, your journey starts here.
+            </p>
 
-            {/* CTA 2: For Donors */}
-            <Link 
-              href="/campaign/list" 
-              className="flex items-center space-x-2 px-8 py-4 border border-white text-white font-medium rounded-xl hover:bg-white/10 transition duration-300 text-lg"
-            >
-              <HandRaisedIcon className="w-6 h-6" />
-              <span>Explore Projects to Fund</span>
-            </Link>
+            <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-6">
+              <Link 
+                href="/campaign/new" 
+                className="w-full sm:w-auto flex items-center justify-center space-x-3 px-10 py-5 bg-teal-400 text-gray-950 font-black rounded-2xl hover:bg-teal-300 transition-all duration-300 text-lg shadow-xl shadow-teal-500/10"
+              >
+                <ArrowTrendingUpIcon className="w-6 h-6" />
+                <span>Launch Campaign</span>
+              </Link>
+
+              <Link 
+                href="/campaign/list" 
+                className="w-full sm:w-auto flex items-center justify-center space-x-3 px-10 py-5 bg-white/5 backdrop-blur-md border border-white/20 text-white font-bold rounded-2xl hover:bg-white/10 transition-all duration-300 text-lg"
+              >
+                <HandRaisedIcon className="w-6 h-6" />
+                <span>Explore Projects</span>
+              </Link>
+            </div>
           </div>
         </div>
-
       </div>
     </section>
   );
