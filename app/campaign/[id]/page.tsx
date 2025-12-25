@@ -13,11 +13,18 @@ interface CampaignDetailPageProps {
 // Server Component to fetch immutable data
 async function getCampaignData(id: string) {
   const campaign = await prisma.campaign.findUnique({
-    where: { id },
-    include: { 
-      creator: { select: { name: true,id: true } }, // Include creator name
-      donations: { orderBy: { createdAt: 'desc' }, take: 10 } // Get recent donations
+   where: { id },
+  include: {
+    creator: true,
+    donations: {
+      orderBy: { createdAt: 'desc' },
+      include: {
+        donor: { // 💡 Critical: This ensures 'donor' is not undefined
+          select: { name: true, image: true }
+        }
+      }
     }
+  }
   });
   return campaign;
 }
