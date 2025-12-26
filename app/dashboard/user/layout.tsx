@@ -8,14 +8,14 @@ export default async function UserDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
+  const session = (await getServerSession(authOptions as any)) as any;
 
   if (!session || session.user.role !== "USER") {
     redirect("/auth/signin");
   }
 
   return (
-    <div className="flex min-h-screen bg-[#0a0f1d]">
+    <div className="flex min-h-screen bg-white dark:bg-[#0a0f1d]">
       <Sidebar />
       <main className="flex-1 p-1 lg:p-12 overflow-y-auto">
         {children}
