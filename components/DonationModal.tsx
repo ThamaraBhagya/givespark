@@ -1,172 +1,114 @@
-// components/DonationModal.tsx
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react'; // Added useEffect, useCallback
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react'; 
 import { useRouter } from 'next/navigation';
+import { X, ShieldCheck, Heart, Loader2, CheckCircle2 } from 'lucide-react';
 
-// 💡 STRIPE IMPORTS
-import { 
-  Elements, 
-  PaymentElement, 
-  useStripe, 
-  useElements 
-} from '@stripe/react-stripe-js';
+// STRIPE IMPORTS
+import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-// Load Stripe with the public key
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PK as string);
 
-
 interface DonationModalProps {
-  campaignId: string;
-  campaignTitle: string;
-  onClose: () => void;
-  onSuccess: (donatedAmount: number) => void;
-}
-
-interface CheckoutFormProps extends DonationModalProps {
-    amount: number;
-    intentId: string;
-    message: string;
-    anonymous: boolean;
-    donorId: string; // Passed from the parent modal
-    // No need for onClose/onSuccess here, they are passed to the handler
+  campaignId: string;
+  campaignTitle: string;
+  onClose: () => void;
+  onSuccess: (donatedAmount: number) => void;
 }
 
 // ----------------------------------------------------------------------
-// 💡 Inner Component: Handles Payment Processing with Stripe Hooks
+// 💡 Inner Component: CheckoutForm
 // ----------------------------------------------------------------------
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ 
+const CheckoutForm: React.FC<any> = ({ 
     campaignId, amount, intentId, message, anonymous, donorId, onSuccess, onClose 
 }) => {
     const stripe = useStripe();
     const elements = useElements();
-
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
-        if (!stripe || !elements) {
-            setError("Stripe initialization failed. Please try again.");
-            return;
-        }
+        if (!stripe || !elements) return;
 
         setIsProcessing(true);
         setError(null);
         
-        // 1. Confirm the payment on the client side using the Payment Element
         const { error: paymentError, paymentIntent } = await stripe.confirmPayment({
             elements,
             redirect: 'if_required',
-            // The return URL is used if the user must be redirected (e.g., 3D Secure)
             confirmParams: {
                 return_url: `${window.location.origin}/campaign/${campaignId}`, 
             },
         });
 
         if (paymentError) {
-            // Display error to the user (e.g., invalid card details)
             setError(paymentError.message || "Payment confirmation failed.");
             setIsProcessing(false);
             return;
         }
         
-        // 2. If confirmation is successful (status: succeeded) or pending, 
-        //    call the backend route to update the database.
-        
-        // We only proceed if we have a paymentIntent ID (which is required)
         if (paymentIntent?.id) {
-            
-            // Call the backend to perform the database write (Prisma transaction)
             const dbUpdateResponse = await fetch('/api/donation/confirm-payment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    campaignId, 
-                    amount,
-                    message,
-                    anonymous,
-                    donorId, // Pass the donor ID for the Donation record
-                    intentId: paymentIntent.id, // Pass the verified Stripe ID
+                    campaignId, amount, message, anonymous, donorId, intentId: paymentIntent.id,
                 }),
             });
 
             if (dbUpdateResponse.ok) {
-                // Database write succeeded
-                onSuccess(amount); // Trigger parent refresh and success state
+                onSuccess(amount);
             } else {
                 const errorData = await dbUpdateResponse.json();
-                setError(errorData.error || "Payment succeeded but failed to record donation.");
+                setError(errorData.error || "Recording donation failed.");
             }
         }
-        
         setIsProcessing(false);
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 mt-4">
-            
-            {/* Display amount, message, and anonymous fields (read-only in this form) */}
-            <div className="text-xl font-bold text-gray-800">
-                Donating: ${amount.toFixed(2)}
+        <form onSubmit={handleSubmit} className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
+                <PaymentElement options={{ layout: 'tabs' }} />
             </div>
 
-            {/* Display errors */}
-            {error && <p className="p-3 text-red-700 bg-red-100 rounded">{error}</p>}
+            {error && <p className="p-3 text-red-400 bg-red-400/10 border border-red-400/20 rounded-xl text-sm">{error}</p>}
             
-            {/* Stripe's secure UI element */}
-            <PaymentElement />
-            
-            {/* Submit Button */}
             <button
                 type="submit"
                 disabled={isProcessing || !stripe || !elements}
-                className="w-full py-3 px-4 rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 transition duration-150"
+                className="w-full py-4 bg-teal-400 text-gray-950 font-black text-lg rounded-2xl hover:bg-teal-300 transition-all shadow-xl shadow-teal-500/20 active:scale-[0.98] flex items-center justify-center space-x-2 disabled:opacity-50"
             >
-                {isProcessing ? 'Processing Payment...' : `Pay & Donate $${amount.toFixed(2)}`}
+                {isProcessing ? <Loader2 className="w-6 h-6 animate-spin" /> : <span>Confirm & Pay ${amount.toFixed(2)}</span>}
             </button>
         </form>
     );
 };
 
-
 // ----------------------------------------------------------------------
-// 💡 Outer Component: Handles Session, Amount Inputs, and Fetching Client Secret
+// 💡 Outer Component: DonationModal
 // ----------------------------------------------------------------------
 export default function DonationModal({ campaignId, campaignTitle, onClose, onSuccess }: DonationModalProps) {
     const { data: session } = useSession();
     const router = useRouter();
     
-    // UI State for inputs
     const [amount, setAmount] = useState(10); 
     const [message, setMessage] = useState('');
     const [anonymous, setAnonymous] = useState(false);
-    
-    // Stripe State
     const [clientSecret, setClientSecret] = useState('');
     const [intentId, setIntentId] = useState('');
-    const [isLoadingStripe, setIsLoadingStripe] = useState(true);
+    const [isLoadingStripe, setIsLoadingStripe] = useState(false);
     const [status, setStatus] = useState<'IDLE' | 'SUCCESS' | 'ERROR'>('IDLE');
     const [error, setError] = useState<string | null>(null);
 
-    // Redirect unauthenticated users
-    if (!session) {
-        router.push(`/auth/signin?callbackUrl=${encodeURIComponent(`/campaign/${campaignId}`)}`);
-        return null;
-    }
-    
-    const donorId = session.user?.id || ''; // Guaranteed to be available if session exists
-    
-    // 💡 Step 1: Fetch the clientSecret from the server
+    const donorId = session?.user?.id || '';
+
     const fetchClientSecret = useCallback(async () => {
         if (amount <= 0) return;
-
         setIsLoadingStripe(true);
-        setClientSecret('');
-        
         try {
             const response = await fetch('/api/donation/create-intent', {
                 method: 'POST',
@@ -174,7 +116,6 @@ export default function DonationModal({ campaignId, campaignTitle, onClose, onSu
                 body: JSON.stringify({ amount, campaignId }),
             });
             const data = await response.json();
-            
             if (response.ok && data.clientSecret) {
                 setClientSecret(data.clientSecret);
                 setIntentId(data.intentId);
@@ -189,290 +130,130 @@ export default function DonationModal({ campaignId, campaignTitle, onClose, onSu
     }, [amount, campaignId]);
 
     useEffect(() => {
-        fetchClientSecret();
-    }, [fetchClientSecret]);
+        const timeoutId = setTimeout(() => {
+            if (amount >= 1) fetchClientSecret();
+        }, 500); // Debounce API calls as user types amount
+        return () => clearTimeout(timeoutId);
+    }, [amount, fetchClientSecret]);
 
-
-    // Function to handle success and closure (passed to CheckoutForm)
-    const handleSuccessAndClose = (donatedAmount: number) => {
-        setStatus('SUCCESS');
-        onSuccess(donatedAmount);
-    }
-    
-    // --- Success State Render ---
     if (status === 'SUCCESS') {
         return (
-            <div className="p-8 text-center">
-                <h2 className="text-3xl font-bold text-green-600">Payment Successful! 🎉</h2>
-                <p className="mt-4 text-gray-600">Thank you for your generous contribution of ${amount.toFixed(2)} to {campaignTitle}.</p>
+            <div className="p-12 text-center bg-[#0a0f1d] text-white">
+                <div className="flex justify-center mb-6">
+                    <div className="p-4 bg-teal-500/20 rounded-full">
+                        <CheckCircle2 className="w-16 h-16 text-teal-400 animate-in zoom-in duration-500" />
+                    </div>
+                </div>
+                <h2 className="text-4xl font-black tracking-tighter mb-4 italic">Spark Ignited! 🎉</h2>
+                <p className="text-gray-400 text-lg font-light leading-relaxed">
+                    Your contribution of <span className="text-white font-bold">${amount}</span> to <br/>
+                    <span className="text-indigo-400 font-bold">{campaignTitle}</span> was successful.
+                </p>
                 <button
                     onClick={onClose}
-                    className="mt-6 px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                    className="mt-10 px-10 py-4 bg-white/10 hover:bg-white/20 text-white font-black rounded-2xl transition-all"
                 >
-                    Close
+                    Back to Project
                 </button>
             </div>
         );
     }
 
-    // --- Main Form Render ---
     return (
-        <div className="p-8 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold text-gray-900">Support {campaignTitle}</h2>
-            <p className="text-gray-500 mb-6">Enter your details securely processed by Stripe.</p>
-
-            {error && <p className="p-3 text-red-700 bg-red-100 rounded mb-4">{error}</p>}
-            
-            {/* User Input Form (Amount, Message, Anonymous) */}
-            <div className="space-y-4">
-                {/* Amount Field */}
+        <div className="relative bg-[#0a0f1d] text-white overflow-hidden max-h-[95vh] flex flex-col">
+            {/* Header */}
+            <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
                 <div>
-                    <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Donation Amount ($)</label>
-                    <input
-                        type="number"
-                        id="amount"
-                        value={amount}
-                        onChange={(e) => setAmount(parseFloat(e.target.value))}
-                        required
-                        min="1"
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-lg"
-                        disabled={isLoadingStripe}
-                    />
+                    <h2 className="text-2xl font-black tracking-tighter flex items-center">
+                        <Heart className="w-5 h-5 mr-2 text-rose-500 fill-rose-500/20" />
+                        Support this Spark
+                    </h2>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mt-1">{campaignTitle}</p>
                 </div>
-                
-                {/* Message Field (Optional) */}
-                <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message (Optional)</label>
-                    <textarea
-                        id="message"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        rows={2}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                        disabled={isLoadingStripe}
-                    />
-                </div>
-                
-                {/* Anonymous Checkbox */}
-                <div className="flex items-center">
-                    <input
-                        id="anonymous"
-                        type="checkbox"
-                        checked={anonymous}
-                        onChange={(e) => setAnonymous(e.target.checked)}
-                        className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                        disabled={isLoadingStripe}
-                    />
-                    <label htmlFor="anonymous" className="ml-2 block text-sm text-gray-900">
-                        Donate anonymously
-                    </label>
-                </div>
+                <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-xl transition-colors text-gray-400 hover:text-white">
+                    <X className="w-6 h-6" />
+                </button>
             </div>
 
-            <div className="mt-8 border-t pt-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-3">Payment Details</h3>
+            <div className="p-8 space-y-8 overflow-y-auto custom-scrollbar">
+                {error && <p className="p-3 text-red-400 bg-red-400/10 border border-red-400/20 rounded-xl text-sm">{error}</p>}
                 
-                {/* 💡 Step 2: Render Stripe Components */}
-                {clientSecret && !isLoadingStripe ? (
-                    <Elements options={{ clientSecret }} stripe={stripePromise}>
-                        <CheckoutForm 
-                            campaignId={campaignId} 
-                            campaignTitle={campaignTitle}
-                            onClose={onClose}
-                            onSuccess={handleSuccessAndClose} // Use the custom handler
-                            amount={amount}
-                            intentId={intentId}
-                            message={message}
-                            anonymous={anonymous}
-                            donorId={donorId}
+                {/* User Inputs */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-teal-400 ml-1">Pledge Amount ($)</label>
+                        <div className="relative">
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
+                            <input
+                                type="number"
+                                value={amount}
+                                onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
+                                className="w-full bg-[#111827] border border-white/10 rounded-2xl pl-10 pr-6 py-4 text-white font-black text-xl focus:ring-2 focus:ring-teal-500/50 transition-all outline-none"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flex items-center space-x-3 pt-6 md:pt-0">
+                        <input
+                            id="anonymous" type="checkbox" checked={anonymous}
+                            onChange={(e) => setAnonymous(e.target.checked)}
+                            className="w-6 h-6 rounded-lg bg-[#111827] border-white/10 text-indigo-500 focus:ring-indigo-500/50 cursor-pointer"
                         />
-                    </Elements>
-                ) : (
-                    <div className="text-center py-5">Loading payment form...</div>
-                )}
+                        <label htmlFor="anonymous" className="text-sm font-bold text-gray-400 cursor-pointer select-none">
+                            Keep my identity private
+                        </label>
+                    </div>
+                </div>
+
+                <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Message for the creator</label>
+                    <textarea
+                        value={message} onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Say something inspiring..."
+                        rows={2}
+                        className="w-full bg-[#111827] border border-white/10 rounded-2xl px-6 py-4 text-white font-medium focus:ring-2 focus:ring-teal-500/50 outline-none transition-all resize-none"
+                    />
+                </div>
+
+                {/* Stripe Section */}
+                <div className="pt-6 border-t border-white/5">
+                    <div className="flex items-center space-x-2 mb-4">
+                        <ShieldCheck className="w-4 h-4 text-teal-400" />
+                        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-gray-500">Secure Payment Details</h3>
+                    </div>
+                    
+                    {clientSecret && !isLoadingStripe ? (
+                        <Elements 
+                            stripe={stripePromise} 
+                            options={{ 
+                                clientSecret, 
+                                appearance: { 
+                                    theme: 'night',
+                                    variables: { colorPrimary: '#2dd4bf', colorBackground: '#111827' }
+                                } 
+                            }}
+                        >
+                            <CheckoutForm 
+                                campaignId={campaignId} amount={amount} intentId={intentId}
+                                message={message} anonymous={anonymous} donorId={donorId}
+                                onClose={onClose} onSuccess={(amt: number) => { setStatus('SUCCESS'); onSuccess(amt); }}
+                            />
+                        </Elements>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center py-10 space-y-3 bg-white/5 rounded-3xl border border-dashed border-white/10">
+                            <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
+                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Initializing Secure Gateway...</p>
+                        </div>
+                    )}
+                </div>
             </div>
-            
+
+            {/* Footer */}
+            <div className="p-6 bg-white/[0.01] border-t border-white/5 flex items-center justify-center">
+                <p className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em] flex items-center">
+                    <ShieldCheck className="w-3 h-3 mr-2" /> Encrypted & Secured by Stripe
+                </p>
+            </div>
         </div>
     );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// // components/DonationModal.tsx
-// "use client";
-
-// import { useState } from 'react';
-// // Assume you use next-auth for getting the session/donor ID on the client
-// import { useSession } from 'next-auth/react'; 
-// import { useRouter } from 'next/navigation';
-
-// interface DonationModalProps {
-//   campaignId: string;
-//   campaignTitle: string;
-//   onClose: () => void;
-//   onSuccess: (donatedAmount: number) => void; // Function to refresh campaign data on success
-// }
-
-// export default function DonationModal({ campaignId, campaignTitle, onClose, onSuccess }: DonationModalProps) {
-//   const { data: session } = useSession(); // Get session
-//   const router = useRouter();
-  
-  
-//   const [amount, setAmount] = useState(10); // Default donation amount
-//   const [message, setMessage] = useState('');
-//   const [anonymous, setAnonymous] = useState(false);
-//   const [loading, setLoading] = useState(false);
-//   const [status, setStatus] = useState<'IDLE' | 'PROCESSING' | 'SUCCESS' | 'ERROR'>('IDLE');
-//   const [error, setError] = useState('');
-
-//   if (!session) {
-//     // Redirect to signin
-//     router.push(`/auth/signin?callbackUrl=${encodeURIComponent(`/campaign/${campaignId}`)}`);
-//     return null;
-//   }
-
-//   const handleDonate = async (e: React.FormEvent) => {
-//     e.preventDefault();
-
-//     if (!session?.user?.id) {
-//       setError("You must be logged in to donate");
-//       return;
-//     }
-//     if (amount <= 0) {
-//       setError("Amount must be greater than zero.");
-//       return;
-//     }
-
-//     setLoading(true);
-//     setStatus('PROCESSING');
-//     setError('');
-
-//     // --- MOCK PAYMENT SIMULATION ---
-//     // Show a fake processing delay to simulate a payment gateway
-//     await new Promise(resolve => setTimeout(resolve, 2000)); 
-
-//     try {
-//       const response = await fetch('/api/donation/create', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({
-//           campaignId,
-//           amount,
-//           message,
-//           anonymous,
-//         }),
-//       });
-
-//       if (!response.ok) {
-//         const errorData = await response.json();
-//         throw new Error(errorData.error || 'Payment failed on server.');
-//       }
-//       // Extract the actual amount from the API response
-//       const successData = await response.json(); 
-//       const actualDonatedAmount = successData.donation.amount; // <-- Get the actual amount
-
-//       setStatus('SUCCESS');
-//       onSuccess(actualDonatedAmount); // Trigger parent page refresh
-      
-//     } catch (err: any) {
-//       setStatus('ERROR');
-//       setError(err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   if (status === 'SUCCESS') {
-//     return (
-//       <div className="p-8 text-center">
-//         <h2 className="text-3xl font-bold text-green-600">Payment Successful! 🎉</h2>
-//         <p className="mt-4 text-gray-600">Thank you for your generous contribution of ${amount} to {campaignTitle}.</p>
-//         <button
-//           onClick={onClose}
-//           className="mt-6 px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-//         >
-//           Close
-//         </button>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="p-8">
-//       <h2 className="text-2xl font-bold text-gray-900">Support {campaignTitle}</h2>
-//       <p className="text-gray-500 mb-6">Your mock donation will instantly update the campaign progress.</p>
-
-//       {status === 'ERROR' && <p className="p-3 text-red-700 bg-red-100 rounded mb-4">{error}</p>}
-//       {status === 'PROCESSING' && (
-//          <div className="flex items-center space-x-2 p-4 bg-yellow-100 text-yellow-800 rounded mb-4">
-//             {/* Simple spinner placeholder */}
-//             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-800"></div>
-//             <span>Processing Mock Payment... (Simulating 2 seconds)</span>
-//          </div>
-//       )}
-
-//       <form onSubmit={handleDonate} className="space-y-4">
-//         {/* Amount Field */}
-//         <div>
-//           <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Donation Amount ($)</label>
-//           <input
-//             type="number"
-//             id="amount"
-//             value={amount}
-//             onChange={(e) => setAmount(parseFloat(e.target.value))}
-//             required
-//             min="1"
-//             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-lg"
-//             disabled={loading}
-//           />
-//         </div>
-
-//         {/* Message Field (Optional) */}
-//         <div>
-//           <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message (Optional)</label>
-//           <textarea
-//             id="message"
-//             value={message}
-//             onChange={(e) => setMessage(e.target.value)}
-//             rows={2}
-//             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-//             disabled={loading}
-//           />
-//         </div>
-        
-//         {/* Anonymous Checkbox */}
-//         <div className="flex items-center">
-//           <input
-//             id="anonymous"
-//             type="checkbox"
-//             checked={anonymous}
-//             onChange={(e) => setAnonymous(e.target.checked)}
-//             className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
-//             disabled={loading}
-//           />
-//           <label htmlFor="anonymous" className="ml-2 block text-sm text-gray-900">
-//             Donate anonymously
-//           </label>
-//         </div>
-
-//         {/* Submit Button */}
-//         <button
-//           type="submit"
-//           disabled={loading || status === 'PROCESSING'}
-//           className="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-teal-600 hover:bg-teal-700 disabled:opacity-50"
-//         >
-//           {loading ? 'Processing...' : 'Confirm Mock Donation'}
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }

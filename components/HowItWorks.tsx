@@ -34,18 +34,18 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="relative py-24 sm:py-32 bg-[#0a0f1d] overflow-hidden">
+    <section id="how-it-works" className="relative py-24 sm:py-32 bg-white dark:bg-[#0a0f1d] overflow-hidden">
       {/* Background Glows */}
-      <div className="absolute top-1/2 left-0 w-72 h-72 bg-teal-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-1/2 left-0 w-72 h-72 bg-teal-500/10 dark:bg-teal-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-500/15 dark:bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         
         {/* Header */}
         <div className="text-center mb-20">
-          <h2 className="text-sm font-black text-teal-400 tracking-[0.3em] uppercase mb-4">Simple Process</h2>
-          <p className="text-4xl md:text-5xl font-black text-white tracking-tight">
-            How GiveSpark Works in <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-indigo-400">4 Simple Steps</span>
+          <h2 className="text-sm font-black text-teal-600 dark:text-teal-400 tracking-[0.3em] uppercase mb-4">Simple Process</h2>
+          <p className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+            How GiveSpark Works in <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-indigo-600 dark:from-teal-400 dark:to-indigo-400">4 Simple Steps</span>
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export default function HowItWorks() {
           {steps.map((stepItem) => (
             <div 
               key={stepItem.step} 
-              className="group relative flex flex-col items-center p-8 rounded-3xl bg-white/[0.03] border border-white/10 backdrop-blur-md transition-all duration-500 hover:bg-white/[0.06] hover:border-indigo-500/30 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+              className="group relative flex flex-col items-center p-8 rounded-3xl bg-indigo-50/50 dark:bg-white/[0.03] border border-indigo-200 dark:border-white/30 backdrop-blur-md transition-all duration-500 hover:bg-indigo-100/70 dark:hover:bg-white/[0.06] hover:border-indigo-400 dark:hover:border-indigo-500/30 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(99,102,241,0.15)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
             >
               {/* Icon and Step Number Container */}
               <div className="relative mb-8">
@@ -63,18 +63,18 @@ export default function HowItWorks() {
                 </div>
                 
                 {/* Step Badge */}
-                <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[#0a0f1d] border border-white/20 flex items-center justify-center text-xs font-black text-white shadow-xl">
+                <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-white dark:bg-[#0a0f1d] border border-indigo-200 dark:border-white/20 flex items-center justify-center text-xs font-black text-slate-900 dark:text-white shadow-xl">
                   {stepItem.step}
                 </div>
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-extrabold text-white mb-4 group-hover:text-teal-400 transition-colors">
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-4 group-hover:text-indigo-600 dark:group-hover:text-teal-400 transition-colors">
                 {stepItem.name}
               </h3>
 
               {/* Description */}
-              <p className="text-sm text-gray-400 leading-relaxed font-light text-center">
+              <p className="text-sm text-slate-600 dark:text-gray-400 leading-relaxed font-light text-center">
                 {stepItem.description}
               </p>
 
@@ -88,7 +88,7 @@ export default function HowItWorks() {
         <div className="mt-24 text-center">
           <Link 
             href="/campaign/new" 
-            className="group inline-flex items-center space-x-3 px-10 py-4 bg-white/5 backdrop-blur-md border border-white/10 text-white font-bold rounded-full hover:bg-white/10 hover:border-teal-500/50 transition-all duration-300 text-xl"
+            className="group inline-flex items-center space-x-3 px-10 py-4 bg-indigo-50 dark:bg-white/5 backdrop-blur-md border border-indigo-200 dark:border-white/10 text-slate-900 dark:text-white font-bold rounded-full hover:bg-indigo-100 dark:hover:bg-white/10 hover:border-indigo-400 dark:hover:border-teal-500/50 transition-all duration-300 text-xl"
           >
             <span>Ready to Launch Your Idea?</span>
             <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>

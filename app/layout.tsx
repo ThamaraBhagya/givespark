@@ -6,6 +6,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar"; 
 import Footer from "@/components/Footer";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "GiveSpark", 
@@ -18,10 +19,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       
       <body className={`antialiased`}> 
-        
+        <ThemeProvider 
+          attribute="class" 
+          defaultTheme="dark"
+          enableSystem
+        >
         <SessionProviderWrapper>
 
           <Navbar />
@@ -32,12 +37,7 @@ export default function RootLayout({
           <Footer />
 
         </SessionProviderWrapper>
-        
-        
-
-
-        
-        
+      </ThemeProvider>
       </body>
     </html>
   );

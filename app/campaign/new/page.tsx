@@ -129,37 +129,37 @@ export default function NewCampaignPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0f1d] text-white pb-20 relative overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white pb-20 relative overflow-hidden">
       {/* Background Decorative Glows */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] -z-10" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-[120px] -z-10" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/15 dark:bg-indigo-600/10 rounded-full blur-[120px] -z-10" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-600/15 dark:bg-teal-500/10 rounded-full blur-[120px] -z-10" />
 
       <div className="max-w-4xl mx-auto p-6 md:p-12 relative z-10">
         <header className="mb-12 text-center md:text-left">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-[0.2em] mb-4">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-500/10 border border-indigo-300 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-400 text-xs font-bold uppercase tracking-[0.2em] mb-4">
             <RocketIcon className="w-3 h-3" />
             <span>Launch Your Vision</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-gray-500">
             Start a New Campaign
           </h1>
-          <p className="text-gray-400 mt-4 text-lg font-light">
+          <p className="text-slate-600 dark:text-gray-400 mt-4 text-lg font-light">
             Fill in the details below to ignite your project and find your backers.
           </p>
         </header>
         
         {error && (
-          <div className="flex items-center space-x-3 bg-red-500/10 border border-red-500/20 text-red-400 p-4 mb-8 rounded-2xl animate-in fade-in slide-in-from-top-4">
+          <div className="flex items-center space-x-3 bg-red-100 dark:bg-red-500/10 border border-red-300 dark:border-red-500/20 text-red-700 dark:text-red-400 p-4 mb-8 rounded-2xl animate-in fade-in slide-in-from-top-4">
             <AlertCircle className="w-5 h-5 shrink-0" />
             <p className="text-sm font-medium">{error}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-8 bg-white/5 backdrop-blur-xl p-8 md:p-12 rounded-[2.5rem] border border-white/10 shadow-2xl">
+        <form onSubmit={handleSubmit} className="space-y-8 bg-indigo-50 dark:bg-white/5 backdrop-blur-xl p-8 md:p-12 rounded-[2.5rem] border border-indigo-200 dark:border-white/10 shadow-2xl">
           
           {/* Campaign Title */}
           <div className="space-y-2">
-            <label htmlFor="title" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+            <label htmlFor="title" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
               <span className="mr-2">01.</span> Campaign Title
             </label>
             <input
@@ -170,13 +170,13 @@ export default function NewCampaignPage() {
               value={formData.title}
               onChange={handleChange}
               required
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all"
+              className="w-full bg-white dark:bg-white/5 border border-indigo-300 dark:border-white/10 rounded-2xl px-6 py-4 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-teal-500/50 transition-all"
             />
           </div>
           
           {/* Short Description */}
           <div className="space-y-2">
-            <label htmlFor="shortDesc" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+            <label htmlFor="shortDesc" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
               <span className="mr-2">02.</span> Elevator Pitch
             </label>
             <input
@@ -187,13 +187,13 @@ export default function NewCampaignPage() {
               value={formData.shortDesc}
               onChange={handleChange}
               required
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all"
+              className="w-full bg-white dark:bg-white/5 border border-indigo-300 dark:border-white/10 rounded-2xl px-6 py-4 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-teal-500/50 transition-all"
             />
           </div>
 
           {/* Full Description */}
           <div className="space-y-2">
-            <label htmlFor="description" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+            <label htmlFor="description" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
               <span className="mr-2">03.</span> The Full Story
             </label>
             <textarea
@@ -204,14 +204,14 @@ export default function NewCampaignPage() {
               value={formData.description}
               onChange={handleChange}
               required
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all resize-none"
+              className="w-full bg-white dark:bg-white/5 border border-indigo-300 dark:border-white/10 rounded-2xl px-6 py-4 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-teal-500/50 transition-all resize-none"
             />
           </div>
 
           {/* Goal & Deadline Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-2">
-              <label htmlFor="goalAmount" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+              <label htmlFor="goalAmount" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
                 <DollarSignIcon className="w-3 h-3 mr-2" /> Goal Amount
               </label>
               <input
@@ -222,11 +222,11 @@ export default function NewCampaignPage() {
                 onChange={handleChange}
                 required
                 min="1"
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all"
+                className="w-full bg-white dark:bg-white/5 border border-indigo-300 dark:border-white/10 rounded-2xl px-6 py-4 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-teal-500/50 transition-all"
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="deadline" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+              <label htmlFor="deadline" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
                 <CalendarIcon className="w-3 h-3 mr-2" /> Deadline
               </label>
               <input
@@ -236,14 +236,14 @@ export default function NewCampaignPage() {
                 value={formData.deadline}
                 onChange={handleChange}
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all [color-scheme:dark]"
+                className="w-full bg-white dark:bg-white/5 border border-indigo-300 dark:border-white/10 rounded-2xl px-6 py-4 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-teal-500/50 transition-all [color-scheme:light] dark:[color-scheme:dark]"
               />
             </div>
           </div>
 
           {/* Category */}
           <div className="space-y-2">
-            <label htmlFor="category" className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+            <label htmlFor="category" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
               <LayersIcon className="w-3 h-3 mr-2" /> Category
             </label>
             <select
@@ -252,24 +252,24 @@ export default function NewCampaignPage() {
               value={formData.category}
               onChange={handleChange}
               required
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all appearance-none cursor-pointer"
+              className="w-full bg-white dark:bg-white/5 border border-indigo-300 dark:border-white/10 rounded-2xl px-6 py-4 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-teal-500/50 transition-all appearance-none cursor-pointer"
             >
-              <option value="" className="bg-[#0a0f1d]">Select a category...</option>
-              <option value="EDUCATION" className="bg-[#0a0f1d]">Education</option>
-              <option value="MEDICAL" className="bg-[#0a0f1d]">Medical</option>
-              <option value="COMMUNITY" className="bg-[#0a0f1d]">Community</option>
-              <option value="TECHNOLOGY" className="bg-[#0a0f1d]">Technology</option>
-              <option value="OTHER" className="bg-[#0a0f1d]">Other</option>
+              <option value="" className="bg-white dark:bg-[#0a0f1d]">Select a category...</option>
+              <option value="EDUCATION" className="bg-white dark:bg-[#0a0f1d]">Education</option>
+              <option value="MEDICAL" className="bg-white dark:bg-[#0a0f1d]">Medical</option>
+              <option value="COMMUNITY" className="bg-white dark:bg-[#0a0f1d]">Community</option>
+              <option value="TECHNOLOGY" className="bg-white dark:bg-[#0a0f1d]">Technology</option>
+              <option value="OTHER" className="bg-white dark:bg-[#0a0f1d]">Other</option>
             </select>
           </div>
 
           {/* Featured Image Upload */}
           <div className="space-y-4">
-            <label className="text-xs font-black uppercase tracking-widest text-teal-400 ml-1 flex items-center">
+            <label className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
               <ImageIcon className="w-3 h-3 mr-2" /> Featured Image
             </label>
             
-            <div className={`relative group border-2 border-dashed rounded-[2rem] p-8 text-center transition-all ${uploadedUrl ? 'border-teal-500/40 bg-teal-500/5' : 'border-white/10 hover:border-white/20'}`}>
+            <div className={`relative group border-2 border-dashed rounded-[2rem] p-8 text-center transition-all ${uploadedUrl ? 'border-indigo-500/40 dark:border-teal-500/40 bg-indigo-50 dark:bg-teal-500/5' : 'border-indigo-300 dark:border-white/10 hover:border-indigo-400 dark:hover:border-white/20'}`}>
               <input 
                   type="file"
                   id="featuredImage"
@@ -284,19 +284,19 @@ export default function NewCampaignPage() {
               <div className="space-y-4">
                 {uploadedUrl ? (
                   <div className="flex flex-col items-center animate-in zoom-in-95">
-                    <CheckCircle2 className="w-12 h-12 text-teal-400 mb-2" />
-                    <p className="text-teal-400 font-bold">Image Securely Uploaded</p>
-                    <img src={uploadedUrl} alt="Preview" className="w-32 h-20 object-cover mt-4 rounded-xl border border-teal-500/20" />
+                    <CheckCircle2 className="w-12 h-12 text-indigo-600 dark:text-teal-400 mb-2" />
+                    <p className="text-indigo-700 dark:text-teal-400 font-bold">Image Securely Uploaded</p>
+                    <img src={uploadedUrl} alt="Preview" className="w-32 h-20 object-cover mt-4 rounded-xl border border-indigo-300 dark:border-teal-500/20" />
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
-                    <div className="p-4 bg-white/5 rounded-2xl mb-2">
-                      <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-white transition-colors" />
+                    <div className="p-4 bg-indigo-100 dark:bg-white/5 rounded-2xl mb-2">
+                      <ImageIcon className="w-8 h-8 text-slate-600 dark:text-gray-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" />
                     </div>
-                    <p className="text-gray-400 group-hover:text-white transition-colors">
+                    <p className="text-slate-600 dark:text-gray-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                       {isUploading ? 'Securing your image...' : 'Click or drag to upload featured image'}
                     </p>
-                    <p className="text-[10px] text-gray-600 uppercase tracking-widest mt-2">Max size: 5MB • JPG, PNG, WEBP</p>
+                    <p className="text-[10px] text-slate-500 dark:text-gray-600 uppercase tracking-widest mt-2">Max size: 5MB • JPG, PNG, WEBP</p>
                   </div>
                 )}
               </div>
@@ -306,7 +306,7 @@ export default function NewCampaignPage() {
           <button
             type="submit"
             disabled={loading || isUploading}
-            className="w-full py-5 px-4 bg-teal-400 text-[#0a0f1d] font-black text-xl rounded-2xl shadow-xl shadow-teal-500/20 hover:bg-teal-300 transition-all active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center space-x-3"
+            className="w-full py-5 px-4 bg-indigo-600 dark:bg-teal-400 text-white dark:text-[#0a0f1d] font-black text-xl rounded-2xl shadow-xl shadow-indigo-600/20 dark:shadow-teal-500/20 hover:bg-indigo-700 dark:hover:bg-teal-300 transition-all active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center space-x-3"
           >
             {loading ? (
               <>

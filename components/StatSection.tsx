@@ -64,22 +64,22 @@ export default function StatsSection() {
   ];
 
   if (loading) return (
-    <div className="bg-[#0a0f1d] py-24 flex flex-col items-center justify-center">
-      <div className="w-12 h-12 border-4 border-teal-500/20 border-t-teal-500 rounded-full animate-spin"></div>
-      <p className="mt-4 text-gray-500 font-medium tracking-widest uppercase text-xs">Syncing Global Impact</p>
+    <div className="bg-white dark:bg-[#0a0f1d] py-24 flex flex-col items-center justify-center">
+      <div className="w-12 h-12 border-4 border-indigo-200 dark:border-teal-500/20 border-t-indigo-600 dark:border-t-teal-500 rounded-full animate-spin"></div>
+      <p className="mt-4 text-slate-600 dark:text-gray-500 font-medium tracking-widest uppercase text-xs">Syncing Global Impact</p>
     </div>
   );
 
   return (
-    <div className="bg-[#0a0f1d] py-24 relative overflow-hidden">
+    <div className="bg-white dark:bg-[#0a0f1d] py-24 relative overflow-hidden">
       {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-indigo-600/5 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-indigo-600/15 dark:bg-indigo-600/5 blur-[120px] rounded-full pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-20">
-          <h2 className="text-sm font-black text-teal-400 tracking-[0.3em] uppercase mb-4">Our Worldwide Reach</h2>
-          <p className="text-4xl md:text-5xl font-black text-white tracking-tight">
-            Realizing Goals, <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-indigo-400">One Spark</span> at a Time.
+          <h2 className="text-sm font-black text-teal-600 dark:text-teal-400 tracking-[0.3em] uppercase mb-4">Our Worldwide Reach</h2>
+          <p className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+            Realizing Goals, <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-indigo-600 dark:from-teal-400 dark:to-indigo-400">One Spark</span> at a Time.
           </p>
         </div>
 
@@ -90,23 +90,23 @@ export default function StatsSection() {
               className="group relative p-1 rounded-3xl transition-all duration-500 hover:scale-[1.02]"
             >
               {/* Card Gradient Border */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl opacity-50"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 dark:from-white/10 to-transparent rounded-3xl opacity-50"></div>
               
-              <div className="relative h-full bg-[#111827]/80 backdrop-blur-xl p-10 rounded-[calc(1.5rem-1px)] border border-white/5 flex flex-col items-center text-center">
+              <div className="relative h-full bg-indigo-50/50 dark:bg-[#111827]/80 backdrop-blur-xl p-10 rounded-[calc(1.5rem-1px)] border border-indigo-200 dark:border-white/30 flex flex-col items-center text-center">
                 {/* Animated Icon Container */}
                 <div className={`mb-6 p-4 rounded-2xl bg-gradient-to-br ${stat.accent} shadow-lg shadow-black/20 group-hover:scale-110 transition-transform duration-300`}>
                   <stat.icon className="h-8 w-8 text-white" aria-hidden="true" />
                 </div>
 
-                <dd className="text-5xl font-black text-white mb-2 tracking-tighter">
+                <dd className="text-5xl font-black text-slate-900 dark:text-white mb-2 tracking-tighter">
                   {stat.value}
                 </dd>
                 
-                <dt className="text-lg font-bold text-gray-300 mb-4">
+                <dt className="text-lg font-bold text-slate-700 dark:text-gray-300 mb-4">
                   {stat.name}
                 </dt>
                 
-                <p className="text-sm text-gray-500 leading-relaxed font-light">
+                <p className="text-sm text-slate-600 dark:text-gray-500 leading-relaxed font-light">
                   {stat.description}
                 </p>
                 <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r ${stat.accent} transition-all duration-500 group-hover:w-full rounded-b-3xl`}></div>

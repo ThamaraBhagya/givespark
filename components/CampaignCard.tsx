@@ -19,7 +19,7 @@ export default function CampaignCard({ campaign }: CampaignCardProps) {
   return (
     <Link 
       href={`/campaign/${campaign.id}`} 
-      className="group block bg-[#111827]/60 backdrop-blur-xl rounded-3xl border border-white/5 overflow-hidden transition-all duration-500 hover:border-teal-500/30 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+      className="group block bg-white dark:bg-[#111827]/60 backdrop-blur-xl rounded-3xl border border-indigo-200 dark:border-white/30 overflow-hidden transition-all duration-500 hover:border-indigo-400 dark:hover:border-teal-500/30 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(99,102,241,0.15)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
     >
       {/* Featured Image with Overlay */}
       <div className="relative h-56 w-full overflow-hidden">
@@ -31,56 +31,55 @@ export default function CampaignCard({ campaign }: CampaignCardProps) {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         {/* Dark overlay for better text contrast if needed */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-transparent to-transparent opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#111827] via-transparent to-transparent opacity-60" />
         
         {/* Category Badge (Optional/Placeholder) */}
-        <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-teal-500 text-[10px] font-black uppercase tracking-widest text-gray-950">
+        <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-indigo-600 dark:bg-teal-500 text-[10px] font-black uppercase tracking-widest text-white dark:text-gray-950">
           Active
         </div>
       </div>
 
       <div className="p-6">
         {/* Title */}
-        <h3 className="text-xl font-black text-white line-clamp-1 group-hover:text-teal-400 transition-colors">
+        <h3 className="text-xl font-black text-slate-900 dark:text-white line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-teal-400 transition-colors">
           {campaign.title}
         </h3>
 
         {/* Short Description */}
-        <p className="mt-3 text-sm text-gray-400 line-clamp-2 font-light leading-relaxed">
+        <p className="mt-3 text-sm text-slate-600 dark:text-gray-400 line-clamp-2 font-light leading-relaxed">
           {campaign.shortDesc}
         </p>
 
         {/* Progress Bar Section */}
         <div className="mt-6">
           <div className="flex justify-between items-end mb-2">
-             <span className="text-xs font-black text-teal-400 uppercase tracking-widest">
+             <span className="text-xs font-black text-indigo-600 dark:text-teal-400 uppercase tracking-widest">
                {fundedPercentage.toFixed(0)}% Funded
              </span>
-             <span className="text-xs text-gray-500 font-medium">
+             <span className="text-xs text-slate-500 dark:text-gray-500 font-medium">
                Goal: ${campaign.goalAmount.toLocaleString()}
              </span>
           </div>
-          <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+          <div className="h-2 bg-indigo-200 dark:bg-white/5 rounded-full overflow-hidden">
             <div 
-              className="h-full rounded-full bg-gradient-to-r from-teal-400 to-indigo-500 transition-all duration-1000 ease-out" 
+              className="h-full rounded-full bg-gradient-to-r from-indigo-600 to-teal-600 dark:from-teal-400 dark:to-indigo-500 transition-all duration-1000 ease-out" 
               style={{ width: `${fundedPercentage}%` }}
             ></div>
           </div>
         </div>
 
         {/* Funding Stats */}
-        <div className="mt-6 pt-5 border-t border-white/5 flex justify-between items-center">
+        <div className="mt-6 pt-5 border-t border-indigo-200 dark:border-white/5 flex justify-between items-center">
           <div>
-            <p className="text-[10px] text-gray-500 uppercase font-black tracking-tighter">Raised</p>
-            <p className="text-lg font-black text-white">
+            <p className="text-[10px] text-slate-500 dark:text-gray-500 uppercase font-black tracking-tighter">Raised</p>
+            <p className="text-lg font-black text-slate-900 dark:text-white">
               ${campaign.currentAmount.toLocaleString()}
             </p>
           </div>
           
-          <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-teal-500 transition-colors duration-300">
-             <svg className="w-5 h-5 text-white group-hover:text-gray-950 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="ArrowRightIcon" />
-               <path d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          <div className="h-10 w-10 rounded-xl bg-indigo-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-indigo-600 dark:group-hover:bg-teal-500 transition-colors duration-300">
+             <svg className="w-5 h-5 text-slate-900 dark:text-white group-hover:text-white dark:group-hover:text-gray-950 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
              </svg>
           </div>
         </div>
