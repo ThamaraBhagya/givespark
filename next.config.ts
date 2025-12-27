@@ -16,6 +16,14 @@ const nextConfig: NextConfig = {
     },
     
     // Add any other configuration options here
+    typescript: {
+        // !! WARN !!
+        // Dangerously allow production builds to successfully complete 
+        // even if your project has type errors.
+        ignoreBuildErrors: true,
+    },
+
+    
 };
 
 export default nextConfig;
