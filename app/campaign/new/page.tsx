@@ -12,6 +12,8 @@ import {
   AlertCircle
 } from 'lucide-react';
 
+import CampaignStoryAI from '@/components/CampaignStoryAI';
+
 export default function NewCampaignPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -38,6 +40,11 @@ export default function NewCampaignPage() {
       [name]: name === 'goalAmount' ? parseFloat(value) : value, 
     }));
   };
+
+  const setStory = (newStory: string) => {
+    console.log("Updating Parent State with AI Story:", newStory.substring(0, 50) + "...");
+    setFormData(prev => ({ ...prev, description: newStory }));
+};
   
   const handleFileUpload = async (file: File) => {
     setIsUploading(true);
@@ -191,7 +198,7 @@ export default function NewCampaignPage() {
             />
           </div>
 
-          {/* Full Description */}
+          {/* Full Description
           <div className="space-y-2">
             <label htmlFor="description" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
               <span className="mr-2">03.</span> The Full Story
@@ -206,7 +213,16 @@ export default function NewCampaignPage() {
               required
               className="w-full bg-white dark:bg-white/5 border border-indigo-300 dark:border-white/10 rounded-2xl px-6 py-4 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-teal-500/50 transition-all resize-none"
             />
-          </div>
+          </div> */}
+          
+          {/* 💡 03. THE FULL STORY (INTEGRATED AI COMPONENT) */}
+          <CampaignStoryAI 
+            title={formData.title}
+            category={formData.category}
+            description={formData.shortDesc} // We pass the shortDesc as context for better AI results
+            story={formData.description}
+            setStory={setStory}
+          />
 
           {/* Goal & Deadline Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
