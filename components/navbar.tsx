@@ -1,19 +1,19 @@
 'use client';
-import { useEffect, useState } from 'react'; // 💡 Added state for menu toggle
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
-import { UserCircleIcon, LogOut, Menu, X, Moon, Sun } from 'lucide-react'; // 💡 Added Menu and X icons
+import { UserCircleIcon, LogOut, Menu, X, Moon, Sun, Rocket, AlertCircle } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // 💡 Toggle state
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCreatorModalOpen, setIsCreatorModalOpen] = useState(false); // 💡 State to control modal
 
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Avoid hydration mismatch by waiting until mounted
   useEffect(() => setMounted(true), []);
   
   const navLinks = [
@@ -25,6 +25,23 @@ export default function Navbar() {
 
   const isAuthenticated = status === 'authenticated';
   const isCreator = isAuthenticated && session?.user?.role === 'CREATOR';
+
+  // 💡 Updated handler to trigger the modal
+  const handleStartCampaign = (e: React.MouseEvent) => {
+    if (!isCreator) {
+      e.preventDefault();
+      setIsCreatorModalOpen(true);
+      setIsMenuOpen(false);
+      return;
+    }
+    window.location.href = '/campaign/new';
+  };
+
+  const handleCreatorSignIn = async () => {
+    setIsCreatorModalOpen(false);
+    // Sign out current session and redirect to sign-in page
+    await signOut({ callbackUrl: '/auth/signin' });
+  };
 
   return (
     <nav className="bg-white/90 dark:bg-[#0a0f1d]/90 backdrop-blur-md border-b border-indigo-100 dark:border-white/5 sticky top-0 z-50">
@@ -43,7 +60,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* 2. Desktop Navigation (Center) */}
+          {/* 2. Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
@@ -56,14 +73,14 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* 3. Desktop Actions (Right) */}
+          {/* 3. Desktop Actions */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link 
-              href={isCreator ? "/campaign/new" : "/auth/signin"} 
+            <button
+              onClick={handleStartCampaign}
               className="px-5 py-2.5 text-sm font-black rounded-full text-white bg-indigo-600 hover:bg-indigo-700 dark:text-gray-900 dark:bg-teal-400 dark:hover:bg-teal-300 transition-all shadow-lg active:scale-95"
             >
               Start a Campaign
-            </Link>
+            </button>
             
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -101,7 +118,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* 4. Mobile Menu Toggle (Hamburger) */}
+          {/* 4. Mobile Menu Toggle */}
           <div className="md:hidden flex items-center">
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -128,13 +145,12 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="pt-6 border-t border-indigo-100 dark:border-white/5 flex flex-col space-y-4">
-              <Link 
-                href={isCreator ? "/campaign/new" : "/auth/signin"}
-                onClick={() => setIsMenuOpen(false)}
+              <button 
+                onClick={handleStartCampaign}
                 className="w-full py-4 bg-indigo-600 dark:bg-teal-400 text-white dark:text-gray-950 text-center font-black rounded-2xl text-lg"
               >
                 Start a Campaign
-              </Link>
+              </button>
               {isAuthenticated ? (
                 <Link 
                   href={isCreator ? "/dashboard/creator" : "/dashboard/user"}
@@ -146,6 +162,53 @@ export default function Navbar() {
               ) : (
                 <Link href="/auth/signin" onClick={() => setIsMenuOpen(false)} className="text-center text-slate-600 dark:text-gray-400 font-black uppercase tracking-widest py-2">Login</Link>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 💡 CREATOR ACCESS MODAL */}
+      {isCreatorModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-start justify-center p-4 pt-32 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 text-left">
+          <div className="relative w-full max-w-md bg-white dark:bg-[#0f172a] rounded-[2.5rem] shadow-2xl border border-indigo-100 dark:border-white/10 overflow-hidden">
+            {/* Close Button */}
+            <button 
+              onClick={() => setIsCreatorModalOpen(false)}
+              className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 hover:text-red-500 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="p-10 text-center">
+              <div className="mx-auto w-20 h-20 rounded-3xl bg-indigo-50 dark:bg-teal-400/10 flex items-center justify-center mb-6">
+                <Rocket className="w-10 h-10 text-indigo-600 dark:text-teal-400" />
+              </div>
+              
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter mb-4">
+                Creator Access Required
+              </h3>
+              
+              <p className="text-slate-600 dark:text-gray-400 mb-8 leading-relaxed font-medium">
+                To launch and manage campaigns, you must be logged in with a <span className="font-bold text-indigo-600 dark:text-teal-400">Creator Account</span>. 
+              </p>
+
+              <div className="space-y-3">
+                <Link 
+                  href="/auth/signin"
+                  onClick={handleCreatorSignIn}
+                  className="block w-full py-4 bg-indigo-600 dark:bg-teal-400 text-white dark:text-gray-950 font-black rounded-2xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all text-center"
+                >
+                  Sign In as Creator
+                </Link>
+                <button 
+                  onClick={() => setIsCreatorModalOpen(false)}
+                  className="block w-full py-4 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-gray-400 font-bold rounded-2xl hover:bg-slate-200 dark:hover:bg-white/10 transition-all"
+                >
+                  Maybe Later
+                </button>
+              </div>
+              
+              
             </div>
           </div>
         </div>
