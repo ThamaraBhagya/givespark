@@ -8,7 +8,7 @@ import * as bcrypt from 'bcryptjs'; // To compare hashed passwords
 
 export const authOptions = {
     // Uses the Prisma client to connect NextAuth sessions/accounts to the DB
-    adapter: PrismaAdapter(prisma), 
+    adapter: PrismaAdapter(prisma) as any, 
     
     providers: [
         CredentialsProvider({
