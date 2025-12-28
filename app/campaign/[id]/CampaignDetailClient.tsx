@@ -71,12 +71,12 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/15 dark:bg-indigo-600/10 rounded-full blur-[120px] -z-10" />
       <div className="absolute top-40 right-1/4 w-96 h-96 bg-teal-600/15 dark:bg-teal-500/10 rounded-full blur-[120px] -z-10" />
 
-      <div className="max-w-7xl mx-auto p-6 md:p-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 md:p-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
           
           {/* LEFT COLUMN: Campaign Content */}
-          <div className="lg:col-span-2 space-y-12">
-            <header className="space-y-6">
+          <div className="lg:col-span-2 space-y-6 sm:space-y-8 md:space-y-12">
+            <header className="space-y-3 sm:space-y-4 md:space-y-6">
               <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-100 dark:bg-teal-500/10 border border-indigo-300 dark:border-teal-500/20 text-indigo-700 dark:text-teal-400 text-xs font-bold uppercase tracking-widest">
                 <span className="relative flex h-2 w-2 mr-1">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-600 dark:bg-teal-400 opacity-75"></span>
@@ -85,11 +85,11 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
                 Active Campaign
               </div>
               
-              <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-gray-400">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-gray-400">
                 {campaignData.title}
               </h1>
 
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                 <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-teal-500 p-[1px]">
                   <div className="h-full w-full rounded-2xl bg-white dark:bg-[#0a0f1d] flex items-center justify-center font-bold text-slate-900 dark:text-white">
                     {campaignData.creator.name.charAt(0)}
@@ -114,8 +114,8 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
               <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#0a0f1d] via-transparent to-transparent opacity-40" />
             </div>
 
-            <section className="bg-indigo-50 dark:bg-white/5 backdrop-blur-md p-10 rounded-[2.5rem] border border-indigo-200 dark:border-white/10">
-              <h2 className="text-3xl font-black text-slate-900 dark:text-white flex items-center mb-8">
+            <section className="bg-indigo-50 dark:bg-white/5 backdrop-blur-md p-6 sm:p-8 md:p-10 rounded-[2.5rem] border border-indigo-200 dark:border-white/10">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 dark:text-white flex items-center mb-6 sm:mb-8">
                 <span className="w-1.5 h-8 bg-gradient-to-b from-indigo-600 to-teal-600 dark:from-teal-400 dark:to-indigo-600 mr-4 rounded-full" />
                 The Story
               </h2>
@@ -127,16 +127,16 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
 
           {/* RIGHT COLUMN: Sidebar (Funding & Donations) */}
           <div className="lg:col-span-1">
-            <div className="sticky top-28 space-y-8">
+            <div className="sticky top-4 sm:top-6 lg:top-28 space-y-6 sm:space-y-8">
               
               {/* Funding Card */}
-              <div className="bg-indigo-50 dark:bg-white/5 backdrop-blur-xl p-10 rounded-[2.5rem] border border-indigo-200 dark:border-white/10 shadow-2xl relative overflow-hidden group">
+              <div className="bg-indigo-50 dark:bg-white/5 backdrop-blur-xl p-6 sm:p-8 md:p-10 rounded-[2.5rem] border border-indigo-200 dark:border-white/10 shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-600 to-teal-600 dark:from-teal-400 dark:to-indigo-600" />
                 
-                <div className="space-y-8">
+                <div className="space-y-6 sm:space-y-8">
                   <div>
-                    <div className="flex items-baseline space-x-2">
-                      <span className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter">${campaignData.currentAmount.toLocaleString()}</span>
+                    <div className="flex items-baseline space-x-2 flex-wrap">
+                      <span className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter">${campaignData.currentAmount.toLocaleString()}</span>
                     </div>
                     <p className="text-slate-600 dark:text-gray-400 mt-2 font-medium">
                       pledged of <span className="text-slate-900 dark:text-white font-bold">${campaignData.goalAmount.toLocaleString()}</span> goal
@@ -183,13 +183,13 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
               </div>
 
               {/* RECENT DONATIONS LIST */}
-              <div className="bg-indigo-50 dark:bg-white/5 backdrop-blur-md p-10 rounded-[2.5rem] border border-indigo-200 dark:border-white/10">
-                <h3 className="text-xl font-black text-slate-900 dark:text-white flex items-center mb-8">
+              <div className="bg-indigo-50 dark:bg-white/5 backdrop-blur-md p-6 sm:p-8 md:p-10 rounded-[2.5rem] border border-indigo-200 dark:border-white/10">
+                <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white flex items-center mb-6 sm:mb-8">
                   <HeartIcon className="w-5 h-5 mr-3 text-indigo-600 dark:text-teal-400 fill-indigo-600/20 dark:fill-teal-400/20" />
                   Recent Backers
                 </h3>
 
-                <div className="space-y-8 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-6 sm:space-y-8 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                   {campaignData.donations.length > 0 ? (
                     campaignData.donations.map((donation, index) => (
                       <div key={donation.id} className="flex items-center space-x-4 group">
