@@ -56,24 +56,24 @@ export default function MyCampaignsPage() {
     }
 
     return (
-        <div className="space-y-10 bg-white dark:bg-[#0a0f1d] min-h-screen text-slate-900 dark:text-white p-3">
+        <div className="space-y-8 md:space-y-10 bg-white dark:bg-[#0a0f1d] min-h-screen text-slate-900 dark:text-white p-4 sm:p-6 md:p-8">
             {/* --- HEADER --- */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6">
+                <div className="flex-1">
                     <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 dark:bg-indigo-500/10 dark:border-indigo-500/20 dark:text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
                         <RocketLaunchIcon className="w-3 h-3" />
                         <span>Campaign Management</span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white">
                         My Campaigns <span className="text-slate-600 dark:text-gray-600 ml-2">({campaigns.length})</span>
                     </h1>
                 </div>
                 
                 <Link
                     href="/campaign/new"
-                    className="group relative flex items-center space-x-3 px-8 py-4 bg-indigo-600 text-white dark:bg-teal-400 dark:text-[#0a0f1d] font-black rounded-2xl shadow-xl shadow-indigo-500/20 dark:shadow-teal-500/20 hover:bg-indigo-500 dark:hover:bg-teal-300 transition-all active:scale-95"
+                    className="group relative flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 px-6 sm:px-8 py-3 sm:py-4 bg-indigo-600 text-white dark:bg-teal-400 dark:text-[#0a0f1d] font-black rounded-xl sm:rounded-2xl shadow-xl shadow-indigo-500/20 dark:shadow-teal-500/20 hover:bg-indigo-500 dark:hover:bg-teal-300 transition-all active:scale-95 text-sm sm:text-base"
                 >
-                    <PlusCircleIcon className="w-6 h-6 transition-transform group-hover:rotate-90" />
+                    <PlusCircleIcon className="w-5 sm:w-6 h-5 sm:h-6 transition-transform group-hover:rotate-90 flex-shrink-0" />
                     <span>Launch New Spark</span>
                 </Link>
             </div>
@@ -86,41 +86,41 @@ export default function MyCampaignsPage() {
 
             {/* --- CAMPAIGN FEED --- */}
             {campaigns.length === 0 ? (
-                <div className="text-center py-24 bg-white border-2 border-dashed border-indigo-200 dark:bg-white/2 dark:border-white/10 rounded-4xl backdrop-blur-md">
-                    <ChartBarIcon className="w-20 h-20 text-slate-400 dark:text-white/30 mx-auto mb-6" />
-                    <p className="text-2xl font-black text-slate-900 dark:text-white mb-2">No active sparks found.</p>
-                    <p className="text-slate-600 dark:text-gray-500 font-medium mb-10">Your journey to change starts with a single campaign.</p>
+                <div className="text-center py-16 sm:py-20 md:py-24 bg-white border-2 border-dashed border-indigo-200 dark:bg-white/2 dark:border-white/10 rounded-2xl sm:rounded-4xl backdrop-blur-md px-4 sm:px-6">
+                    <ChartBarIcon className="w-16 sm:w-20 h-16 sm:h-20 text-slate-400 dark:text-white/30 mx-auto mb-4 sm:mb-6" />
+                    <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mb-2">No active sparks found.</p>
+                    <p className="text-sm sm:text-base text-slate-600 dark:text-gray-500 font-medium mb-8 sm:mb-10">Your journey to change starts with a single campaign.</p>
                     <Link 
                         href="/campaign/new"
-                        className="inline-flex items-center space-x-3 text-indigo-600 hover:text-indigo-500 dark:text-teal-400 dark:hover:text-teal-300 font-black uppercase tracking-widest text-xs transition-all group"
+                        className="inline-flex items-center space-x-2 sm:space-x-3 text-indigo-600 hover:text-indigo-500 dark:text-teal-400 dark:hover:text-teal-300 font-black uppercase tracking-widest text-xs sm:text-sm transition-all group"
                     >
                         <span>Ignite your first campaign</span>
-                        <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                        <ArrowRightIcon className="w-3 sm:w-4 h-3 sm:h-4 group-hover:translate-x-2 transition-transform" />
                     </Link>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 gap-6">
+                <div className="grid grid-cols-1 gap-4 sm:gap-6">
                     {campaigns.map((campaign) => {
                         const fundedPercentage = Math.min(100, (campaign.currentAmount / campaign.goalAmount) * 100);
                         
                         return (
                             <div 
                                 key={campaign.id} 
-                                className="group relative bg-white border border-slate-200 p-8 rounded-4xl shadow-sm dark:shadow-none dark:bg-white/3 dark:border-white/5 backdrop-blur-xl flex flex-col lg:flex-row lg:items-center justify-between transition-all duration-500 hover:bg-slate-50 dark:hover:bg-white/6 hover:border-indigo-300 dark:hover:border-teal-500/30"
+                                className="group relative bg-white border border-slate-200 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-4xl shadow-sm dark:shadow-none dark:bg-white/3 dark:border-white/5 backdrop-blur-xl flex flex-col gap-6 md:gap-0 md:flex-row md:items-center justify-between transition-all duration-500 hover:bg-slate-50 dark:hover:bg-white/6 hover:border-indigo-300 dark:hover:border-teal-500/30"
                             >
                                 {/* Title & Meta */}
-                                <div className="flex-1 lg:max-w-md">
+                                <div className="flex-1 md:max-w-md">
                                     <Link href={`/campaign/${campaign.id}`} className="block">
-                                        <h3 className="text-2xl font-black text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-teal-400 transition-colors line-clamp-1 tracking-tight">
+                                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-teal-400 transition-colors line-clamp-1 tracking-tight">
                                             {campaign.title}
                                         </h3>
                                     </Link>
-                                    <div className="flex items-center mt-3 text-slate-600 dark:text-gray-500 space-x-4">
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center mt-3 text-slate-600 dark:text-gray-500 space-y-2 sm:space-y-0 sm:space-x-4">
                                         <div className="flex items-center text-[10px] font-black uppercase tracking-widest">
                                             <CalendarIcon className="w-4 h-4 mr-2 text-indigo-600 dark:text-indigo-400" />
                                             {new Date(campaign.createdAt).toLocaleDateString()}
                                         </div>
-                                        <div className="h-1 w-1 bg-slate-300 dark:bg-gray-800 rounded-full" />
+                                        <div className="hidden sm:block h-1 w-1 bg-slate-300 dark:bg-gray-800 rounded-full" />
                                         <div className="flex items-center text-[10px] font-black uppercase tracking-widest text-indigo-600 dark:text-teal-500">
                                             <ArrowTrendingUpIcon className="w-4 h-4 mr-2" />
                                             Active
@@ -129,7 +129,7 @@ export default function MyCampaignsPage() {
                                 </div>
                                 
                                 {/* Mid Section: Progress */}
-                                <div className="flex-1 max-w-sm my-8 lg:my-0 lg:mx-12">
+                                <div className="w-full md:flex-1 md:max-w-sm md:mx-12">
                                     <div className="flex justify-between items-end mb-2">
                                         <p className="text-[10px] font-black text-indigo-600 dark:text-teal-400 uppercase tracking-widest">
                                             {fundedPercentage.toFixed(1)}% Funded
@@ -147,24 +147,24 @@ export default function MyCampaignsPage() {
                                 </div>
 
                                 {/* Right Section: Stats & Action */}
-                                <div className="flex items-center justify-between lg:justify-end lg:space-x-12">
-                                    <div className="text-left lg:text-right">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 md:gap-0 md:justify-end md:space-x-8 lg:space-x-12 w-full md:w-auto">
+                                    <div className="text-left sm:text-left flex-1 sm:flex-none">
                                         <p className="text-[10px] font-black text-slate-600 dark:text-gray-500 uppercase tracking-widest mb-1">Total Pledged</p>
-                                        <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">
+                                        <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tighter">
                                             ${campaign.currentAmount.toLocaleString()}
                                             <span className="text-xs text-slate-600 dark:text-gray-600 ml-1 font-bold">/ ${campaign.goalAmount.toLocaleString()}</span>
                                         </p>
                                     </div>
                                     <Link 
                                         href={`/campaign/${campaign.id}`}
-                                        className="p-4 bg-white border border-slate-200 rounded-2xl text-slate-600 hover:text-indigo-600 hover:bg-slate-50 dark:bg-white/5 dark:border-white/5 dark:text-gray-400 dark:hover:text-teal-400 dark:hover:bg-teal-400/10 transition-all"
+                                        className="p-3 sm:p-4 bg-white border border-slate-200 rounded-xl sm:rounded-2xl text-slate-600 hover:text-indigo-600 hover:bg-slate-50 dark:bg-white/5 dark:border-white/5 dark:text-gray-400 dark:hover:text-teal-400 dark:hover:bg-teal-400/10 transition-all flex-shrink-0"
                                     >
-                                        <ArrowRightIcon className="w-6 h-6" />
+                                        <ArrowRightIcon className="w-5 sm:w-6 h-5 sm:h-6" />
                                     </Link>
                                 </div>
 
                                 {/* Subtle Signature Accent Line */}
-                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-linear-to-r from-indigo-600 to-teal-500 dark:from-teal-400 dark:to-indigo-600 transition-all duration-500 group-hover:w-full rounded-b-4xl" />
+                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-linear-to-r from-indigo-600 to-teal-500 dark:from-teal-400 dark:to-indigo-600 transition-all duration-500 group-hover:w-full rounded-b-2xl sm:rounded-b-4xl" />
                             </div>
                         );
                     })}

@@ -152,13 +152,25 @@ export default function Navbar() {
                 Start a Campaign
               </button>
               {isAuthenticated ? (
-                <Link 
-                  href={isCreator ? "/dashboard/creator" : "/dashboard/user"}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="w-full py-4 bg-indigo-50 dark:bg-white/5 border border-indigo-200 dark:border-white/10 text-slate-900 dark:text-white text-center font-black rounded-2xl text-lg"
-                >
-                  Go to Dashboard
-                </Link>
+                <>
+                  <Link 
+                    href={isCreator ? "/dashboard/creator" : "/dashboard/user"}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="w-full py-4 bg-indigo-50 dark:bg-white/5 border border-indigo-200 dark:border-white/10 text-slate-900 dark:text-white text-center font-black rounded-2xl text-lg"
+                  >
+                    Go to Dashboard
+                  </Link>
+                  <button 
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      signOut({ callbackUrl: '/' });
+                    }}
+                    className="w-full py-4 bg-rose-50 dark:bg-red-400/10 border border-rose-200 dark:border-red-400/20 text-rose-600 dark:text-red-400 text-center font-black rounded-2xl text-lg hover:bg-rose-100 dark:hover:bg-red-400/20 transition-colors flex items-center justify-center space-x-2"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span>Logout</span>
+                  </button>
+                </>
               ) : (
                 <Link href="/auth/signin" onClick={() => setIsMenuOpen(false)} className="text-center text-slate-600 dark:text-gray-400 font-black uppercase tracking-widest py-2">Login</Link>
               )}
