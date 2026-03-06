@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { Camera, User, CheckCircle, Loader2, Shield, Bell, CreditCard } from 'lucide-react';
+import { Camera, User, CheckCircle, Loader2 } from 'lucide-react';
 
 export default function SettingsPage() {
     const { data: session, update } = useSession();
@@ -53,6 +53,38 @@ export default function SettingsPage() {
             setStatus('Error updating profile.');
         } finally {
             setSaving(false);
+        }
+    };
+
+    const handleConnectStripe = async () => {
+        if (session?.user?.role !== 'CREATOR') {
+            setStatus('Only creators can connect Stripe.');
+            return;
+        }
+
+        setConnectingStripe(true);
+        setStatus('');
+
+        try {
+            const res = await fetch('/api/stripe/connect/onboard', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            const data = await res.json();
+
+            if (res.ok && data.onboardingUrl) {
+                // Redirect to Stripe onboarding
+                window.location.href = data.onboardingUrl;
+            } else {
+                setStatus(data.error || 'Failed to start Stripe onboarding.');
+                await fetchStripeStatus();
+            }
+        } catch (err: any) {
+            setStatus('Error connecting Stripe.');
+            await fetchStripeStatus();
+        } finally {
+            setConnectingStripe(false);
         }
     };
 
@@ -114,8 +146,6 @@ export default function SettingsPage() {
                     placeholder="Your name"
                 />
             </div>
-
-            
         </div>
 
         {/* Submit & Status */}
@@ -134,8 +164,8 @@ export default function SettingsPage() {
             </button>
 
             {status && (
-                <div className={`flex items-center justify-center space-x-2 text-xs sm:text-sm font-bold animate-in fade-in slide-in-from-top-2 ${status.includes('success') ? 'text-indigo-600 dark:text-teal-400' : 'text-red-600 dark:text-red-400'}`}>
-                    {status.includes('success') && <CheckCircle className="w-3 sm:w-4 h-3 sm:h-4" />}
+                <div className={`flex items-center justify-center space-x-2 text-xs sm:text-sm font-bold animate-in fade-in slide-in-from-top-2 ${status.includes('success') || status.includes('Connected') ? 'text-indigo-600 dark:text-teal-400' : 'text-red-600 dark:text-red-400'}`}>
+                    {(status.includes('success') || status.includes('Connected')) && <CheckCircle className="w-3 sm:w-4 h-3 sm:h-4" />}
                     <span>{status}</span>
                 </div>
             )}

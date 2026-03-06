@@ -12,6 +12,7 @@ declare module "next-auth" {
       image?: string;
       id: string; // <-- Add custom ID
       role: 'USER' | 'CREATOR'; // <-- Add custom Role
+      stripeAccountId?: string; // <-- Add Stripe Connect Account ID
     } & DefaultSession["user"];
   }
 
@@ -21,6 +22,7 @@ declare module "next-auth" {
   interface User {
     id: string; // <-- Add custom ID
     role: 'USER' | 'CREATOR'; // <-- Add custom Role
+    stripeAccountId?: string; // <-- Add Stripe Connect Account ID
   }
 }
 
@@ -32,5 +34,6 @@ declare module "next-auth/jwt" {
   interface JWT {
     id: string; // <-- Add custom ID
     role: 'USER' | 'CREATOR'; // <-- Add custom Role
+    stripeAccountId?: string; // <-- Add Stripe Connect Account ID
   }
 }

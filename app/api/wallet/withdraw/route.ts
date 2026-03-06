@@ -2,11 +2,12 @@
 
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth"; // To identify the creator
+import { getServerSession } from "next-auth";
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
+  
   // Ensure the user is authenticated and is a Creator
   if (!session?.user || session.user.role !== 'CREATOR') {
       return NextResponse.json({ error: "Access denied or not a creator." }, { status: 403 });
@@ -16,46 +17,47 @@ export async function POST(req: Request) {
 
   try {
     const { amount } = await req.json();
+    const numericAmount = Number(amount);
 
     // Input validation
-    if (amount <= 0) {
+    if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
         return NextResponse.json({ error: "Invalid withdrawal amount." }, { status: 400 });
     }
 
-    // 1. Check current balance
+    // Check current balance
     const wallet = await prisma.wallet.findUnique({
         where: { userId: creatorId }
     });
 
-    if (!wallet || wallet.balance < amount) {
+    if (!wallet || wallet.balance < numericAmount) {
         return NextResponse.json({ error: "Insufficient balance in virtual wallet." }, { status: 400 });
     }
 
-    // 2. Update Wallet (Deduct balance and log withdrawal)
+    // Update wallet (mock withdrawal - just DB update, no real transfer)
     const updatedWallet = await prisma.wallet.update({
         where: { userId: creatorId },
         data: {
-            balance: { decrement: amount }, // Deduct the available balance
-            withdrawnAmount: { increment: amount }, // Log lifetime withdrawn total
+            balance: { decrement: numericAmount },
+            withdrawnAmount: { increment: numericAmount },
             transactions: {
                 create: {
-                    amount,
-                    type: "WITHDRAW" // Log as a withdrawal transaction
+                    amount: numericAmount,
+                    type: "WITHDRAW",
                 }
             }
         }
     });
 
-    // Mock success message (This is where a real app would interface with a bank)
     return NextResponse.json({ 
         success: true, 
-        message: "Mock withdrawal successful. Funds disbursed.", 
+        message: "Withdrawal processed successfully (mock mode).",
         wallet: updatedWallet 
     }, { status: 200 });
 
-  } catch (e) {
+  } catch (e: any) {
+    console.error("Withdrawal Error:", e);
     return NextResponse.json(
-      { error: "Withdrawal failed.", details: e },
+      { error: "Withdrawal failed.", details: e.message },
       { status: 500 }
     );
   }
