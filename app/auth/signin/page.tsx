@@ -68,6 +68,7 @@ export default function SignInPage() {
 
             if (result?.error) {
                 setError('Login failed: Invalid email or password.');
+                setLoading(false);
             } else {
                 router.push('/');
             }
