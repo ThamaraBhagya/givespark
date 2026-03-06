@@ -24,12 +24,8 @@ export async function POST(req: Request) {
     const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
     
     // Choose a model - OpenRouter supports many
-    const MODEL = "mistralai/mistral-7b-instruct:free"; // Free model
-    // Alternatives:
-    // - "google/gemma-7b-it:free"
-    // - "huggingfaceh4/zephyr-7b-beta:free"
-    // - "openai/gpt-3.5-turbo" (requires credits)
-    // - "anthropic/claude-3-haiku" (requires credits)
+    const MODEL = "meta-llama/llama-3.2-3b-instruct:free"; // Free model
+    
 
     // Improved prompt for better results
     const prompt = `You are an expert crowdfunding copywriter with 15 years of experience creating successful campaigns. Your specialty is crafting emotional, compelling stories that inspire people to take action and donate.
@@ -61,7 +57,7 @@ STORY STRUCTURE:
 5. **The Impact** - Describe the difference this will make
 6. **Call to Action** - End with an inspiring appeal for support
 
-Make the story approximately 500-700 words. Use markdown formatting with headers, bold text, and bullet points for readability.`;
+Make the story approximately 500-700 words. Use clear, persuasive language that builds trust and motivates action. Avoid generic phrases and focus on creating a unique, compelling narrative based on the provided details.`;
 
     console.log("Calling OpenRouter API with model:", MODEL);
 
