@@ -55,7 +55,7 @@ export default function Sidebar() {
       <div className="p-4 md:p-5 lg:p-6">
         <div className="bg-white border border-indigo-200 dark:bg-white/5 dark:border-white/10 backdrop-blur-md rounded-lg md:rounded-xl lg:rounded-2xl p-3 md:p-4 flex items-center space-x-3 md:space-x-4">
           <div className="relative shrink-0">
-            {/* The "Squircle" Profile Image Container */}
+            
             <div className="w-10 md:w-10 lg:w-11 h-10 md:h-10 lg:h-11 rounded-lg md:rounded-lg lg:rounded-xl overflow-hidden bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/10 shadow-lg flex items-center justify-center">
               {user?.image ? (
                 <img src={user.image} alt="" className="w-full h-full object-cover" />
@@ -63,7 +63,7 @@ export default function Sidebar() {
                 <UserIcon className="w-5 md:w-5 lg:w-6 h-5 md:h-5 lg:h-6 text-slate-500 dark:text-gray-500" />
               )}
             </div>
-            {/* Status indicator - Indigo for Donors to differentiate from Creator Teal */}
+            
             <div className="absolute -bottom-1 -right-1 w-3 h-3 md:w-3.5 md:h-3.5 lg:w-4 lg:h-4 bg-indigo-500 rounded-full border-2 border-white dark:border-[#0a0f1d]" />
           </div>
           <div className="truncate min-w-0">
@@ -125,7 +125,7 @@ export default function Sidebar() {
       <div className="p-6">
         <div className="bg-white border border-indigo-200 dark:bg-white/5 dark:border-white/10 backdrop-blur-md rounded-2xl p-4 flex items-center space-x-4">
           <div className="relative shrink-0">
-            {/* The "Squircle" Profile Image Container */}
+            
             <div className="w-11 h-11 rounded-xl overflow-hidden bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/10 shadow-lg flex items-center justify-center">
               {user?.image ? (
                 <img src={user.image} alt="" className="w-full h-full object-cover" />
@@ -133,7 +133,7 @@ export default function Sidebar() {
                 <UserIcon className="w-6 h-6 text-slate-500 dark:text-gray-500" />
               )}
             </div>
-            {/* Status indicator - Indigo for Donors to differentiate from Creator Teal */}
+            
             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-indigo-500 rounded-full border-2 border-white dark:border-[#0a0f1d]" />
           </div>
           <div className="truncate">

@@ -1,4 +1,4 @@
-import SettingsPage from "@/components/settings"; // 💡 Import your existing component
+import SettingsPage from "@/components/settings"; 
 
 export default function CreatorSettings() {
     return (

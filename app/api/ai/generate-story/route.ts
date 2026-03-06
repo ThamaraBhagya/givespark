@@ -23,11 +23,11 @@ export async function POST(req: Request) {
     // OpenRouter API endpoint
     const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
     
-    // Choose a model - OpenRouter supports many
+    
     const MODEL = "meta-llama/llama-3.2-3b-instruct:free"; // Free model
     
 
-    // Improved prompt for better results
+    
     const prompt = `You are an expert crowdfunding copywriter with 15 years of experience creating successful campaigns. Your specialty is crafting emotional, compelling stories that inspire people to take action and donate.
 
 Write a complete crowdfunding story for a campaign with these details:
@@ -70,7 +70,7 @@ Make the story approximately 500-700 words. Use clear, persuasive language that 
           "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
           "HTTP-Referer": "http://localhost:3000", // Required by OpenRouter
-          "X-Title": "Crowdfunding Platform", // Optional but good practice
+          "X-Title": "Crowdfunding Platform", 
         },
         method: "POST",
         body: JSON.stringify({
@@ -168,7 +168,7 @@ Make the story approximately 500-700 words. Use clear, persuasive language that 
   } catch (error: any) {
     console.error("Unexpected error in AI generation:", error);
     
-    // Try to get the data for fallback
+    
     let title = "", category = "", description = "";
     try {
       const body = await req.json();

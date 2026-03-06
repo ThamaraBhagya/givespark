@@ -56,37 +56,7 @@ export default function SettingsPage() {
         }
     };
 
-    const handleConnectStripe = async () => {
-        if (session?.user?.role !== 'CREATOR') {
-            setStatus('Only creators can connect Stripe.');
-            return;
-        }
-
-        setConnectingStripe(true);
-        setStatus('');
-
-        try {
-            const res = await fetch('/api/stripe/connect/onboard', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-            });
-
-            const data = await res.json();
-
-            if (res.ok && data.onboardingUrl) {
-                // Redirect to Stripe onboarding
-                window.location.href = data.onboardingUrl;
-            } else {
-                setStatus(data.error || 'Failed to start Stripe onboarding.');
-                await fetchStripeStatus();
-            }
-        } catch (err: any) {
-            setStatus('Error connecting Stripe.');
-            await fetchStripeStatus();
-        } finally {
-            setConnectingStripe(false);
-        }
-    };
+    
 
     return (
         <div className="min-h-screen bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white p-4 sm:p-6 md:p-8 lg:p-10">

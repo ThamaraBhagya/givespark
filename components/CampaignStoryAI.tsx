@@ -30,7 +30,7 @@ export default function CampaignStoryAI({
     setIsGenerating(true);
     setStatusMessage("Spark AI is igniting your story...");
     
-    // Suggestion: If using Hugging Face free tier, models sleep.
+    
     // Set a timeout to update the message if it takes long.
     const timer = setTimeout(() => {
         setStatusMessage("Warming up the ML model... (this can take 20s)");

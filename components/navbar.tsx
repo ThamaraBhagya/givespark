@@ -26,7 +26,7 @@ export default function Navbar() {
   const isAuthenticated = status === 'authenticated';
   const isCreator = isAuthenticated && session?.user?.role === 'CREATOR';
 
-  // 💡 Updated handler to trigger the modal
+ 
   const handleStartCampaign = (e: React.MouseEvent) => {
     if (!isCreator) {
       e.preventDefault();
@@ -39,7 +39,7 @@ export default function Navbar() {
 
   const handleCreatorSignIn = async () => {
     setIsCreatorModalOpen(false);
-    // Sign out current session and redirect to sign-in page
+    
     await signOut({ callbackUrl: '/auth/signin' });
   };
 
@@ -179,7 +179,7 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* 💡 CREATOR ACCESS MODAL */}
+      
       {isCreatorModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-start justify-center p-4 pt-32 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 text-left">
           <div className="relative w-full max-w-md bg-white dark:bg-[#0f172a] rounded-[2.5rem] shadow-2xl border border-indigo-100 dark:border-white/10 overflow-hidden">

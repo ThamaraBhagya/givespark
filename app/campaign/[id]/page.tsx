@@ -1,9 +1,9 @@
 // app/campaign/[id]/page.tsx
 import prisma from '@/lib/prisma';
 import DonationModal from '@/components/DonationModal';
-// Import your server-side auth helper if needed to check creator access
+
 import { notFound } from 'next/navigation'; 
-import CampaignDetailClient from './CampaignDetailClient'; // Client wrapper for the modal
+import CampaignDetailClient from './CampaignDetailClient';
 
 
 interface CampaignDetailPageProps {
@@ -19,7 +19,7 @@ async function getCampaignData(id: string) {
     donations: {
       orderBy: { createdAt: 'desc' },
       include: {
-        donor: { // 💡 Critical: This ensures 'donor' is not undefined
+        donor: { 
           select: { name: true, image: true }
         }
       }
@@ -39,8 +39,7 @@ export default async function CampaignDetailsPage({ params }: CampaignDetailPage
 
   const fundedPercentage = Math.min(100, (campaign.currentAmount / campaign.goalAmount) * 100);
 
-  // Pass the initial server-fetched data to a client component
-  // This ensures the client component can re-fetch updated data after a donation.
+  
   return (
     <CampaignDetailClient 
         campaignId={campaign.id} 

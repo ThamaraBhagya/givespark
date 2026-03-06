@@ -3,12 +3,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'; // Ensure you export authOptions
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'; 
 
 export async function GET() {
     const session = await getServerSession(authOptions);
     
-    // 1. Check Authentication and Role
+    // Check Authentication and Role
     if (!session?.user || session.user.role !== 'CREATOR') {
         return NextResponse.json({ error: "Access denied. Creator role required." }, { status: 403 });
     }
@@ -16,7 +16,7 @@ export async function GET() {
     const creatorId = session.user.id;
 
     try {
-        // 2. Fetch Wallet data, including all transactions
+        //  Fetch Wallet data, including all transactions
         const wallet = await prisma.wallet.findUnique({
             where: { userId: creatorId },
             include: {
@@ -28,12 +28,11 @@ export async function GET() {
         });
 
         if (!wallet) {
-            // This case should ideally not happen if registration worked correctly, 
-            // but is a safeguard.
+            
             return NextResponse.json({ error: "Creator wallet not found." }, { status: 404 });
         }
 
-        // 3. Return the comprehensive wallet data
+        // Return the comprehensive wallet data
         return NextResponse.json({ success: true, wallet }, { status: 200 });
 
     } catch (e) {

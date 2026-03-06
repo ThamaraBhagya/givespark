@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { X, ShieldCheck, Heart, Loader2, CheckCircle2 } from 'lucide-react';
 
-// STRIPE IMPORTS
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
@@ -18,9 +17,7 @@ interface DonationModalProps {
   onSuccess: (donatedAmount: number) => void;
 }
 
-// ----------------------------------------------------------------------
-// 💡 Inner Component: CheckoutForm
-// ----------------------------------------------------------------------
+
 const CheckoutForm: React.FC<any> = ({ 
     campaignId, amount, intentId, message, anonymous, donorId, onSuccess, onClose 
 }) => {
@@ -88,9 +85,7 @@ const CheckoutForm: React.FC<any> = ({
     );
 };
 
-// ----------------------------------------------------------------------
-// 💡 Outer Component: DonationModal
-// ----------------------------------------------------------------------
+
 export default function DonationModal({ campaignId, campaignTitle, onClose, onSuccess }: DonationModalProps) {
     const { data: session } = useSession();
     const router = useRouter();

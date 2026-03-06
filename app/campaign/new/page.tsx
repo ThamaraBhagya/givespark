@@ -198,28 +198,13 @@ export default function NewCampaignPage() {
             />
           </div>
 
-          {/* Full Description
-          <div className="space-y-2">
-            <label htmlFor="description" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
-              <span className="mr-2">03.</span> The Full Story
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              rows={6}
-              placeholder="Describe your project, your goals, and why it matters..."
-              value={formData.description}
-              onChange={handleChange}
-              required
-              className="w-full bg-white dark:bg-white/5 border border-indigo-300 dark:border-white/10 rounded-2xl px-6 py-4 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-teal-500/50 transition-all resize-none"
-            />
-          </div> */}
+         
           
-          {/* 💡 03. THE FULL STORY (INTEGRATED AI COMPONENT) */}
+          {/*  THE FULL STORY (INTEGRATED AI COMPONENT) */}
           <CampaignStoryAI 
             title={formData.title}
             category={formData.category}
-            description={formData.shortDesc} // We pass the shortDesc as context for better AI results
+            description={formData.shortDesc} 
             story={formData.description}
             setStory={setStory}
           />

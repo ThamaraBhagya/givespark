@@ -6,7 +6,6 @@ import prisma from "@/lib/prisma";
 export async function GET() {
   try {
     const campaigns = await prisma.campaign.findMany({
-      // Since we removed the status/approval, we just fetch all campaigns
       select: {
         id: true,
         title: true,
@@ -14,16 +13,16 @@ export async function GET() {
         featuredImage: true,
         currentAmount: true,
         goalAmount: true,
-        category: true, // 💡 Ensure category is included
+        category: true,
       },
       orderBy: { createdAt: "desc" } 
-    }); //[cite: 105]
+    });
 
-    return NextResponse.json({ campaigns }); //[cite: 106]
+    return NextResponse.json({ campaigns });
   } catch (e) {
     return NextResponse.json(
       { error: "Failed to fetch campaigns", details: e },
       { status: 500 }
-    ); //[cite: 107]
+    );
   }
 }

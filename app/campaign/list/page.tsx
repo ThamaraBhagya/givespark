@@ -83,7 +83,7 @@ export default function AllCampaignsPage() {
                     </h1>
                 </header>
 
-                {/* 🛠️ FILTER BAR (Glassmorphism) */}
+                
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12 p-4 bg-indigo-50 dark:bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-indigo-200 dark:border-white/10 shadow-2xl">
                     
                     {/* Search */}
@@ -132,7 +132,7 @@ export default function AllCampaignsPage() {
                     </div>
                 </div>
 
-                {/* 💡 Result Counter */}
+                
                 <div className="flex items-center justify-between mb-8 px-2">
                     <p className="text-slate-600 dark:text-gray-500 text-sm font-black uppercase tracking-widest">
                         Showing <span className="text-slate-900 dark:text-white">{filteredCampaigns.length}</span> {filteredCampaigns.length === 1 ? 'project' : 'projects'}
@@ -140,7 +140,7 @@ export default function AllCampaignsPage() {
                     <div className="h-px flex-1 bg-indigo-200 dark:bg-white/5 mx-6 hidden md:block" />
                 </div>
                 
-                {/* 💡 Conditional Grid Rendering */}
+                
                 {filteredCampaigns.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                         {filteredCampaigns.map((campaign) => (
@@ -152,7 +152,7 @@ export default function AllCampaignsPage() {
                         ))}
                     </div>
                 ) : (
-                    /* 💡 Empty State */
+                    
                     <div className="text-center py-32 bg-indigo-50 dark:bg-white/5 backdrop-blur-sm rounded-[3rem] border-2 border-dashed border-indigo-200 dark:border-white/10">
                         <FunnelIcon className="mx-auto h-16 w-16 text-slate-400 dark:text-gray-700 mb-6" />
                         <h3 className="text-2xl font-black text-slate-900 dark:text-white">No projects found</h3>

@@ -1,5 +1,3 @@
-// /app/api/donation/confirm-payment/route.ts
-
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth"; 
@@ -12,18 +10,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 
 export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
-    const donorId = session?.user?.id; // Donor ID is optional if donor is logged out/anonymous
+    const donorId = session?.user?.id;
 
     try {
-        // Extract data sent from the client's successful payment confirmation
         const { campaignId, amount, message, anonymous, intentId } = await req.json();
         
-        // --- Input Validation ---
         if (!campaignId || !intentId) {
             return NextResponse.json({ error: "Missing campaign or intent ID." }, { status: 400 });
         }
 
-        // 💡 CRITICAL: Verify the Payment Intent status with Stripe
         const paymentIntent = await stripe.paymentIntents.retrieve(intentId);
 
         if (paymentIntent.status !== 'succeeded') {
@@ -32,11 +27,8 @@ export async function POST(req: Request) {
             }, { status: 400 });
         }
 
-        // 💡 SECURITY FIX: Use Stripe's verified amount (in cents), not client-sent amount
-        // This prevents clients from inflating the amount they claim to have paid
-        const verifiedAmount = paymentIntent.amount / 100; // Convert from cents to dollars
+        const verifiedAmount = paymentIntent.amount / 100;
         
-        // --- 1. Fetch Campaign and Creator ---
         const campaign = await prisma.campaign.findUnique({
              where: { id: campaignId },
              select: { id: true, creatorId: true, title: true }
@@ -46,35 +38,30 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Campaign not found." }, { status: 404 });
         }
 
-        // 💡 Creator Self-Donation Check
         if (donorId && campaign.creatorId === donorId) {
             return NextResponse.json({ 
                 error: "Creator cannot donate to their own campaign" 
             }, { status: 403 });
         }
 
-        // --- 2. Perform the Transaction (Only if payment is successful) ---
         const [donation, updatedCampaign, updatedWallet] = await prisma.$transaction([
 
-            // 2a. Create donation record
             prisma.donation.create({
                 data: {
                     campaignId,
                     donorId,
-                    amount: verifiedAmount, // Use verified amount from Stripe, not client-sent
+                    amount: verifiedAmount,
                     message,
                     anonymous,
-                    stripePaymentIntentId: intentId, // Save the verified Stripe ID
+                    stripePaymentIntentId: intentId,
                 }
             }),
 
-            // 2b. Update campaign's currentAmount (using verified amount)
             prisma.campaign.update({
                 where: { id: campaignId },
                 data: { currentAmount: { increment: verifiedAmount } }
             }),
 
-            // 2c. Update Creator's Wallet (Deposit with verified amount)
             prisma.wallet.update({
                 where: { userId: campaign.creatorId },
                 data: {
@@ -82,10 +69,10 @@ export async function POST(req: Request) {
                     totalReceived: { increment: verifiedAmount }, 
                     transactions: {
                         create: {
-                            amount: verifiedAmount, // Use verified amount from Stripe
+                            amount: verifiedAmount,
                             type: "DEPOSIT", 
-                            sourceId: intentId, // Link to the Stripe Intent ID
-                            sourceType: "STRIPE_PAYMENT", // Mark the source type
+                            sourceId: intentId,
+                            sourceType: "STRIPE_PAYMENT",
                         }
                     }
                 }

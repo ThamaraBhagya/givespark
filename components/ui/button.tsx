@@ -3,7 +3,7 @@ import React from 'react';
 
 // Define the properties (props) the Button component can accept
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  // You can add more props here later (e.g., variant, size, loadingState)
+  
   children: React.ReactNode;
 }
 

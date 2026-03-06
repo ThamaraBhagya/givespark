@@ -67,24 +67,7 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
       
       {/* Header/Logo Section */}
       <div className="flex flex-col items-center justify-center py-6 md:py-8 lg:py-10 border-b border-indigo-200 dark:border-white/5">
-        {/* <Link href="/" className="flex items-center space-x-2 group">
-            <div className="relative h-8 w-8">
-              <Image 
-                src="/logo-icon.png" 
-                alt="Icon" 
-                fill 
-                className="object-contain transition-transform group-hover:rotate-12" 
-              />
-            </div>
-            <div className="relative h-5 w-28">
-              <Image 
-                src="/givespark-text.png" 
-                alt="GiveSpark" 
-                fill 
-                className="object-contain dark:brightness-0 dark:invert" 
-              />
-            </div>
-        </Link> */}
+        
         <span className="mt-2 text-[13px] md:text-[14px] lg:text-[15px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] lg:tracking-[0.3em] text-indigo-600 dark:text-teal-500/60">
           Creator Studio
         </span>

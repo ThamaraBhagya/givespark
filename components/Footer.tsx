@@ -31,7 +31,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-white dark:bg-[#050811] border-t border-indigo-200 dark:border-white/5 relative overflow-hidden">
-      {/* Subtle Glow Accent */}
+      
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-indigo-500/50 dark:via-teal-500/50 to-transparent"></div>
 
       <div className="max-w-7xl mx-auto py-16 px-6 lg:px-8 relative z-10">
@@ -121,7 +121,7 @@ export default function Footer() {
           </div>
         </div>
         
-        {/* Bottom Socials & Copyright */}
+        
         <div className="mt-20 pt-8 border-t border-indigo-200 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
           <p className="text-slate-600 dark:text-gray-500 text-sm font-light order-2 md:order-1">
             &copy; {new Date().getFullYear()} GiveSpark, Inc. Built for impact.
@@ -136,7 +136,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Modal logic remains the same... */}
+      
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 dark:bg-black/80 backdrop-blur-md">
           <div className="relative w-full max-w-lg animate-in zoom-in-95 duration-300">

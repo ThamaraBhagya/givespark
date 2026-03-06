@@ -2,20 +2,20 @@
 
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth"; // Used for authentication [cite: 74]
+import { getServerSession } from "next-auth"; 
 import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 }); //[cite: 76]
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 }); 
   }
 
   try {
     const body = await req.json();
     const {
       title, shortDesc, description, goalAmount, deadline, images, featuredImage, category
-    } = body; // Destructure all mandatory fields [cite: 77]
+    } = body; 
 
     const deadlineDate = new Date(deadline);
       if (isNaN(deadlineDate.getTime())) {
@@ -34,15 +34,15 @@ export async function POST(req: Request) {
         images: images || [],
         featuredImage,
         category,
-        creatorId: creatorId, // Link to the logged-in creator [cite: 78]
+        creatorId: creatorId, 
       }
     });
 
-    return NextResponse.json({ success: true, campaign });// [cite: 79]
+    return NextResponse.json({ success: true, campaign });
   } catch (e) {
     return NextResponse.json(
       { error: "Failed to create campaign", details: e },
       { status: 500 }
-    ); //[cite: 80]
+    ); 
   }
 }

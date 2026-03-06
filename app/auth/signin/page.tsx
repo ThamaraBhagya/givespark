@@ -107,7 +107,7 @@ export default function SignInPage() {
             {/* LEFT SIDE: IMMERSIVE IMAGE */}
             <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-indigo-900">
                 <Image 
-                    src="/auth-bg.png" // 💡 Change this to your preferred high-quality image
+                    src="/auth-bg.png" 
                     alt="GiveSpark Impact"
                     fill
                     className="object-cover opacity-60 grayscale-40"

@@ -79,10 +79,10 @@ export default function FeaturedCampaigns() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {campaigns.map((campaign) => (
             <div key={campaign.id} className="group relative">
-               {/* 💡 The same subtle bottom action line for card consistency */}
+               
                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-indigo-600 to-teal-600 dark:from-teal-400 dark:to-indigo-500 transition-all duration-500 group-hover:w-full z-20 rounded-full"></div>
                
-               {/* Note: Ensure CampaignCard internal UI is updated to dark mode/glassmorphism if possible */}
+               
                <CampaignCard campaign={campaign} />
             </div>
           ))}
