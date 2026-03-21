@@ -48,7 +48,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
-          {/* 1. Logo Section */}
+          
           <div className="shrink-0 flex items-center">
             <Link href="/" className="flex items-center space-x-2 group">
               <div className="relative h-8 w-8 sm:h-10 sm:w-10">
@@ -60,7 +60,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* 2. Desktop Navigation */}
+          
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
@@ -73,7 +73,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* 3. Desktop Actions */}
+          
           <div className="hidden md:flex items-center space-x-6">
             <button
               onClick={handleStartCampaign}
@@ -118,7 +118,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* 4. Mobile Menu Toggle */}
+          
           <div className="md:hidden flex items-center">
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -130,7 +130,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* 5. Mobile Menu Overlay */}
+      
       {isMenuOpen && (
         <div className="md:hidden absolute top-20 left-0 w-full bg-white dark:bg-[#0a0f1d] border-b border-indigo-100 dark:border-white/5 animate-in slide-in-from-top duration-300">
           <div className="px-6 py-8 space-y-6">
@@ -183,7 +183,7 @@ export default function Navbar() {
       {isCreatorModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-start justify-center p-4 pt-32 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 text-left">
           <div className="relative w-full max-w-md bg-white dark:bg-[#0f172a] rounded-[2.5rem] shadow-2xl border border-indigo-100 dark:border-white/10 overflow-hidden">
-            {/* Close Button */}
+            
             <button 
               onClick={() => setIsCreatorModalOpen(false)}
               className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 hover:text-red-500 transition-colors"

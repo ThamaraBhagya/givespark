@@ -1,4 +1,3 @@
-// app/api/auth/register/route.ts
 
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
@@ -8,16 +7,13 @@ export async function POST(req: Request) {
     try {
         const { name, email, password, role ,image } = await req.json();
 
-        // Check if user already exists
         const existingUser = await prisma.user.findUnique({ where: { email } });
         if (existingUser) {
             return NextResponse.json({ error: "User already exists with this email." }, { status: 409 });
         }
 
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create the new user
         const newUser = await prisma.user.create({
             data: {
                 name,
@@ -28,7 +24,6 @@ export async function POST(req: Request) {
             }
         });
 
-        // If the user is a CREATOR, create their initial Wallet
         if (newUser.role === 'CREATOR') {
             await prisma.wallet.create({
                 data: {

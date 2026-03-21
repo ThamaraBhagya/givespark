@@ -72,7 +72,7 @@ export default function StatsSection() {
 
   return (
     <div className="bg-white dark:bg-[#0a0f1d] py-24 relative overflow-hidden">
-      {/* Background Glow */}
+      
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-indigo-600/15 dark:bg-indigo-600/5 blur-[120px] rounded-full pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -89,11 +89,11 @@ export default function StatsSection() {
               key={stat.id} 
               className="group relative p-1 rounded-3xl transition-all duration-500 hover:scale-[1.02]"
             >
-              {/* Card Gradient Border */}
+              
               <div className="absolute inset-0 bg-gradient-to-br from-white/10 dark:from-white/10 to-transparent rounded-3xl opacity-50"></div>
               
               <div className="relative h-full bg-indigo-50/50 dark:bg-[#111827]/80 backdrop-blur-xl p-10 rounded-[calc(1.5rem-1px)] border border-indigo-200 dark:border-white/30 flex flex-col items-center text-center">
-                {/* Animated Icon Container */}
+                
                 <div className={`mb-6 p-4 rounded-2xl bg-gradient-to-br ${stat.accent} shadow-lg shadow-black/20 group-hover:scale-110 transition-transform duration-300`}>
                   <stat.icon className="h-8 w-8 text-white" aria-hidden="true" />
                 </div>

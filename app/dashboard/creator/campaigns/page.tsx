@@ -57,7 +57,6 @@ export default function MyCampaignsPage() {
 
     return (
         <div className="space-y-8 md:space-y-10 bg-white dark:bg-[#0a0f1d] min-h-screen text-slate-900 dark:text-white p-4 sm:p-6 md:p-8">
-            {/* --- HEADER --- */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6">
                 <div className="flex-1">
                     <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 dark:bg-indigo-500/10 dark:border-indigo-500/20 dark:text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
@@ -84,7 +83,6 @@ export default function MyCampaignsPage() {
                 </div>
             )}
 
-            {/* --- CAMPAIGN FEED --- */}
             {campaigns.length === 0 ? (
                 <div className="text-center py-16 sm:py-20 md:py-24 bg-white border-2 border-dashed border-indigo-200 dark:bg-white/2 dark:border-white/10 rounded-2xl sm:rounded-4xl backdrop-blur-md px-4 sm:px-6">
                     <ChartBarIcon className="w-16 sm:w-20 h-16 sm:h-20 text-slate-400 dark:text-white/30 mx-auto mb-4 sm:mb-6" />
@@ -108,7 +106,6 @@ export default function MyCampaignsPage() {
                                 key={campaign.id} 
                                 className="group relative bg-white border border-slate-200 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-4xl shadow-sm dark:shadow-none dark:bg-white/3 dark:border-white/5 backdrop-blur-xl flex flex-col gap-6 md:gap-0 md:flex-row md:items-center justify-between transition-all duration-500 hover:bg-slate-50 dark:hover:bg-white/6 hover:border-indigo-300 dark:hover:border-teal-500/30"
                             >
-                                {/* Title & Meta */}
                                 <div className="flex-1 md:max-w-md">
                                     <Link href={`/campaign/${campaign.id}`} className="block">
                                         <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-teal-400 transition-colors line-clamp-1 tracking-tight">
@@ -128,7 +125,6 @@ export default function MyCampaignsPage() {
                                     </div>
                                 </div>
                                 
-                                {/* Mid Section: Progress */}
                                 <div className="w-full md:flex-1 md:max-w-sm md:mx-12">
                                     <div className="flex justify-between items-end mb-2">
                                         <p className="text-[10px] font-black text-indigo-600 dark:text-teal-400 uppercase tracking-widest">
@@ -146,7 +142,6 @@ export default function MyCampaignsPage() {
                                     </div>
                                 </div>
 
-                                {/* Right Section: Stats & Action */}
                                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 md:gap-0 md:justify-end md:space-x-8 lg:space-x-12 w-full md:w-auto">
                                     <div className="text-left sm:text-left flex-1 sm:flex-none">
                                         <p className="text-[10px] font-black text-slate-600 dark:text-gray-500 uppercase tracking-widest mb-1">Total Pledged</p>
@@ -163,7 +158,6 @@ export default function MyCampaignsPage() {
                                     </Link>
                                 </div>
 
-                                {/* Subtle Signature Accent Line */}
                                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-linear-to-r from-indigo-600 to-teal-500 dark:from-teal-400 dark:to-indigo-600 transition-all duration-500 group-hover:w-full rounded-b-2xl sm:rounded-b-4xl" />
                             </div>
                         );

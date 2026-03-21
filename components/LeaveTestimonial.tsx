@@ -47,7 +47,7 @@ export default function LeaveTestimonial() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Star Rating Interaction */}
+        
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Your Rating</label>
           <div className="flex items-center space-x-1">
@@ -87,7 +87,7 @@ export default function LeaveTestimonial() {
           />
         </div>
 
-        {/* Submit Button */}
+        
         <button
           type="submit"
           disabled={loading || content.length < 10}
@@ -96,7 +96,7 @@ export default function LeaveTestimonial() {
           {loading ? 'Posting...' : 'Post Testimonial'}
         </button>
 
-        {/* Status Messages */}
+        
         {status.type && (
           <div className={`p-4 rounded-lg text-center text-sm font-medium ${
             status.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'

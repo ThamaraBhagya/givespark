@@ -137,7 +137,7 @@ export default function NewCampaignPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white pb-20 relative overflow-hidden">
-      {/* Background Decorative Glows */}
+      
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/15 dark:bg-indigo-600/10 rounded-full blur-[120px] -z-10" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-600/15 dark:bg-teal-500/10 rounded-full blur-[120px] -z-10" />
 
@@ -164,7 +164,7 @@ export default function NewCampaignPage() {
 
         <form onSubmit={handleSubmit} className="space-y-8 bg-indigo-50 dark:bg-white/5 backdrop-blur-xl p-8 md:p-12 rounded-[2.5rem] border border-indigo-200 dark:border-white/10 shadow-2xl">
           
-          {/* Campaign Title */}
+          
           <div className="space-y-2">
             <label htmlFor="title" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
               <span className="mr-2">01.</span> Campaign Title
@@ -181,7 +181,7 @@ export default function NewCampaignPage() {
             />
           </div>
           
-          {/* Short Description */}
+        
           <div className="space-y-2">
             <label htmlFor="shortDesc" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
               <span className="mr-2">02.</span> Elevator Pitch
@@ -209,7 +209,7 @@ export default function NewCampaignPage() {
             setStory={setStory}
           />
 
-          {/* Goal & Deadline Grid */}
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-2">
               <label htmlFor="goalAmount" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
@@ -242,7 +242,7 @@ export default function NewCampaignPage() {
             </div>
           </div>
 
-          {/* Category */}
+        
           <div className="space-y-2">
             <label htmlFor="category" className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
               <LayersIcon className="w-3 h-3 mr-2" /> Category
@@ -264,7 +264,7 @@ export default function NewCampaignPage() {
             </select>
           </div>
 
-          {/* Featured Image Upload */}
+     
           <div className="space-y-4">
             <label className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-teal-400 ml-1 flex items-center">
               <ImageIcon className="w-3 h-3 mr-2" /> Featured Image

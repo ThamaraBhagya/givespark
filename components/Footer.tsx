@@ -80,7 +80,7 @@ export default function Footer() {
             )}
           </div>
 
-          {/* Navigation Links */}
+          
           <div className="mt-16 grid grid-cols-2 md:grid-cols-3 gap-8 xl:mt-0 xl:col-span-2">
             <div>
               <h3 className="text-sm font-black text-slate-900 dark:text-white tracking-[0.2em] uppercase mb-6">Solutions</h3>

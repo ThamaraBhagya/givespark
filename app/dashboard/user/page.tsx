@@ -18,7 +18,6 @@ export default async function UserDashboard() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white p-4 sm:p-6 md:p-8 space-y-8 sm:space-y-10 md:space-y-12">
-      {/* --- DASHBOARD HEADER --- */}
       <header className="relative py-4 sm:py-5 md:py-6">
         <div className="absolute -top-10 -left-10 w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="relative z-10">
@@ -31,9 +30,7 @@ export default async function UserDashboard() {
         </div>
       </header>
 
-      {/* --- IMPACT METRICS --- */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 md:gap-8">
-        {/* Total Contributed Card */}
         <div className="relative group bg-white border border-slate-200 dark:bg-white/5 dark:border-white/10 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-4xl md:rounded-5xl transition-all hover:border-indigo-300 dark:hover:border-indigo-500/30 overflow-hidden shadow-sm dark:shadow-none">
           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-indigo-600/60 dark:bg-indigo-500 blur-md opacity-50 group-hover:opacity-100 transition-opacity" />
           <Heart className="absolute top-4 sm:top-5 md:top-6 right-4 sm:right-6 md:right-8 text-slate-300/30 dark:text-white/5 w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12" />
@@ -43,7 +40,6 @@ export default async function UserDashboard() {
           </p>
         </div>
 
-        {/* Projects Supported Card */}
         <div className="relative group bg-white border border-slate-200 dark:bg-white/5 dark:border-white/10 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-4xl md:rounded-5xl transition-all hover:border-teal-300 dark:hover:border-teal-500/30 overflow-hidden shadow-sm dark:shadow-none">
           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-teal-600/60 dark:bg-teal-500 blur-md opacity-50 group-hover:opacity-100 transition-opacity" />
           <Globe className="absolute top-4 sm:top-5 md:top-6 right-4 sm:right-6 md:right-8 text-slate-300/30 dark:text-white/5 w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12" />
@@ -54,7 +50,6 @@ export default async function UserDashboard() {
         </div>
       </div>
 
-      {/* --- DONATION HISTORY LEDGER --- */}
       <div className="space-y-4 sm:space-y-5 md:space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 px-2 sm:px-0">
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center">
@@ -67,7 +62,6 @@ export default async function UserDashboard() {
         </div>
 
         <div className="bg-white border border-slate-200 dark:bg-white/5 dark:border-white/10 rounded-2xl sm:rounded-4xl md:rounded-5xl overflow-hidden backdrop-blur-xl shadow-sm dark:shadow-none">
-          {/* Mobile: Card View */}
           <div className="md:hidden space-y-3 p-4 sm:p-5">
             {donations.length === 0 ? (
               <div className="text-center py-12 sm:py-16">
@@ -103,7 +97,6 @@ export default async function UserDashboard() {
             )}
           </div>
 
-          {/* Desktop: Table View */}
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>

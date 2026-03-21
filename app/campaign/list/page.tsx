@@ -68,7 +68,7 @@ export default function AllCampaignsPage() {
 
     return (
         <div className="min-h-screen bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white pb-20 relative overflow-hidden">
-            {/* Background Decorative Glows */}
+            
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/15 dark:bg-indigo-600/10 rounded-full blur-[120px] -z-10" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-600/15 dark:bg-teal-500/10 rounded-full blur-[120px] -z-10" />
 
@@ -86,7 +86,7 @@ export default function AllCampaignsPage() {
                 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12 p-4 bg-indigo-50 dark:bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-indigo-200 dark:border-white/10 shadow-2xl">
                     
-                    {/* Search */}
+                    
                     <div className="lg:col-span-2 relative group">
                         <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-gray-500 group-focus-within:text-indigo-600 dark:group-focus-within:text-teal-400 transition-colors" />
                         <input 
@@ -98,7 +98,7 @@ export default function AllCampaignsPage() {
                         />
                     </div>
 
-                    {/* Category Dropdown */}
+                    
                     <div className="relative">
                         <select 
                             value={selectedCategory}
@@ -114,7 +114,7 @@ export default function AllCampaignsPage() {
                         <FunnelIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-600 pointer-events-none" />
                     </div>
 
-                    {/* Status Toggle */}
+                    
                     <div className="flex bg-indigo-100 dark:bg-[#0a0f1d] p-1.5 rounded-2xl border border-indigo-300 dark:border-white/5">
                         {(['ALL', 'ACTIVE', 'FUNDED'] as const).map((status) => (
                             <button
@@ -145,7 +145,7 @@ export default function AllCampaignsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                         {filteredCampaigns.map((campaign) => (
                             <div key={campaign.id} className="group relative">
-                                {/* Subtle bottom glow for consistency */}
+                                
                                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-indigo-600 to-teal-600 dark:from-teal-400 dark:to-indigo-500 transition-all duration-500 group-hover:w-full z-20 rounded-full"></div>
                                 <CampaignCard campaign={campaign} /> 
                             </div>

@@ -41,7 +41,6 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
 
   return (
     <>
-      {/* Mobile Navigation Button */}
       <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         className="md:hidden fixed bottom-4 left-4 z-50 p-2.5 bg-indigo-600 dark:bg-teal-400 text-white dark:text-gray-950 rounded-lg shadow-lg hover:bg-indigo-500 dark:hover:bg-teal-300 transition-all"
@@ -54,7 +53,6 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
         )}
       </button>
 
-      {/* Mobile Navigation Overlay */}
       {mobileMenuOpen && (
         <div
           className="md:hidden fixed inset-0 z-30 bg-black/40 backdrop-blur-sm"
@@ -62,10 +60,8 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
         />
       )}
 
-      {/* Desktop Sidebar */}
     <aside className="hidden md:flex md:w-64 lg:w-72 bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white flex-col h-screen sticky top-0 border-r border-indigo-200 dark:border-white/5">
       
-      {/* Header/Logo Section */}
       <div className="flex flex-col items-center justify-center py-6 md:py-8 lg:py-10 border-b border-indigo-200 dark:border-white/5">
         
         <span className="mt-2 text-[13px] md:text-[14px] lg:text-[15px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] lg:tracking-[0.3em] text-indigo-600 dark:text-teal-500/60">
@@ -73,7 +69,6 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
         </span>
       </div>
 
-      {/* User Info Section */}
       <div className="p-4 md:p-5 lg:p-6">
         <div className="bg-indigo-50 dark:bg-white/5 backdrop-blur-md rounded-lg md:rounded-xl lg:rounded-2xl p-3 md:p-4 border border-indigo-200 dark:border-white/10 flex items-center space-x-3 md:space-x-4">
           <div className="relative shrink-0">
@@ -95,7 +90,6 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
         </div>
       </div>
 
-      {/* Navigation Section */}
       <nav className="flex-1 px-3 md:px-4 py-3 md:py-4 space-y-2 md:space-y-3">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -117,13 +111,11 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
         })}
       </nav>
 
-      {/* Launch New Campaign Section */}
       <div className="p-4 md:p-5 lg:p-6 mt-auto">
         <Link
           href="/campaign/new"
           className="group relative flex items-center justify-center space-x-2 md:space-x-3 w-full py-3 md:py-4 bg-indigo-100 dark:bg-white/5 border border-indigo-300 dark:border-white/10 text-slate-900 dark:text-white font-black rounded-lg md:rounded-2xl overflow-hidden transition-all hover:bg-indigo-200 dark:hover:bg-white/10 hover:border-indigo-500 dark:hover:border-teal-500/50"
         >
-          {/* Subtle bottom glow effect */}
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-indigo-600 dark:bg-teal-400 transition-all duration-500 group-hover:w-full" />
           
           <Rocket className="w-4 md:w-5 h-4 md:h-5 text-indigo-600 dark:text-teal-400 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
@@ -132,19 +124,16 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
       </div>
     </aside>
 
-    {/* Mobile Navigation Drawer */}
     <aside className={`md:hidden fixed left-0 top-0 z-40 h-screen w-72 bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white flex-col shadow-2xl transform transition-transform duration-300 ease-in-out border-r border-indigo-200 dark:border-white/5 flex ${
       mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
     }`}>
       
-      {/* Header/Logo Section */}
       <div className="flex flex-col items-center justify-center py-8 border-b border-indigo-200 dark:border-white/5">
         <span className="mt-2 text-[15px] font-black uppercase tracking-[0.3em] text-indigo-600 dark:text-teal-500/60">
           Creator Studio
         </span>
       </div>
 
-      {/* User Info Section */}
       <div className="p-6">
         <div className="bg-indigo-50 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-indigo-200 dark:border-white/10 flex items-center space-x-4">
           <div className="relative shrink-0">
@@ -166,7 +155,6 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
         </div>
       </div>
 
-      {/* Navigation Section */}
       <nav className="flex-1 px-4 py-4 space-y-3">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -189,14 +177,12 @@ export default function Sidebar({ user: initialUser }: SidebarProps) {
         })}
       </nav>
 
-      {/* Launch New Campaign Section */}
       <div className="p-6 mt-auto">
         <Link
           href="/campaign/new"
           onClick={() => setMobileMenuOpen(false)}
           className="group relative flex items-center justify-center space-x-3 w-full py-4 bg-indigo-100 dark:bg-white/5 border border-indigo-300 dark:border-white/10 text-slate-900 dark:text-white font-black rounded-2xl overflow-hidden transition-all hover:bg-indigo-200 dark:hover:bg-white/10 hover:border-indigo-500 dark:hover:border-teal-500/50"
         >
-          {/* Subtle bottom glow effect */}
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-indigo-600 dark:bg-teal-400 transition-all duration-500 group-hover:w-full" />
           
           <Rocket className="w-5 h-5 text-indigo-600 dark:text-teal-400 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />

@@ -104,7 +104,7 @@ export default function SignInPage() {
     return (
         <div className="flex min-h-screen bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white overflow-hidden">
             
-            {/* LEFT SIDE: IMMERSIVE IMAGE */}
+            
             <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-indigo-900">
                 <Image 
                     src="/auth-bg.png" 
@@ -133,9 +133,9 @@ export default function SignInPage() {
                 </div>
             </div>
 
-            {/* RIGHT SIDE: AUTH FORM */}
+           
             <div className="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 md:p-16 relative">
-                {/* Subtle Background Glows */}
+                
                 <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
                 <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-teal-500/10 rounded-full blur-[100px] pointer-events-none" />
 
@@ -158,7 +158,7 @@ export default function SignInPage() {
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         {!isLogin && (
                             <div className="space-y-6 animate-in slide-in-from-top-4 duration-500">
-                                {/* Profile Photo Upload */}
+                               
                                 <div className="flex flex-col items-center space-y-4">
                                     <div className="relative group">
                                         <div className="w-28 h-28 rounded-4xl border-4 border-slate-200 dark:border-white/5 overflow-hidden bg-white dark:bg-[#111827] shadow-xl transition-transform duration-500 group-hover:scale-105">

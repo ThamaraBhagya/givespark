@@ -1,4 +1,3 @@
-// app/dashboard/creator/DashboardClient.tsx
 "use client";
 
 import Sidebar from './Sidebar';

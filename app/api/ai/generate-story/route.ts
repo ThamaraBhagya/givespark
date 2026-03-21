@@ -1,4 +1,3 @@
-// app/api/ai/generate-story/route.ts
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
@@ -20,11 +19,10 @@ export async function POST(req: Request) {
       );
     }
 
-    // OpenRouter API endpoint
     const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
     
     
-    const MODEL = "meta-llama/llama-3.2-3b-instruct:free"; // Free model
+    const MODEL = "meta-llama/llama-3.2-3b-instruct:free";
     
 
     
@@ -62,14 +60,14 @@ Make the story approximately 500-700 words. Use clear, persuasive language that 
     console.log("Calling OpenRouter API with model:", MODEL);
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+    const timeout = setTimeout(() => controller.abort(), 60000);
 
     try {
       const response = await fetch(OPENROUTER_API_URL, {
         headers: {
           "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
-          "HTTP-Referer": "http://localhost:3000", // Required by OpenRouter
+          "HTTP-Referer": "http://localhost:3000",
           "X-Title": "Crowdfunding Platform", 
         },
         method: "POST",
@@ -117,7 +115,6 @@ Make the story approximately 500-700 words. Use clear, persuasive language that 
       const result = await response.json();
       console.log("OpenRouter response received");
 
-      // Extract the story from OpenRouter response
       const story = result.choices?.[0]?.message?.content;
       
       if (!story) {
@@ -128,16 +125,13 @@ Make the story approximately 500-700 words. Use clear, persuasive language that 
         }, { status: 200 });
       }
 
-      // Clean up the story
       let finalStory = story.trim();
       
-      // Remove any potential system prompts or artifacts
       finalStory = finalStory
         .replace(/^(As an AI assistant|As a crowdfunding expert)[^.]*\.\s*/i, '')
         .replace(/^(I'll create|I will write)[^.]*\.\s*/i, '')
         .trim();
 
-      // Ensure the story is substantial
       if (finalStory.length < 200) {
         console.warn("Generated story too short, using enhanced fallback");
         finalStory = createEnhancedFallbackStory(title, category, description);

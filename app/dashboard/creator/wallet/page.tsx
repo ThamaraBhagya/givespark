@@ -110,9 +110,7 @@ export default function CreatorWalletPage() {
                 </div>
             )}
 
-            {/* --- 1. Metric Cards --- */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-                {/* Balance */}
                 <div className="relative group bg-white dark:bg-white/5 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl md:rounded-4xl border border-indigo-200 dark:border-white/10 overflow-hidden shadow-sm dark:shadow-none">
                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-indigo-600/60 dark:bg-indigo-500 blur-sm rounded-full"></div>
                     <WalletIcon className="absolute top-3 sm:top-4 right-3 sm:right-4 text-slate-300/30 dark:text-white/5 w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12" />
@@ -122,7 +120,6 @@ export default function CreatorWalletPage() {
                     </p>
                 </div>
 
-                {/* Total Received */}
                 <div className="relative group bg-white dark:bg-white/5 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl md:rounded-4xl border border-indigo-200 dark:border-white/10 overflow-hidden shadow-sm dark:shadow-none">
                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-teal-600/60 dark:bg-teal-500 blur-sm rounded-full"></div>
                     <TrendingUpIcon className="absolute top-3 sm:top-4 right-3 sm:right-4 text-slate-300/30 dark:text-white/5 w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12" />
@@ -132,7 +129,6 @@ export default function CreatorWalletPage() {
                     </p>
                 </div>
 
-                {/* Total Withdrawn */}
                 <div className="relative group bg-white dark:bg-white/5 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl md:rounded-4xl border border-indigo-200 dark:border-white/10 overflow-hidden text-slate-600 dark:text-gray-400 shadow-sm dark:shadow-none sm:col-span-2 md:col-span-1">
                     <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest mb-2">Total Withdrawn</p>
                     <p className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-700 dark:text-white/60 tracking-tighter">
@@ -141,10 +137,8 @@ export default function CreatorWalletPage() {
                 </div>
             </div>
 
-            {/* --- 2. Lower Section --- */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
                 
-                {/* Withdrawal Form */}
                 <div className="md:col-span-1 bg-white dark:bg-white/5 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] border border-indigo-200 dark:border-white/10 backdrop-blur-md h-fit shadow-sm dark:shadow-none">
                     <h2 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white mb-4 sm:mb-6 flex items-center">
                         <ArrowUpCircleIcon className="w-4 sm:w-5 h-4 sm:h-5 mr-2 text-indigo-600 dark:text-indigo-400" />
@@ -183,7 +177,6 @@ export default function CreatorWalletPage() {
                     </form>
                 </div>
 
-                {/* Transaction History */}
                 <div className="md:col-span-2 bg-white dark:bg-white/5 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] border border-indigo-200 dark:border-white/10 backdrop-blur-md shadow-sm dark:shadow-none">
                     <h2 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white mb-6 sm:mb-8 flex items-center">
                         <HistoryIcon className="w-4 sm:w-5 h-4 sm:h-5 mr-2 text-indigo-600 dark:text-teal-400" />

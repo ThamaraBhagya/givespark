@@ -40,17 +40,17 @@ export default function CampaignCard({ campaign }: CampaignCardProps) {
       </div>
 
       <div className="p-6">
-        {/* Title */}
+        
         <h3 className="text-xl font-black text-slate-900 dark:text-white line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-teal-400 transition-colors">
           {campaign.title}
         </h3>
 
-        {/* Short Description */}
+      
         <p className="mt-3 text-sm text-slate-600 dark:text-gray-400 line-clamp-2 font-light leading-relaxed">
           {campaign.shortDesc}
         </p>
 
-        {/* Progress Bar Section */}
+       
         <div className="mt-6">
           <div className="flex justify-between items-end mb-2">
              <span className="text-xs font-black text-indigo-600 dark:text-teal-400 uppercase tracking-widest">
@@ -68,7 +68,7 @@ export default function CampaignCard({ campaign }: CampaignCardProps) {
           </div>
         </div>
 
-        {/* Funding Stats */}
+       
         <div className="mt-6 pt-5 border-t border-indigo-200 dark:border-white/5 flex justify-between items-center">
           <div>
             <p className="text-[10px] text-slate-500 dark:text-gray-500 uppercase font-black tracking-tighter">Raised</p>

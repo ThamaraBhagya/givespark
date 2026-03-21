@@ -50,13 +50,13 @@ export default function FeaturedCampaigns() {
 
   return (
     <section className="relative py-24 sm:py-32 bg-white dark:bg-[#0a0f1d] overflow-hidden">
-      {/* Background Decorative Elements */}
+      
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/15 dark:bg-indigo-600/5 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-500/20 dark:bg-teal-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
 
-        {/* Header */}
+       
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-2xl">
             <h2 className="text-sm font-black text-teal-600 dark:text-teal-400 tracking-[0.3em] uppercase mb-4 text-center md:text-left">
@@ -75,7 +75,7 @@ export default function FeaturedCampaigns() {
           </Link>
         </div>
 
-        {/* Campaign Grid */}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {campaigns.map((campaign) => (
             <div key={campaign.id} className="group relative">
@@ -88,7 +88,7 @@ export default function FeaturedCampaigns() {
           ))}
         </div>
 
-        {/* Mobile CTA */}
+        
         <div className="mt-16 text-center md:hidden">
           <Link 
             href="/campaign/list" 

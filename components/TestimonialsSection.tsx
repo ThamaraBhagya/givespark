@@ -45,7 +45,7 @@ export default function TestimonialsSection() {
 
   return (
     <section className="relative bg-white dark:bg-[#0a0f1d] py-24 overflow-hidden">
-      {/* Background Accent */}
+      
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/15 dark:bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -62,7 +62,7 @@ export default function TestimonialsSection() {
               key={t.id} 
               className="group relative bg-indigo-50/50 dark:bg-white/[0.03] border border-indigo-200 dark:border-white/10 p-8 rounded-3xl backdrop-blur-xl transition-all duration-500 hover:bg-indigo-100/70 dark:hover:bg-white/[0.06] hover:-translate-y-2"
             >
-              {/* Star Rating */}
+              
               <div className="flex mb-6 space-x-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <StarIcon
@@ -94,7 +94,7 @@ export default function TestimonialsSection() {
                 </div>
               </div>
               
-              {/* Signature Bottom Line */}
+              
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-indigo-600 to-teal-600 dark:from-teal-400 dark:to-indigo-500 transition-all duration-500 group-hover:w-full rounded-b-3xl"></div>
             </div>
           ))}

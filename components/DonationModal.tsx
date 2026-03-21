@@ -156,7 +156,7 @@ export default function DonationModal({ campaignId, campaignTitle, onClose, onSu
 
     return (
         <div className="relative bg-[#0a0f1d] text-white overflow-hidden max-h-[95vh] flex flex-col">
-            {/* Header */}
+            
             <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
                 <div>
                     <h2 className="text-2xl font-black tracking-tighter flex items-center">
@@ -173,7 +173,7 @@ export default function DonationModal({ campaignId, campaignTitle, onClose, onSu
             <div className="p-8 space-y-8 overflow-y-auto custom-scrollbar">
                 {error && <p className="p-3 text-red-400 bg-red-400/10 border border-red-400/20 rounded-xl text-sm">{error}</p>}
                 
-                {/* User Inputs */}
+               
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <label className="text-[10px] font-black uppercase tracking-widest text-teal-400 ml-1">Pledge Amount ($)</label>
@@ -210,7 +210,7 @@ export default function DonationModal({ campaignId, campaignTitle, onClose, onSu
                     />
                 </div>
 
-                {/* Stripe Section */}
+               
                 <div className="pt-6 border-t border-white/5">
                     <div className="flex items-center space-x-2 mb-4">
                         <ShieldCheck className="w-4 h-4 text-teal-400" />
@@ -243,7 +243,7 @@ export default function DonationModal({ campaignId, campaignTitle, onClose, onSu
                 </div>
             </div>
 
-            {/* Footer */}
+           
             <div className="p-6 bg-white/[0.01] border-t border-white/5 flex items-center justify-center">
                 <p className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em] flex items-center">
                     <ShieldCheck className="w-3 h-3 mr-2" /> Encrypted & Secured by Stripe

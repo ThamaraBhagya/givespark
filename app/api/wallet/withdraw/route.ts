@@ -1,4 +1,3 @@
-// app/api/wallet/withdraw/route.ts
 
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
@@ -8,7 +7,6 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   
-  // Ensure the user is authenticated and is a Creator
   if (!session?.user || session.user.role !== 'CREATOR') {
       return NextResponse.json({ error: "Access denied or not a creator." }, { status: 403 });
   }
@@ -19,12 +17,10 @@ export async function POST(req: Request) {
     const { amount } = await req.json();
     const numericAmount = Number(amount);
 
-    // Input validation
     if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
         return NextResponse.json({ error: "Invalid withdrawal amount." }, { status: 400 });
     }
 
-    // Check current balance
     const wallet = await prisma.wallet.findUnique({
         where: { userId: creatorId }
     });
@@ -33,7 +29,6 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Insufficient balance in virtual wallet." }, { status: 400 });
     }
 
-    // Update wallet (mock withdrawal - just DB update, no real transfer)
     const updatedWallet = await prisma.wallet.update({
         where: { userId: creatorId },
         data: {

@@ -61,7 +61,7 @@ export default function SettingsPage() {
     return (
         <div className="min-h-screen bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white p-4 sm:p-6 md:p-8 lg:p-10">
             <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
-                {/* Header */}
+                
                 <header>
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-gray-500">
                         Profile Settings
@@ -71,10 +71,10 @@ export default function SettingsPage() {
 
                 <div className="lg:col-span-2">
     <form onSubmit={handleSave} className="bg-indigo-50 dark:bg-white/5 border border-indigo-200 dark:border-white/10 backdrop-blur-xl rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] p-5 sm:p-6 md:p-8 md:p-10 shadow-2xl space-y-6 sm:space-y-8 md:space-y-10 relative overflow-hidden">
-        {/* Decorative Glow */}
+        
         <div className="absolute -top-24 -right-24 w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 bg-indigo-600/20 dark:bg-indigo-500/10 rounded-full blur-[80px] pointer-events-none" />
 
-        {/* Profile Photo Section */}
+        
         <div className="flex flex-col items-center sm:flex-row sm:space-x-6 md:space-x-8 gap-4 sm:gap-0">
             <div className="relative group">
                 <div className="h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32 rounded-2xl sm:rounded-3xl overflow-hidden border-4 border-indigo-200 dark:border-white/5 bg-indigo-50 dark:bg-[#111827] shadow-2xl relative flex-shrink-0">
@@ -102,7 +102,7 @@ export default function SettingsPage() {
 
         <hr className="border-indigo-200 dark:border-white/5" />
 
-        {/* Form Fields */}
+        
         <div className="space-y-5 sm:space-y-6">
             <div className="space-y-2">
                 <label className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-indigo-600 dark:text-teal-400 ml-1">
@@ -118,7 +118,7 @@ export default function SettingsPage() {
             </div>
         </div>
 
-        {/* Submit & Status */}
+        
         <div className="pt-2 sm:pt-4 space-y-3 sm:space-y-4">
             <button
                 type="submit"

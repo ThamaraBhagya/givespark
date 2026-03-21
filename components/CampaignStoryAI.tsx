@@ -31,7 +31,7 @@ export default function CampaignStoryAI({
     setStatusMessage("Spark AI is igniting your story...");
     
     
-    // Set a timeout to update the message if it takes long.
+   
     const timer = setTimeout(() => {
         setStatusMessage("Warming up the ML model... (this can take 20s)");
     }, 3000);
@@ -93,7 +93,7 @@ export default function CampaignStoryAI({
       </div>
 
       <div className="relative group">
-        {/* Decorative corner glow */}
+        
         <div className="absolute -top-px -left-px w-10 h-10 bg-indigo-500/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
         
         <textarea

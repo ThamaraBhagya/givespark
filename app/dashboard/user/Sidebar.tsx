@@ -19,7 +19,6 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile Navigation Button */}
       <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         className="md:hidden fixed bottom-4 left-4 z-50 p-2.5 bg-indigo-600 dark:bg-teal-400 text-white dark:text-gray-950 rounded-lg shadow-lg hover:bg-indigo-500 dark:hover:bg-teal-300 transition-all"
@@ -32,7 +31,6 @@ export default function Sidebar() {
         )}
       </button>
 
-      {/* Mobile Navigation Overlay */}
       {mobileMenuOpen && (
         <div
           className="md:hidden fixed inset-0 z-30 bg-black/40 backdrop-blur-sm"
@@ -40,10 +38,8 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Desktop Sidebar */}
     <aside className="hidden md:flex md:w-64 lg:w-72 bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white flex-col h-screen sticky top-0 border-r border-indigo-200 dark:border-white/5">
       
-      {/* Header/Logo Section */}
       <div className="flex flex-col items-center justify-center py-6 md:py-8 lg:py-10 border-b border-indigo-200 dark:border-white/5">
         
         <span className="mt-2 text-[13px] md:text-[14px] lg:text-[15px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] lg:tracking-[0.3em] text-indigo-600 dark:text-teal-500/60">
@@ -51,7 +47,6 @@ export default function Sidebar() {
         </span>
       </div>
 
-      {/* User Info Section */}
       <div className="p-4 md:p-5 lg:p-6">
         <div className="bg-white border border-indigo-200 dark:bg-white/5 dark:border-white/10 backdrop-blur-md rounded-lg md:rounded-xl lg:rounded-2xl p-3 md:p-4 flex items-center space-x-3 md:space-x-4">
           <div className="relative shrink-0">
@@ -75,7 +70,6 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Navigation Section */}
       <nav className="flex-1 px-3 md:px-4 py-3 md:py-4 space-y-2 md:space-y-3">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -97,7 +91,6 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Logout & Footer Section */}
       <div className="p-4 md:p-5 lg:p-6 mt-auto border-t border-indigo-200 dark:border-white/5">
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
@@ -109,19 +102,16 @@ export default function Sidebar() {
       </div>
     </aside>
 
-    {/* Mobile Navigation Drawer */}
     <aside className={`md:hidden fixed left-0 top-0 z-40 h-screen w-72 bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white flex-col shadow-2xl transform transition-transform duration-300 ease-in-out border-r border-indigo-200 dark:border-white/5 flex ${
       mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
     }`}>
       
-      {/* Header/Logo Section */}
       <div className="flex flex-col items-center justify-center py-8 border-b border-indigo-200 dark:border-white/5">
         <span className="mt-2 text-[15px] font-black uppercase tracking-[0.3em] text-indigo-600 dark:text-teal-500/60">
           Donor Dashboard
         </span>
       </div>
 
-      {/* User Info Section */}
       <div className="p-6">
         <div className="bg-white border border-indigo-200 dark:bg-white/5 dark:border-white/10 backdrop-blur-md rounded-2xl p-4 flex items-center space-x-4">
           <div className="relative shrink-0">
@@ -145,7 +135,6 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Navigation Section */}
       <nav className="flex-1 px-4 py-4 space-y-3">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -168,7 +157,6 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Logout & Footer Section */}
       <div className="p-6 mt-auto border-t border-indigo-200 dark:border-white/5">
         <button
           onClick={() => {

@@ -67,14 +67,14 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0a0f1d] text-slate-900 dark:text-white pb-20">
-      {/* Decorative Background Glows */}
+      
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/15 dark:bg-indigo-600/10 rounded-full blur-[120px] -z-10" />
       <div className="absolute top-40 right-1/4 w-96 h-96 bg-teal-600/15 dark:bg-teal-500/10 rounded-full blur-[120px] -z-10" />
 
       <div className="max-w-7xl mx-auto p-4 sm:p-6 md:p-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
           
-          {/* LEFT COLUMN: Campaign Content */}
+          {/*Campaign Content */}
           <div className="lg:col-span-2 space-y-6 sm:space-y-8 md:space-y-12">
             <header className="space-y-3 sm:space-y-4 md:space-y-6">
               <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-100 dark:bg-teal-500/10 border border-indigo-300 dark:border-teal-500/20 text-indigo-700 dark:text-teal-400 text-xs font-bold uppercase tracking-widest">
@@ -102,7 +102,7 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
               </div>
             </header>
 
-            {/* Main Image Card */}
+            
             <div className="group relative aspect-video w-full rounded-[2rem] overflow-hidden border border-indigo-200 dark:border-white/10 shadow-2xl shadow-black">
               <Image 
                 src={campaignData.featuredImage || '/placeholder.jpg'} 
@@ -125,7 +125,7 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
             </section>
           </div>
 
-          {/* RIGHT COLUMN: Sidebar (Funding & Donations) */}
+          
           <div className="lg:col-span-1">
             <div className="sticky top-4 sm:top-6 lg:top-28 space-y-6 sm:space-y-8">
               
@@ -143,7 +143,7 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
                     </p>
                   </div>
 
-                  {/* Progress Bar */}
+                 
                   <div className="space-y-4">
                     <div className="h-4 bg-indigo-200 dark:bg-white/5 rounded-full overflow-hidden border border-indigo-300 dark:border-white/5">
                       <div 
@@ -195,7 +195,7 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
                       <div key={donation.id} className="flex items-center space-x-4 group">
                         <div className="relative shrink-0">
                           <div className="h-12 w-12 rounded-2xl bg-indigo-100 dark:bg-white/5 border border-indigo-200 dark:border-white/10 flex items-center justify-center overflow-hidden transition-transform group-hover:scale-110">
-                            {/* 💡 Fixed: Optional Chaining to prevent TypeError */}
+                           
                             {donation.donor?.image ? (
                               <img src={donation.donor.image} className="h-full w-full object-cover" alt="" />
                             ) : (
@@ -237,7 +237,7 @@ export default function CampaignDetailClient({ campaignId, initialCampaignData, 
         </div>
       </div>
 
-      {/* Donation Modal Overlay */}
+      
       {isModalOpen && session && (
         <div className="fixed inset-0 bg-black/80 dark:bg-[#0a0f1d]/80 backdrop-blur-xl flex items-center justify-center z-[100] p-4 transition-all duration-300">
           <div className="bg-white dark:bg-white rounded-[3rem] max-w-lg w-full shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">

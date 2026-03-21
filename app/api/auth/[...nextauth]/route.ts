@@ -1,4 +1,3 @@
-// app/api/auth/[...nextauth]/route.ts
 
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -7,7 +6,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import * as bcrypt from 'bcryptjs'; 
 
 export const authOptions = {
-    // Uses the Prisma client to connect NextAuth sessions/accounts to the DB
     adapter: PrismaAdapter(prisma) as any, 
     
     providers: [
@@ -18,13 +16,11 @@ export const authOptions = {
                 password: { label: "Password", type: "password" }
             },
             
-            // This is the custom function that runs when a user attempts to sign in
             async authorize(credentials) {
                 if (!credentials?.email || !credentials.password) {
                     return null;
                 }
 
-                // Find the user by email
                 const user = await prisma.user.findUnique({
                     where: { email: credentials.email },
                 });
@@ -41,8 +37,6 @@ export const authOptions = {
                     return null; 
                 }
                 
-                // Return the user object
-                // The fields returned here are stored in the JWT token (after serialization)
                 return {
                     id: user.id,
                     email: user.email,

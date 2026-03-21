@@ -1,7 +1,41 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowTrendingUpIcon, HandRaisedIcon } from '@heroicons/react/24/solid';
+import { use, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
+import { Rocket, X } from 'lucide-react';
 
 export default function CtaSection() {
+
+ const { data: session, status } = useSession();
+   const [isCreatorModalOpen, setIsCreatorModalOpen] = useState(false);
+   const router = useRouter();
+ 
+   const isAuthenticated = status === 'authenticated';
+   const isCreator = isAuthenticated && session?.user?.role === 'CREATOR';
+ 
+   const handleStartCampaign = () => {
+     if (!isCreator) {
+       setIsCreatorModalOpen(true);
+       return;
+     }
+ 
+     router.push('/campaign/new');
+   };
+ 
+   const handleCreatorSignIn = async () => {
+     setIsCreatorModalOpen(false);
+ 
+     if (isAuthenticated) {
+       await signOut({ callbackUrl: '/auth/signin' });
+       return;
+     }
+ 
+     router.push('/auth/signin');
+   };
+
   return (
     <section className="relative py-24 bg-white dark:bg-[#0a0f1d]">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -23,13 +57,13 @@ export default function CtaSection() {
             </p>
 
             <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-6">
-              <Link 
-                href="/campaign/new" 
+              <button                 onClick={handleStartCampaign} 
+               type='button'
                 className="w-full sm:w-auto flex items-center justify-center space-x-3 px-10 py-5 bg-indigo-600 dark:bg-teal-400 text-white dark:text-gray-950 font-black rounded-2xl hover:bg-indigo-700 dark:hover:bg-teal-300 transition-all duration-300 text-lg shadow-xl shadow-indigo-600/20 dark:shadow-teal-500/10"
               >
                 <ArrowTrendingUpIcon className="w-6 h-6" />
                 <span>Launch Campaign</span>
-              </Link>
+              </button>
 
               <Link 
                 href="/campaign/list" 
@@ -42,6 +76,51 @@ export default function CtaSection() {
           </div>
         </div>
       </div>
+
+      {isCreatorModalOpen && (
+              <div className="fixed inset-0 z-100 flex items-start justify-center p-4 pt-32 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 text-left">
+                <div className="relative w-full max-w-md bg-white dark:bg-[#0f172a] rounded-[2.5rem] shadow-2xl border border-indigo-100 dark:border-white/10 overflow-hidden">
+                  <button
+                    onClick={() => setIsCreatorModalOpen(false)}
+                    className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 hover:text-red-500 transition-colors"
+                    aria-label="Close creator access modal"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+      
+                  <div className="p-10 text-center">
+                    <div className="mx-auto w-20 h-20 rounded-3xl bg-indigo-50 dark:bg-teal-400/10 flex items-center justify-center mb-6">
+                      <Rocket className="w-10 h-10 text-indigo-600 dark:text-teal-400" />
+                    </div>
+      
+                    <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter mb-4">
+                      Creator Access Required
+                    </h3>
+      
+                    <p className="text-slate-600 dark:text-gray-400 mb-8 leading-relaxed font-medium">
+                      To launch and manage campaigns, you must be logged in with a <span className="font-bold text-indigo-600 dark:text-teal-400">Creator Account</span>.
+                    </p>
+      
+                    <div className="space-y-3">
+                      <button
+                        type="button"
+                        onClick={handleCreatorSignIn}
+                        className="block w-full py-4 bg-indigo-600 dark:bg-teal-400 text-white dark:text-gray-950 font-black rounded-2xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all text-center"
+                      >
+                        Sign In as Creator
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsCreatorModalOpen(false)}
+                        className="block w-full py-4 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-gray-400 font-bold rounded-2xl hover:bg-slate-200 dark:hover:bg-white/10 transition-all"
+                      >
+                        Maybe Later
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
     </section>
   );
 }
