@@ -1,9 +1,12 @@
-# 🚀 GiveSpark - AI-Powered Crowdfunding Platform
+# 🚀 GiveSpark - Crowdfunding Platform
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white) ![PostgreSQL (Neon)](https://img.shields.io/badge/PostgreSQL_Neon-4169E1?style=for-the-badge&logo=postgresql&logoColor=white) ![Stripe](https://img.shields.io/badge/Stripe-6366F1?style=for-the-badge&logo=stripe&logoColor=white) ![Meta Llama](https://img.shields.io/badge/Meta_Llama_3.2-0467DF?style=for-the-badge&logo=meta&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
-**Empowering Creators & Backers Through Intelligent Fundraising**
+**GiveSpark: Empowering Communities Through Simple Fundraising**
 
-GiveSpark is a production-grade, full-stack crowdfunding platform that combines modern web technologies with AI-driven storytelling to help creators launch compelling campaigns and backers discover impactful projects. Built with a focus on performance, security, and user experience.
+GiveSpark is a community-driven crowdfunding platform designed to make raising and donating money easy and secure. I built this platform to give individuals and groups a straightforward way to fund the activities and causes they care about. 
+
+* **The Problem:** Community groups often struggle to find a centralized, easy-to-use platform to collect funds and share their stories.
+* **The Solution:** GiveSpark provides a seamless experience where users can launch campaigns (with built-in AI tools to help write compelling stories), search for local or global causes, and securely process donations all in one place.
 
 ---
 
